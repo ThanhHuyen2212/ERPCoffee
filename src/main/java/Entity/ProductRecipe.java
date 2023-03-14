@@ -5,22 +5,22 @@ import java.util.HashMap;
 
 public class ProductRecipe {
 
-    private HashMap<Ingredient,int> ingredientCosts;
+    private HashMap<Ingredient,Integer> ingredientCosts;
     private int productQty;
 
     public ProductRecipe() {
     }
 
-    public ProductRecipe(HashMap<Ingredient, int> ingredientCosts, int productQty) {
+    public ProductRecipe(HashMap<Ingredient, Integer> ingredientCosts, int productQty) {
         this.ingredientCosts = ingredientCosts;
         this.productQty = productQty;
     }
 
-    public HashMap<Ingredient, int> getIngredientCosts() {
+    public HashMap<Ingredient, Integer> getIngredientCosts() {
         return ingredientCosts;
     }
 
-    public void setIngredientCosts(HashMap<Ingredient, int> ingredientCosts) {
+    public void setIngredientCosts(HashMap<Ingredient, Integer> ingredientCosts) {
         this.ingredientCosts = ingredientCosts;
     }
 
