@@ -12,6 +12,8 @@ public class Product {
     private Category category;
     private HashMap<Size,int> priceList;
 
+    private ProductRecipe recipe;
+
     public Product() {
     }
 
@@ -85,4 +87,11 @@ public class Product {
                         .toList());
     }
 
+    public ProductRecipe getRecipe() {
+        return recipe;
+    }
+
+    public void setRecipe(ProductRecipe recipe) {
+        this.recipe = recipe;
+    }
 }
