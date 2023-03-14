@@ -10,12 +10,14 @@ public class Product {
     private String productName;
     private String imagePath;
     private Category category;
-    private HashMap<Size,int> priceList;
+    private HashMap<Size,Integer> priceList;
+
+    private ProductRecipe recipe;
 
     public Product() {
     }
 
-    public Product(int productId, String productName, String imagePath, Category category, HashMap<Size, int> priceList) {
+    public Product(int productId, String productName, String imagePath, Category category, HashMap<Size, Integer> priceList) {
         this.productId = productId;
         this.productName = productName;
         this.imagePath = imagePath;
@@ -55,11 +57,11 @@ public class Product {
         this.category = category;
     }
 
-    public HashMap<Size, int> getPriceList() {
+    public HashMap<Size, Integer> getPriceList() {
         return priceList;
     }
 
-    public void setPriceList(HashMap<Size, int> priceList) {
+    public void setPriceList(HashMap<Size, Integer> priceList) {
         this.priceList = priceList;
     }
 
@@ -85,4 +87,11 @@ public class Product {
                         .toList());
     }
 
+    public ProductRecipe getRecipe() {
+        return recipe;
+    }
+
+    public void setRecipe(ProductRecipe recipe) {
+        this.recipe = recipe;
+    }
 }
