@@ -10,10 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.File;
-<<<<<<< HEAD
-import java.sql.Date;
-=======
->>>>>>> main
+
 
 public class MainApp extends Application {
     @Override
