@@ -6,8 +6,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.GridPane?>
@@ -17,50 +15,19 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="viewControl" prefHeight="810.0" prefWidth="1315.0" stylesheets="@../../../../../../../javaFx/LuvaTech/src/main/java/App/View/css/style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Contoller.ShopController">
+<AnchorPane fx:id="viewControl" prefHeight="810.0" prefWidth="1315.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Contoller.ShopController">
    <children>
-      <BorderPane layoutX="-1.0" prefHeight="810.0" prefWidth="1315.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <left>
-            <VBox alignment="CENTER" prefHeight="810.0" prefWidth="49.0" styleClass="left-menu" BorderPane.alignment="CENTER">
-               <children>
-                  <Pane prefHeight="44.0" prefWidth="55.0" VBox.vgrow="ALWAYS" />
-                  <ImageView fitHeight="29.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../../../../../javaFx/LuvaTech/src/main/java/Assets/Image/icon/user.png" />
-                     </image>
-                  </ImageView>
-                  <Pane prefHeight="363.0" prefWidth="171.0" />
-                  <ImageView fitHeight="43.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../../../../../javaFx/LuvaTech/src/main/java/Assets/Image/icon/shop.png" />
-                     </image>
-                  </ImageView>
-                  <Pane prefHeight="322.0" prefWidth="55.0" />
-                  <ImageView fitHeight="29.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../../../../../javaFx/LuvaTech/src/main/java/Assets/Image/icon/log-out.png" />
-                     </image>
-                  </ImageView>
-                  <Pane prefHeight="51.0" prefWidth="55.0" VBox.vgrow="ALWAYS" />
-               </children>
-            </VBox>
-         </left>
-         <center>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <BorderPane layoutX="-1.0" prefHeight="810.0" prefWidth="1315.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <HBox prefHeight="1050.0" prefWidth="1920.0">
+         <children>
+            <Pane prefHeight="1050.0" prefWidth="9.0" />
+            <VBox prefHeight="1050.0" prefWidth="486.0" styleClass="green" />
+            <Pane prefHeight="1050.0" prefWidth="15.0" />
+            <VBox alignment="CENTER" prefHeight="1050.0" prefWidth="865.0" styleClass="yellow">
                <children>
                   <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="81.0" prefWidth="1256.0">
                      <children>
-                        <Pane prefHeight="59.0" prefWidth="31.0" />
-                        <ImageView fitHeight="37.0" fitWidth="142.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../../../../javaFx/LuvaTech/src/main/java/Assets/Image/icon/filter.png" />
-                           </image>
-                           <styleClass>
-                              <String fx:value="add-btn" />
-                              <String fx:value="shadow" />
-                           </styleClass>
-                        </ImageView>
-                        <Pane prefHeight="62.0" prefWidth="363.0" HBox.hgrow="ALWAYS" />
+                        <Pane prefHeight="81.0" prefWidth="236.0" HBox.hgrow="ALWAYS" />
                         <HBox alignment="CENTER" prefHeight="47.0" prefWidth="312.0">
                            <children>
                               <TextField fx:id="textSearch" alignment="TOP_LEFT" prefHeight="28.0" prefWidth="184.0" promptText="Type here to  Search" styleClass="transparent">
@@ -88,29 +55,7 @@
                               <Insets bottom="8.0" left="10.0" top="8.0" />
                            </HBox.margin>
                         </HBox>
-                        <Pane prefHeight="62.0" prefWidth="324.0" HBox.hgrow="ALWAYS" />
-                        <ImageView fitHeight="37.0" fitWidth="142.0"  pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../../../../javaFx/LuvaTech/src/main/java/Assets/Image/icon/shopping-cart.png" />
-                           </image>
-                           <styleClass>
-                              <String fx:value="add-btn" />
-                              <String fx:value="shadow" />
-                           </styleClass>
-                        </ImageView>
-                        <Label fx:id="quality" alignment="CENTER" prefHeight="27.0" prefWidth="27.0" text="99" textAlignment="RIGHT" textFill="#e52507">
-                           <HBox.margin>
-                              <Insets left="-5.0" right="16.0" top="-25.0" />
-                           </HBox.margin>
-                           <font>
-                              <Font name="System Bold" size="16.0" />
-                           </font>
-                           <styleClass>
-                              <String fx:value="product-tutal" />
-                              <String fx:value="shadow" />
-                           </styleClass>
-                        </Label>
-                        <Pane prefHeight="62.0" prefWidth="21.0" />
+                        <Pane prefHeight="81.0" prefWidth="233.0" HBox.hgrow="ALWAYS" />
                      </children>
                      <VBox.margin>
                         <Insets />
@@ -123,7 +68,7 @@
                      </VBox.margin>
                   </HBox>
                   <Pane prefHeight="44.0" prefWidth="1266.0" />
-                  <HBox alignment="CENTER" prefHeight="663.0" prefWidth="1260.0" styleClass="transparent">
+                  <HBox alignment="CENTER" prefHeight="650.0" prefWidth="865.0" styleClass="transparent">
                      <children>
                         <ScrollPane fx:id="scroll" prefHeight="648.0" prefWidth="1226.0">
                            <HBox.margin>
@@ -145,7 +90,14 @@
                   </HBox>
                </children>
             </VBox>
-         </center>
-      </BorderPane>
+            <Pane prefHeight="1050.0" prefWidth="30.0" />
+            <AnchorPane prefHeight="1050.0" prefWidth="508.0" styleClass="blue">
+               <children>
+                  <Label layoutX="168.0" layoutY="66.0" text="Label" />
+               </children>
+            </AnchorPane>
+            <Pane prefHeight="1080.0" prefWidth="7.0" />
+         </children>
+      </HBox>
    </children>
 </AnchorPane>
