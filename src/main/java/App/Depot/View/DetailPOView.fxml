@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="577.0" prefWidth="1048.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Depot.Controller.DetailPOController">
+    <children>
+        <Label alignment="CENTER" minHeight="42.0" prefHeight="42.0" prefWidth="1024.0" styleClass="filler" text="Recipes Management" VBox.vgrow="ALWAYS">
+            <font>
+                <Font name="System Bold" size="24.0" />
+            </font>
+        </Label>
+        <HBox alignment="CENTER_RIGHT" prefHeight="71.0" prefWidth="1032.0" VBox.vgrow="ALWAYS">
+            <children>
+                <Button fx:id="printBtn" alignment="CENTER" maxWidth="100.0" minWidth="60.0" mnemonicParsing="false" styleClass="wrapper-btn" text="Print" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                    <padding>
+                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                    </padding>
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                    <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../../Assets/Icons/printer.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+            </children>
+            <VBox.margin>
+                <Insets bottom="10.0" />
+            </VBox.margin>
+        </HBox>
+        <HBox prefHeight="501.0" prefWidth="838.0" VBox.vgrow="ALWAYS">
+            <children>
+                <TableView fx:id="detailTable" prefHeight="427.0" prefWidth="1024.0" HBox.hgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="idCol" prefWidth="172.55186367034912" text="ID" />
+                        <TableColumn fx:id="ingredientNameCol" prefWidth="313.94810485839844" text="Ingredient" />
+                        <TableColumn fx:id="qtyCol" minWidth="0.0" prefWidth="185.23782348632812" text="Order Quantity" />
+                        <TableColumn fx:id="receiveCol" prefWidth="167.10223388671875" text="Received" />
+                        <TableColumn fx:id="priceCol" prefWidth="173.40704345703125" text="Unit Price" />
+                    </columns>
+                </TableView>
+            </children>
+        </HBox>
+        <HBox alignment="CENTER" minHeight="35.0" prefHeight="55.0" prefWidth="1024.0" spacing="20.0" VBox.vgrow="ALWAYS">
+            <VBox.margin>
+                <Insets top="18.0" />
+            </VBox.margin>
+            <children>
+                <Button fx:id="confirmBtn" minHeight="28.0" minWidth="60.0" mnemonicParsing="false" text="Confirm" textAlignment="CENTER">
+                    <textFill>
+                        <LinearGradient endX="1.0" endY="1.0">
+                            <stops>
+                                <Stop>
+                                    <color>
+                                        <Color />
+                                    </color>
+                                </Stop>
+                                <Stop offset="1.0">
+                                    <color>
+                                        <Color />
+                                    </color>
+                                </Stop>
+                            </stops>
+                        </LinearGradient>
+                    </textFill>
+                    <padding>
+                        <Insets bottom="4.0" left="8.0" right="8.0" top="4.0" />
+                    </padding>
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                    <styleClass>
+                        <String fx:value="success-btn" />
+                        <String fx:value="wrapper-btn" />
+                    </styleClass>
+                </Button>
+                <Button fx:id="cancelBtn" minHeight="28.0" minWidth="60.0" mnemonicParsing="false" text="Cancel" textAlignment="CENTER">
+                    <textFill>
+                        <LinearGradient endX="1.0" endY="1.0">
+                            <stops>
+                                <Stop>
+                                    <color>
+                                        <Color />
+                                    </color>
+                                </Stop>
+                                <Stop offset="1.0">
+                                    <color>
+                                        <Color />
+                                    </color>
+                                </Stop>
+                            </stops>
+                        </LinearGradient>
+                    </textFill>
+                    <padding>
+                        <Insets bottom="4.0" left="8.0" right="8.0" top="4.0" />
+                    </padding>
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                    <styleClass>
+                        <String fx:value="wrapper-btn" />
+                        <String fx:value="normal-btn" />
+                    </styleClass>
+                </Button>
+            </children>
+        </HBox>
+    </children>
+    <padding>
+        <Insets bottom="12.0" left="12.0" right="12.0" />
+    </padding>
+</VBox>
