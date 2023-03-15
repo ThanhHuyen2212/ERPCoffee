@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="273.0" prefWidth="213.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Contoller.itemController">
+<AnchorPane onMousePressed="#click" prefHeight="344.0" prefWidth="252.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Controller.itemController">
    <styleClass>
       <String fx:value="shadow" />
       <String fx:value="product-item" />
@@ -20,7 +20,7 @@
    <children>
       <VBox alignment="CENTER" layoutX="37.0" prefHeight="273.0" prefWidth="213.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fx:id="imageproduct" fitHeight="163.0" fitWidth="124.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="imgProduct" fitHeight="163.0" fitWidth="124.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../Assets/Images/WhiteCoffee.png" />
                </image>
