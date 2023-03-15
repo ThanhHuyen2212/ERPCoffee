@@ -10,17 +10,19 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.File;
+<<<<<<< HEAD
 import java.sql.Date;
+=======
+>>>>>>> main
 
 public class MainApp extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        stage.setScene(new Scene(
-                FXMLLoader.load(new File("src/main/java/App/Statitics/View/RevenueChart.fxml").toURI().toURL())
-        ));
+
+        Parent root = FXMLLoader.load(new File("src/main/java/App/View/ShopGUI.fxml").toURI().toURL());
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
         stage.show();
-        for (Date day : DateTool.getDayOfMonth(2020,2)){
-            System.out.println(day.toString());
-        }
+
     }
 }

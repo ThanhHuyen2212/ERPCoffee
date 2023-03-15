@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonType?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<DialogPane fx:id="dialogCategoryAdd" prefHeight="572.0" prefWidth="999.0" styleClass="dialog" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Contoller.AdminProductAddController">
+   <stylesheets>
+      <URL value="@css/AddApplication.css" />
+      <URL value="@css/AdminApplication.css" />
+      <URL value="@css/Application.css" />
+      <URL value="@css/detailItem.css" />
+   </stylesheets>
+   <header>
+      <TabPane prefHeight="518.0" prefWidth="997.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab fx:id="tabSizeProduct" text="Add Product">
+               <content>
+                  <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="490.0" prefWidth="997.0">
+                     <children>
+                        <Label prefHeight="43.0" prefWidth="999.0" styleClass="header" text="Add Product" />
+                        <Label layoutX="379.0" layoutY="144.0" prefHeight="44.0" prefWidth="214.0" styleClass="LabelTilte" text="Product Name" />
+                        <Label layoutX="67.0" layoutY="129.0" prefHeight="340.0" prefWidth="221.0" styleClass="table-view">
+                           <graphic>
+                              <ImageView  fitHeight="336.0" fitWidth="221.0" pickOnBounds="true" preserveRatio="true" />
+                           </graphic>
+                        </Label>
+                        <Label layoutX="379.0" layoutY="215.0" prefHeight="44.0" prefWidth="214.0" styleClass="LabelTilte" text="Category" />
+                        <TextField fx:id="txtProductName" layoutX="677.0" layoutY="142.0" prefHeight="49.0" prefWidth="249.0" styleClass="TextFieldInput" />
+                        <TextField fx:id="txtCategory" layoutX="677.0" layoutY="221.0" prefHeight="49.0" prefWidth="249.0" styleClass="TextFieldInput" />
+                        <Label layoutX="379.0" layoutY="299.0" prefHeight="44.0" prefWidth="214.0" styleClass="LabelTilte" text="Upload Image" />
+                        <Button fx:id="btnUploadfile" layoutX="681.0" layoutY="308.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="241.0" text="UploadFile" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+          <Tab fx:id="tabSize" text="Add Size">
+               <content>
+                  <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="490.0" prefWidth="997.0">
+                     <children>
+                        <Label prefHeight="43.0" prefWidth="999.0" styleClass="header" text="Add Product" />
+                        <Label layoutX="379.0" layoutY="107.0" prefHeight="44.0" prefWidth="214.0" styleClass="LabelTilte" text="Product Name" />
+                        <Label layoutX="67.0" layoutY="97.0" prefHeight="340.0" prefWidth="221.0" styleClass="table-view">
+                           <graphic>
+                              <ImageView  fitHeight="336.0" fitWidth="221.0" pickOnBounds="true" preserveRatio="true" />
+                           </graphic>
+                        </Label>
+                        <Label layoutX="379.0" layoutY="245.0" prefHeight="44.0" prefWidth="214.0" styleClass="LabelTilte" text="Size" />
+                        <Label layoutX="379.0" layoutY="176.0" prefHeight="44.0" prefWidth="214.0" styleClass="LabelTilte" text="Category" />
+                        <Label layoutX="379.0" layoutY="314.0" prefHeight="44.0" prefWidth="214.0" styleClass="LabelTilte" text="Price" />
+                        <TextField fx:id="txtprice" layoutX="681.0" layoutY="312.0" prefHeight="49.0" prefWidth="241.0" styleClass="TextFieldInput" />
+                        <ComboBox fx:id="cbSize" layoutX="679.0" layoutY="246.0" prefHeight="42.0" prefWidth="242.0" styleClass="TextFieldInput" />
+                        <Label fx:id="labelProduct" layoutX="676.0" layoutY="107.0" prefHeight="44.0" prefWidth="249.0" text="Product Name">
+                           <styleClass>
+                              <String fx:value="TextFieldInput" />
+                              <String fx:value="LabelTitleDelete" />
+                              <String fx:value="search-box" />
+                           </styleClass>
+                        </Label>
+                        <Label fx:id="labelCateogory" layoutX="681.0" layoutY="176.0" prefHeight="44.0" prefWidth="249.0" text="Product Category">
+                           <styleClass>
+                              <String fx:value="TextFieldInput" />
+                              <String fx:value="LabelTitleDelete" />
+                              <String fx:value="search-box" />
+                           </styleClass>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </header>
+   <buttonTypes>
+      <ButtonType fx:constant="APPLY" />
+      <ButtonType fx:constant="CLOSE" />
+   </buttonTypes>
+</DialogPane>
