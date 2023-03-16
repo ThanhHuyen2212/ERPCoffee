@@ -18,6 +18,9 @@
 .shadow{
     -fx-effect:dropShadow(three-pass-box, rgba(0,0,0,0.1),10.0,0.0,0.0,10.0);
 }
+.border_radius{
+-fx-background-radius:30;
+}
 /*.chonsen-fruit-card{
     -fx-background-color:#F16C31;
     -fx-background-top-radius: 30;
@@ -76,4 +79,23 @@
 }
 .blue{
 -fx-background-color:#19A7CE;
+}
+.btnAdd{
+
+   -fx-background-radius:20;
+    -fx-text-fill: #fff;
+    -fx-font-size: 20;
+    -fx-font-weight: 700;
+}
+.btnAdd:hover{
+    -fx-background-color:tomato;
+}
+.colorGreen{
+    -fx-background-color:#5D9C59;
+}
+.colorYellow{
+    -fx-background-color:#FFDD83;
+}
+.colorRed{
+    -fx-background-color:#FF7878;
 }

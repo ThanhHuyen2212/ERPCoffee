@@ -1,0 +1,171 @@
+* {
+   -fx-primary-color: #3A3845;
+   -fx-red-color: #FC605C;
+   -fx-green-color: #34c647;
+   -fx-light-grey-color: #DDDDDD;
+   -fx-background-scroll-pane: #F5F8FB;
+}
+
+.ml-8 {
+    -fx-padding: 0 32 0 0;
+}
+
+.search {
+    -fx-background-radius: 32px;
+    -fx-padding: 10px 40px 10px 16px;
+}
+
+.search-btn {
+    -fx-background-color: #F4F5F7;
+    -fx-border-radius: 50%;
+    -fx-background-radius: 50%;
+    -fx-padding: 6;
+    -fx-cursor: hand;
+}
+
+.wrapper-btn {
+    -fx-background-radius: 8;
+    -fx-padding: 8px 16px;
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
+.primary-btn {
+    -fx-background-color: -fx-primary-color;
+    -fx-text-fill: #FFFFFF;
+}
+
+.primary-btn:hover {
+    -fx-opacity: 0.8;
+    -fx-effect: dropshadow(three-pass-box, #5F50F1,2,0,0,0);
+}
+
+.cancel-btn {
+    -fx-background-color: -fx-red-color;
+    -fx-text-fill: #FFFFFF;
+}
+
+.cancel-btn:hover {
+    -fx-opacity: 0.8;
+    -fx-effect: dropshadow(three-pass-box, -fx-red-color,2,0,0,0);
+}
+
+.success-btn {
+    -fx-background-color: -fx-green-color;
+    -fx-text-fill: #FFFFFF;
+}
+
+.success-btn:hover {
+    -fx-opacity: 0.8;
+    -fx-effect: dropshadow(three-pass-box, -fx-green-color,2,0,0,0);
+}
+
+.normal-btn {
+    -fx-background-color: -fx-light-grey-color;
+    -fx-text-fill: #000000;
+}
+
+.normal-btn:hover {
+    -fx-opacity: 0.8;
+    -fx-effect: dropshadow(three-pass-box, -fx-light-grey-color,2,0,0,0);
+}
+
+.small-btn {
+    -fx-min-width: 86px;
+}
+
+.label-header {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+/* Table View and Table Column */
+.table-view{
+    -fx-effect: dropshadow(three-pass-box, #111,10,0,0,0);
+}
+.table-view .column-header, .table-view .filler{
+    -fx-size: 45;
+    -fx-background-color: -fx-primary-color;
+    -fx-alignment: center;
+}
+.table-view .column-header .label{
+    -fx-text-fill: #fff;
+    -fx-text-alignment: center;
+}
+
+/* TextField */
+.text-field {
+    -fx-background-color: #a9a9a9 , white , white;
+    -fx-background-insets: 0 -1 -1 -1, 0 0 0 0, 0 -1 3 -1;
+}
+
+.text-field:focused {
+    -fx-background-color: #a9a9a9 , white , white;
+    -fx-background-insets: 0 -1 -1 -1, 0 0 0 0, 0 -1 3 -1;
+}
+
+/* ComboBox */
+.combo-box .list-cell
+{
+    -fx-background: white;
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-text-base-color;
+    -fx-padding: 3 0 2 7;
+    -fx-cell-size: 1.66667em;
+}
+
+.combo-box-popup .list-view
+{
+    -fx-background-color: white, white;
+    -fx-background-insets: 0, 1;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 8, 0.0 , 0 , 0 );
+}
+
+.combo-box-popup .list-view .list-cell
+{
+    -fx-padding: 4 0 4 5;
+
+    /* No alternate highlighting */
+    -fx-background-color: white;
+}
+
+.combo-box-popup .list-view .list-cell:filled:selected, .combo-box-popup .list-view .list-cell:filled:selected:hover
+{
+    -fx-background: -fx-accent;
+    -fx-background-color: -fx-selection-bar;
+    -fx-text-fill: -fx-selection-bar-text;
+}
+
+.combo-box-popup .list-view .list-cell:filled:hover
+{
+    -fx-background-color: white;
+    -fx-text-fill: -fx-text-inner-color;
+}
+
+.combo-box-base
+{
+    -fx-skin: "com.sun.javafx.scene.control.skin.ComboBoxBaseSkin";
+    -fx-background-color: white, white, white, white;
+    -fx-background-radius: 5, 5, 4, 3;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-padding: 2;
+}
+
+.combo-box-base:hover
+{
+    -fx-color: -fx-hover-base;
+}
+
+.combo-box-base:showing
+{
+    -fx-color: -fx-pressed-base;
+}
+
+.combo-box-base:focused {
+    -fx-background-color: -fx-focus-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
+    -fx-background-radius: 6.4, 4, 5, 3;
+    -fx-background-insets: -1.4, 0, 1, 2;
+}
+
+.combo-box-base:disabled {
+    -fx-opacity: .4;
+}
