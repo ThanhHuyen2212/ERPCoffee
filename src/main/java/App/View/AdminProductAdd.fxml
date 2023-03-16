@@ -13,7 +13,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<DialogPane fx:id="dialogCategoryAdd" prefHeight="572.0" prefWidth="999.0" styleClass="dialog" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Contoller.AdminProductAddController">
+<DialogPane fx:id="dialogCategoryAdd" prefHeight="572.0" prefWidth="999.0" styleClass="dialog" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Controller.AdminProductAddController">
    <stylesheets>
       <URL value="@css/AddApplication.css" />
       <URL value="@css/AdminApplication.css" />

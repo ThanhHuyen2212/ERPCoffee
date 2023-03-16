@@ -1,4 +1,6 @@
 package App.Statitics.Controller;
+import App.Statitics.Model.RevenueModel;
+import Entity.Order;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.BarChart;
@@ -11,9 +13,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.net.URL;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
-public class RevenueControl implements Initializable {
+public class RevenueControl{
 
     @FXML
     private CategoryAxis category;
@@ -30,43 +35,41 @@ public class RevenueControl implements Initializable {
     @FXML
     private VBox btmBox;
 
+    private RevenueModel model;
+
+    public RevenueModel getModel() {
+        return model;
+    }
+
+    public void setModel(RevenueModel model) {
+        this.model = model;
+    }
+
+    private XYChart.Series dataSeries;
 
 
+    public void renderChart(){
+        setDataSeries(model.getData());
+        renderTableData();
+        revenueChart.getData().add(dataSeries);
+    }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        XYChart.Series series1 = new XYChart.Series();
-        series1.setName("2003");
-        series1.getData().add(new XYChart.Data("1994-07-09", 25601.34));
-        series1.getData().add(new XYChart.Data("1994-07-10", 20148.82));
-        series1.getData().add(new XYChart.Data("1994-07-11", 10000));
-        series1.getData().add(new XYChart.Data("1994-07-12", 35407.15));
-        series1.getData().add(new XYChart.Data("1994-07-13", 12000));
-        series1.getData().add(new XYChart.Data("1994-07-14", 25601.34));
-        series1.getData().add(new XYChart.Data("1994-07-15", 20148.82));
-        series1.getData().add(new XYChart.Data("1994-07-16", 10000));
-        series1.getData().add(new XYChart.Data("1994-07-17", 35407.15));
-        series1.getData().add(new XYChart.Data("1994-07-18", 12000));
-        series1.getData().add(new XYChart.Data("1994-07-19", 25601.34));
-        series1.getData().add(new XYChart.Data("1994-07-20", 20148.82));
-        series1.getData().add(new XYChart.Data("1994-07-21", 10000));
-        series1.getData().add(new XYChart.Data("1994-07-22", 35407.15));
-        series1.getData().add(new XYChart.Data("1994-07-23", 12000));
-        series1.getData().add(new XYChart.Data("1994-07-24", 25601.34));
-        series1.getData().add(new XYChart.Data("1994-07-25", 20148.82));
-        series1.getData().add(new XYChart.Data("1994-07-26", 10000));
-        series1.getData().add(new XYChart.Data("1994-07-27", 35407.15));
-        series1.getData().add(new XYChart.Data("1994-07-28", 12000));
-        revenueChart.getData().addAll(series1);
-
-        for(Object xy : series1.getData()){
+    public void renderTableData(){
+        btmBox.getChildren().clear();
+        for(Object xy : dataSeries.getData()){
             btmBox.getChildren().add(
                     new HBox(new Label(((XYChart.Data<String,Integer>) xy).getXValue()+" : "),
                             new Label(String.valueOf(((XYChart.Data<String,Integer>) xy).getYValue()))
                     ));
         }
-
-
     }
 
+
+    public XYChart.Series getDataSeries() {
+        return dataSeries;
+    }
+
+    public void setDataSeries(XYChart.Series dataSeries) {
+        this.dataSeries = dataSeries;
+    }
 }
