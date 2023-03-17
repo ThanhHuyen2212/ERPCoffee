@@ -1,10 +1,9 @@
 package App.Statitics.Controller;
+import App.Statitics.Model.RevenueModel;
+import Logic.Statitics.LStatitics;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
@@ -13,16 +12,29 @@ import javafx.scene.layout.VBox;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class RevenueControl implements Initializable {
+public class RevenueControl implements Initializable{
+
 
     @FXML
-    private CategoryAxis category;
+    private NumberAxis revDAxis;
 
     @FXML
-    private NumberAxis number;
+    private CategoryAxis revDCate;
 
     @FXML
-    private BarChart<String, Integer> revenueChart;
+    private NumberAxis revPAxis;
+
+    @FXML
+    private CategoryAxis revPCate;
+
+    @FXML
+    private PieChart revenueCateChart;
+
+    @FXML
+    private BarChart<String, Number> revenueDayChart;
+
+    @FXML
+    private BarChart<String, Number> revenueProductChart;
 
     @FXML
     private ScrollPane btmScrollpane;
@@ -30,43 +42,41 @@ public class RevenueControl implements Initializable {
     @FXML
     private VBox btmBox;
 
+    private RevenueModel model;
 
+    public RevenueModel getModel() {
+        return model;
+    }
 
+    public void setModel(RevenueModel model) {
+        this.model = model;
+    }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        XYChart.Series series1 = new XYChart.Series();
-        series1.setName("2003");
-        series1.getData().add(new XYChart.Data("1994-07-09", 25601.34));
-        series1.getData().add(new XYChart.Data("1994-07-10", 20148.82));
-        series1.getData().add(new XYChart.Data("1994-07-11", 10000));
-        series1.getData().add(new XYChart.Data("1994-07-12", 35407.15));
-        series1.getData().add(new XYChart.Data("1994-07-13", 12000));
-        series1.getData().add(new XYChart.Data("1994-07-14", 25601.34));
-        series1.getData().add(new XYChart.Data("1994-07-15", 20148.82));
-        series1.getData().add(new XYChart.Data("1994-07-16", 10000));
-        series1.getData().add(new XYChart.Data("1994-07-17", 35407.15));
-        series1.getData().add(new XYChart.Data("1994-07-18", 12000));
-        series1.getData().add(new XYChart.Data("1994-07-19", 25601.34));
-        series1.getData().add(new XYChart.Data("1994-07-20", 20148.82));
-        series1.getData().add(new XYChart.Data("1994-07-21", 10000));
-        series1.getData().add(new XYChart.Data("1994-07-22", 35407.15));
-        series1.getData().add(new XYChart.Data("1994-07-23", 12000));
-        series1.getData().add(new XYChart.Data("1994-07-24", 25601.34));
-        series1.getData().add(new XYChart.Data("1994-07-25", 20148.82));
-        series1.getData().add(new XYChart.Data("1994-07-26", 10000));
-        series1.getData().add(new XYChart.Data("1994-07-27", 35407.15));
-        series1.getData().add(new XYChart.Data("1994-07-28", 12000));
-        revenueChart.getData().addAll(series1);
+    public void setDayData(){
+        this.revenueDayChart.getData().clear();
+        this.revenueDayChart.getData().add(model.getRevenueChartData());
+    }
 
-        for(Object xy : series1.getData()){
-            btmBox.getChildren().add(
-                    new HBox(new Label(((XYChart.Data<String,Integer>) xy).getXValue()+" : "),
-                            new Label(String.valueOf(((XYChart.Data<String,Integer>) xy).getYValue()))
-                    ));
-        }
-
+    public void setProductData(){
+        this.revenueProductChart.getData().clear();
+        this.revenueProductChart.getData().add(model.getRevenueChartByProduct());
 
     }
 
+    public void setCateData(){
+        this.revenueCateChart.setData(model.getRevenueChartByCategory());
+    }
+
+    public void setData(){
+        setDayData();
+        setProductData();
+        setCateData();
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        this.model = new RevenueModel();
+        this.model.setDataGetter(new LStatitics());
+        setData();
+    }
 }
