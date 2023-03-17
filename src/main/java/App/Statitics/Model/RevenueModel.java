@@ -1,6 +1,11 @@
 package App.Statitics.Model;
 
 import Entity.Order;
+import Logic.Statitics.IStatitics;
+import Logic.Statitics.LStatitics;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 
 import java.sql.Date;
@@ -8,34 +13,66 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class RevenueModel {
-    private HashMap<Date,ArrayList<Order>> orders;
+
+    private IStatitics dataGetter;
+
+    private ArrayList<IStatitics.Order> revenueData;
+    private ArrayList<IStatitics.Product> revenueByProduct;
+    private ArrayList<IStatitics.Category> revenueByCategory;
 
     public RevenueModel() {
-        orders = new HashMap<>();
     }
 
-    public RevenueModel(HashMap<Date, ArrayList<Order>> orders) {
-        this.orders = orders;
+    public IStatitics getDataGetter() {
+        return dataGetter;
     }
 
-    public HashMap<Date, ArrayList<Order>> getOrders() {
-        return orders;
+    public void setDataGetter(IStatitics dataGetter) {
+        this.dataGetter = dataGetter;
+        this.revenueData = dataGetter.getRevenueStatitics();
+        this.revenueByProduct = dataGetter.getProductStatitics();
+        this.revenueByCategory = dataGetter.getCategoryStatitics();
     }
 
-    public void setOrders(HashMap<Date, ArrayList<Order>> orders) {
-        this.orders = orders;
+    public ArrayList<IStatitics.Order> getRevenueData() {
+        if(revenueData == null) revenueData = new ArrayList<>();
+        return revenueData;
     }
 
-    public Number getRevenue(Date date){
-        double sum = 0;
-        for(Order od : orders.get(date)){
-            sum += od.getTotalPrice();
-        }
-        return sum;
+    public XYChart.Series<String,Number> getRevenueChartData(){
+        return new XYChart.Series<>("Revenue", FXCollections.observableList(
+                revenueData.stream().map(
+                        data -> new XYChart.Data<>(data.getDate().toString(),data.getTotalRevenue())
+                ).toList()
+        ));
     }
 
-    public void addOrder(Order od){
-        orders.get(od.getOrderDate()).add(od);
+    public ArrayList<IStatitics.Product> getRevenueByProduct() {
+        if (revenueByProduct == null) revenueByProduct = new ArrayList<>();
+        return revenueByProduct;
+    }
+
+    public XYChart.Series<String,Number> getRevenueChartByProduct(){
+        return new XYChart.Series<>("Revenue by Product", FXCollections.observableList(
+                revenueByProduct.stream().map(
+                        data -> new XYChart.Data<>(data.getProductName(),data.getTotalRevenue())
+                ).toList()
+        ));
+    }
+
+    public ArrayList<IStatitics.Category> getRevenueByCategory() {
+        if(revenueByCategory == null) revenueByCategory = new ArrayList<>();
+        return revenueByCategory;
+    }
+
+    public ObservableList<PieChart.Data> getRevenueChartByCategory(){
+        return FXCollections.observableList(
+                revenueByCategory.stream().map(
+                        data -> new PieChart.Data(
+                                data.getName(),
+                                Double.parseDouble(data.getTotalRevenue().toString()))
+                ).toList()
+        );
     }
 
     public XYChart.Series getData(){
