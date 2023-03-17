@@ -5,6 +5,8 @@ import Entity.Product;
 import Entity.Size;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -32,6 +34,12 @@ public class ShopController implements Initializable {
 
     @FXML
     private HBox hboxCartegory;
+    @FXML
+    private Button btnAdd;
+    @FXML
+    private Button btnEdit;
+    @FXML
+    private Button btnCancel;
 
     @FXML
     private ScrollPane scroll;
@@ -52,6 +60,7 @@ public class ShopController implements Initializable {
 
     private List<Category> categoryList = new ArrayList<>();
     public static ArrayList<Product> productList  = new ArrayList<>();
+    public ArrayList<Product> orderList = new ArrayList<>();
     private List<Size> sizeList = new ArrayList<>();
 
     /**
@@ -108,6 +117,7 @@ public class ShopController implements Initializable {
         return products;
     }
     public void render(ArrayList<Product> products){
+        orderList.clear();
         products= (ArrayList<Product>) getDataProducts();
         int column=0;
         int row=1;
@@ -117,7 +127,17 @@ public class ShopController implements Initializable {
                 @Override
                 public void onClickListener(Product product) {
                     setDetails(product);
+                    btnAdd.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent actionEvent) {
+                            orderList.add(product);
+                            for (Product p: orderList) {
+                                System.out.println(p.getProductName());
+                            }
+                        }
+                    });
                 }
+
             };
         }
         try {
