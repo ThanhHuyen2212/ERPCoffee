@@ -15,7 +15,7 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="577.0" prefWidth="1048.0" type="VBox" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Depot.Controller.IngredientManagementController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="577.0" prefWidth="1048.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Depot.Controller.IngredientManagementController">
 
     <children>
         <Label alignment="CENTER" minWidth="30.0" prefHeight="50.0" prefWidth="1048.0" text="Raw Material Warehouse" VBox.vgrow="ALWAYS">
@@ -252,4 +252,4 @@
     <padding>
         <Insets bottom="12.0" left="12.0" right="12.0" />
     </padding>
-</fx:root>
+</VBox>
