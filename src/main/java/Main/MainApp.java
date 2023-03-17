@@ -2,6 +2,7 @@ package Main;
 
 import App.Statitics.Controller.RevenueControl;
 import App.Statitics.Model.RevenueModel;
+import Logic.Statitics.LStatitics;
 import Util.DateTool;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -20,8 +21,6 @@ public class MainApp extends Application {
         String filepath = "src/main/java/App/Statitics/View/RevenueChart.fxml";
         FXMLLoader fxmlLoader = new FXMLLoader(new File(filepath).toURI().toURL());
         Parent root = fxmlLoader.load();
-        ((RevenueControl)fxmlLoader.getController()).setModel(new RevenueModel());
-        ((RevenueControl)fxmlLoader.getController()).renderChart();
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
