@@ -157,21 +157,21 @@
                   <HBox alignment="CENTER" prefHeight="73.0" prefWidth="387.0">
                      <children>
                         <Pane prefHeight="87.0" prefWidth="27.0" />
-                        <Button mnemonicParsing="false" prefHeight="61.0" prefWidth="109.0" text="Add">
+                        <Button fx:id="btnAdd" mnemonicParsing="false" prefHeight="61.0" prefWidth="109.0" text="Add">
                            <styleClass>
                               <String fx:value="btnAdd" />
                               <String fx:value="colorGreen" />
                            </styleClass>
                         </Button>
                         <Pane prefHeight="73.0" prefWidth="20.0" />
-                        <Button mnemonicParsing="false" prefHeight="62.0" prefWidth="113.0" text="Edit">
+                        <Button fx:id="btnEdit" mnemonicParsing="false" prefHeight="62.0" prefWidth="113.0" text="Edit">
                            <styleClass>
                               <String fx:value="btnAdd" />
                               <String fx:value="colorYellow" />
                            </styleClass>
                         </Button>
                         <Pane prefHeight="87.0" prefWidth="27.0" />
-                        <Button mnemonicParsing="false" prefHeight="62.0" prefWidth="112.0" text="Button">
+                        <Button fx:id="btnCacncel" mnemonicParsing="false" prefHeight="62.0" prefWidth="112.0" text="Cancel">
                            <styleClass>
                               <String fx:value="colorRed" />
                               <String fx:value="btnAdd" />
