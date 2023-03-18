@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<TableView xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="App.Statitics.Controller.CategoryTableControl"
+           fx:id="dataTable"
+            prefHeight="400.0" prefWidth="600.0">
+    <columns>
+        <TableColumn fx:id="nameCol" prefWidth="75.0" text="Name" />
+        <TableColumn fx:id="revCol" prefWidth="75.0" text="Revenue" />
+        <TableColumn fx:id="countCol" prefWidth="75.0" text="Product Count" />
+    </columns>
+    <columnResizePolicy>
+        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+    </columnResizePolicy>
+</TableView>
