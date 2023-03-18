@@ -1,33 +1,45 @@
 package App.Statitics.Controller;
 import App.Statitics.Model.RevenueModel;
-import Entity.Order;
+import Logic.Statitics.LStatitics;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.ResourceBundle;
 
-public class RevenueControl{
+public class RevenueControl implements Initializable{
+
 
     @FXML
-    private CategoryAxis category;
+    private NumberAxis revDAxis;
 
     @FXML
-    private NumberAxis number;
+    private CategoryAxis revDCate;
 
     @FXML
-    private BarChart<String, Integer> revenueChart;
+    private NumberAxis revPAxis;
+
+    @FXML
+    private CategoryAxis revPCate;
+
+    @FXML
+    private PieChart revenueCateChart;
+
+    @FXML
+    private BarChart<String, Number> revenueDayChart;
+
+    @FXML
+    private BarChart<String, Number> revenueProductChart;
 
     @FXML
     private ScrollPane btmScrollpane;
@@ -45,31 +57,90 @@ public class RevenueControl{
         this.model = model;
     }
 
-    private XYChart.Series dataSeries;
-
-
-    public void renderChart(){
-        setDataSeries(model.getData());
-        renderTableData();
-        revenueChart.getData().add(dataSeries);
+    public void setDayData(){
+        this.revenueDayChart.getData().clear();
+        this.revenueDayChart.getData().add(model.getRevenueChartData());
     }
 
-    public void renderTableData(){
-        btmBox.getChildren().clear();
-        for(Object xy : dataSeries.getData()){
-            btmBox.getChildren().add(
-                    new HBox(new Label(((XYChart.Data<String,Integer>) xy).getXValue()+" : "),
-                            new Label(String.valueOf(((XYChart.Data<String,Integer>) xy).getYValue()))
-                    ));
-        }
+    public void setProductData(){
+        this.revenueProductChart.getData().clear();
+        this.revenueProductChart.getData().add(model.getRevenueChartByProduct());
+
     }
 
-
-    public XYChart.Series getDataSeries() {
-        return dataSeries;
+    public void setCateData(){
+        this.revenueCateChart.setData(model.getRevenueChartByCategory());
     }
 
-    public void setDataSeries(XYChart.Series dataSeries) {
-        this.dataSeries = dataSeries;
+    public void setData(){
+        setDayData();
+        setProductData();
+        setCateData();
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        this.model = new RevenueModel();
+        this.model.setDataGetter(new LStatitics());
+        btmScrollpane.setPrefWidth(400);
+        setData();
+        handleRevChartClick();
+        handleProChartClick();
+        handleCatChartClick();
+    }
+
+    public void handleRevChartClick(){
+        revenueDayChart.setOnMouseClicked(e->{
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(
+                        new File("src/main/java/App/Statitics/View/RevenueTable.fxml").toURI().toURL()
+                );
+                TableView table = fxmlLoader.load();
+                btmScrollpane.setContent(table);
+                ((RevenueTableControl)fxmlLoader.getController()).setData(model.getRevenueData());
+                table.setPrefWidth(btmScrollpane.getPrefWidth());
+
+            } catch (MalformedURLException ex) {
+                throw new RuntimeException(ex);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+    }
+    public void handleProChartClick(){
+        revenueProductChart.setOnMouseClicked(e->{
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(
+                        new File("src/main/java/App/Statitics/View/ProductTable.fxml").toURI().toURL()
+                );
+                TableView table = fxmlLoader.load();
+                btmScrollpane.setContent(table);
+                ((ProductTableControl)fxmlLoader.getController()).setData(model.getRevenueByProduct());
+                table.setPrefWidth(btmScrollpane.getPrefWidth());
+
+            } catch (MalformedURLException ex) {
+                throw new RuntimeException(ex);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+    }
+    public void handleCatChartClick(){
+        revenueCateChart.setOnMouseClicked(e->{
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(
+                        new File("src/main/java/App/Statitics/View/CategoryTable.fxml").toURI().toURL()
+                );
+                TableView table = fxmlLoader.load();
+                btmScrollpane.setContent(table);
+                ((CategoryTableControl)fxmlLoader.getController()).setData(model.getRevenueByCategory());
+                table.setPrefWidth(btmScrollpane.getPrefWidth());
+
+            } catch (MalformedURLException ex) {
+                throw new RuntimeException(ex);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
     }
 }
