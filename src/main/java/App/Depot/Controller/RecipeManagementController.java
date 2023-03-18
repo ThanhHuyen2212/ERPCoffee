@@ -14,7 +14,7 @@ public class RecipeManagementController {
     private TableColumn<?, ?> idCol;
 
     @FXML
-    private TableView<?> recipeTable;
+    private TableView<?> ingredientTable;
 
     @FXML
     private TableColumn<?, ?> productNameCol;

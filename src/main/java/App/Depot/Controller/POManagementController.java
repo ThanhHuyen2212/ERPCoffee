@@ -8,16 +8,22 @@ public class POManagementController {
     private Button addBtn;
 
     @FXML
-    private TableView<?> POTable;
-
-    @FXML
     private TableColumn<?, ?> buyerCol;
 
     @FXML
     private TableColumn<?, ?> idCol;
 
     @FXML
+    private TableView<?> ingredientTable;
+
+    @FXML
     private TableColumn<?, ?> orderDateCol;
+
+    @FXML
+    private Label searchBtn;
+
+    @FXML
+    private TextField searchTxf;
 
     @FXML
     private TableColumn<?, ?> statusCol;
@@ -28,9 +34,4 @@ public class POManagementController {
     @FXML
     private TableColumn<?, ?> vendorCol;
 
-    @FXML
-    private Label searchBtn;
-
-    @FXML
-    private TextField searchTxf;
 }

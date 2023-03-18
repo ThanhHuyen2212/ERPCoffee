@@ -1,7 +1,7 @@
 package App.Depot.Controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.*;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -10,19 +10,7 @@ import java.awt.*;
 
 public class POInputController {
     @FXML
-    private Button addBtn;
-
-    @FXML
-    private Button confirmBtn;
-
-    @FXML
     private TextField dateLbl;
-
-    @FXML
-    private Button deleteBtn;
-
-    @FXML
-    private Button editBtn;
 
     @FXML
     private TableColumn<?, ?> idCol;
@@ -53,9 +41,6 @@ public class POInputController {
 
     @FXML
     private TextField staffCreateTxf;
-
-    @FXML
-    private Label totalLbl;
 
     @FXML
     private TableColumn<?, ?> typeCol;
