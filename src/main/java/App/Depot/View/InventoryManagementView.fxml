@@ -1,13 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      prefHeight="577.0" prefWidth="1048.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/18"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Depot.Controller.InventoryManagementController">
+    <children>
+        <Label alignment="CENTER" minWidth="30.0" prefHeight="50.0" prefWidth="1048.0" text="Moves History"
+               VBox.vgrow="ALWAYS">
+            <font>
+                <Font name="System Bold" size="24.0"/>
+            </font>
+        </Label>
+        <TableView fx:id="historyTable" minWidth="800.0" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="dateCol" prefWidth="106.99409770965576" text="Date"/>
+                <TableColumn fx:id="refCol" prefWidth="136.50589752197266" text="Reference"/>
+                <TableColumn fx:id="productCol" prefWidth="226.18377685546875" text="Product"/>
+                <TableColumn fx:id="fromCol" prefWidth="208.65737915039062" text="From"/>
+                <TableColumn fx:id="qtyCol" prefWidth="99.23593139648438" text="Quantity"/>
+                <TableColumn fx:id="unitCol" prefWidth="140.6580810546875" text="Unit"/>
+                <TableColumn fx:id="statusCol" prefWidth="106.8419189453125" text="Status"/>
+            </columns>
+        </TableView>
+    </children>
+    <padding>
+        <Insets bottom="12.0" left="12.0" right="12.0"/>
+    </padding>
+</VBox>
