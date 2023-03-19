@@ -1,6 +1,9 @@
 package App.Controller;
 
+import App.Model.OrderTable;
 import Entity.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -9,22 +12,41 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
-import javafx.scene.image.WritableImage;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.NumberFormat;
 import java.util.*;
 
 public class ShopController implements Initializable {
     @FXML
     private Button BtnSearch;
+
+    @FXML
+    private TableColumn<OrderTable, Integer> NoColumn;
+
+    @FXML
+    private TableColumn<OrderTable,String> ProductColumn;
+
     @FXML
     private TextField Quality;
+
+    @FXML
+    private Button btnAdd;
+
+    @FXML
+    private Button btnCacncel;
+
+    @FXML
+    private Button btnEdit;
+
+    @FXML
+    private Button btnOrder;
 
     @FXML
     private ComboBox<String> cbSizePrice;
@@ -34,22 +56,27 @@ public class ShopController implements Initializable {
 
     @FXML
     private HBox hboxCartegory;
-    @FXML
-    private Button btnAdd;
-    @FXML
-    private Button btnEdit;
-    @FXML
-    private Button btnCancel;
+
     @FXML
     private Button minusBtn;
 
     @FXML
+    private TableView<OrderTable> orderDetailsTables;
+
+    @FXML
     private Button plusBtn;
+
+    @FXML
+    private TableColumn<OrderTable, Integer> quantityColumn;
+
     @FXML
     private ScrollPane scroll;
 
     @FXML
     private TextField textSearch;
+
+    @FXML
+    private TableColumn<OrderTable, String> totalColumn;
 
     @FXML
     private Label txtPriceDetails;
@@ -60,7 +87,7 @@ public class ShopController implements Initializable {
     @FXML
     private AnchorPane viewControl;
     @FXML
-    private  Button btnOrder;
+    private Label totalmoneyLabel;
 
     private MyListener myListener;
 
@@ -68,6 +95,29 @@ public class ShopController implements Initializable {
     public static ArrayList<Product> productList  = new ArrayList<>();
     public ArrayList<OrderDetail> orderList = new ArrayList<>();
     private List<Size> sizeList = new ArrayList<>();
+    ObservableList<OrderTable> orderTableObservableList;
+    public ArrayList<OrderTable> getDataOrderTable(ArrayList<OrderDetail> orderList){
+        ArrayList<OrderTable> orderTables = new ArrayList<>();
+        for(OrderDetail o : orderList) {
+            OrderTable newOrderTable = new OrderTable(o);
+            orderTables.add(newOrderTable);
+        }
+        if(orderTables.size()>0){
+            System.out.println("co");
+        }else{
+            System.out.println("Khong");
+        }
+        return  orderTables;
+
+    }
+    public void initTable( ArrayList<OrderTable> orderTables){
+        orderTableObservableList=FXCollections.observableArrayList(orderTables);
+        NoColumn.setCellValueFactory(new PropertyValueFactory<OrderTable, Integer>("No"));
+        ProductColumn.setCellValueFactory(new PropertyValueFactory<OrderTable,String>("product"));
+        quantityColumn.setCellValueFactory(new PropertyValueFactory<OrderTable, Integer>("quantity"));
+        totalColumn.setCellValueFactory(new PropertyValueFactory<OrderTable, String>("total"));
+        orderDetailsTables.setItems(orderTableObservableList);
+    }
 
     /**
      * Fake dữ liệu
@@ -93,6 +143,16 @@ public class ShopController implements Initializable {
         category.setCategoryName("milkTea1");
         categories.add(category);
         return categories;
+    }
+    private ArrayList<Size> getDataSize(){
+        ArrayList<Size> sizes = new ArrayList<>();
+        Size sizeS = new Size("S","Size sieu nho");
+        Size sizeM = new Size("M","Size sieu vua");
+        Size sizeL = new Size("L","Size sieu lon");
+        sizes.add(sizeS);
+        sizes.add(sizeM);
+        sizes.add(sizeL);
+        return sizes;
     }
     private ArrayList<Product> getDataProducts(){
         Size sizeS = new Size("S","Size sieu nho");
@@ -150,6 +210,59 @@ public class ShopController implements Initializable {
             Quality.setText(String.valueOf(inputValue));
         }
     }
+    public boolean checkProductChoose(OrderDetail orderDetail) {
+        for (OrderDetail o : orderList) {
+            if (orderDetail.getProduct() == o.getProduct() && o.getSize().getSign().equalsIgnoreCase(cbSizePrice.getValue()) ) {
+                o.setQty(o.getQty() + Integer.parseInt(Quality.getText()));
+                System.out.println(o.getProduct().getProductName() + "-" + o.getQty() + "-" + o.getSize().getSign());
+                return true;
+            }
+        }
+        orderList.add(orderDetail);
+        return  false;
+    }
+    public OrderDetail orderDetailsChoose(Product product, String sizeChoose){
+        OrderDetail orderDetail = new OrderDetail();
+        orderDetail.setProduct(product);
+        int quantity = Integer.parseInt(Quality.getText());
+        Size size = null;
+        for (Size s : sizeList){
+            if(s.getSign().equalsIgnoreCase(sizeChoose)){
+                size=s;
+            }
+        }
+        orderDetail.setQty(quantity);
+        orderDetail.setSize(size);
+        return orderDetail;
+    }
+    public void AddOrderDetails(OrderDetail product){
+        btnAdd.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+            if(orderList.size()>0){
+                if(checkProductChoose(product)){
+                    System.out.println("San pham cu");
+                }else{
+                    System.out.println("San pham moi");
+                }
+            }else{
+                System.out.println("San pham moi 1");
+                orderList.add(product);
+            }
+                initTable(getDataOrderTable(orderList));
+                orderDetailsTables.refresh();
+                Integer sumTotal =0;
+                for(OrderDetail o : orderList){
+                    sumTotal+=o.getProduct().getPrice(o.getSize().getSign())*o.getQty();
+                }
+
+                totalmoneyLabel.setText(NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(sumTotal));
+            }
+
+
+        });
+
+    }
     public void printOrder(){
         FXMLLoader loader = new FXMLLoader();
         String orderFIle = "src/main/java/App/View/Order.fxml";
@@ -178,26 +291,52 @@ public class ShopController implements Initializable {
         });
 
     }
+    public void Event(Product product){
+        setDetails(product);
+        changeSizePrice(product);
 
+    }
+
+    public void changeSizePrice(Product product){
+        cbSizePrice.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                int Price = product.getPrice(t1);
+                txtPriceDetails.setText(NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(Price));
+            }
+        });
+    }
+    public void addOrderChangeSize(Product product){
+            cbSizePrice.valueProperty().addListener(new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                    OrderDetail o = orderDetailsChoose(product, t1);
+                    AddOrderDetails(o);
+                }
+
+
+            });
+        }
     public void render(ArrayList<Product> products){
         orderList.clear();
         products= (ArrayList<Product>) getDataProducts();
+        sizeList = getDataSize();
         int column=0;
         int row=1;
         if(products.size()>0){
-            setDetails(products.get(0));
+            Event(products.get(0));
+            OrderDetail o = orderDetailsChoose(products.get(0),cbSizePrice.getValue());
+            AddOrderDetails(o);
+            addOrderChangeSize(products.get(0));
+
             myListener = new MyListener() {
                 @Override
                 public void onClickListener(Product product) {
-                    setDetails(product);
-                    btnAdd.setOnAction(new EventHandler<ActionEvent>() {
-                        @Override
-                        public void handle(ActionEvent actionEvent) {
+                    Event(product);
+                    OrderDetail o = orderDetailsChoose(product,cbSizePrice.getValue());
+                    AddOrderDetails(o);
 
-                        }
-                    });
                 }
-
             };
         }
         try {
@@ -282,7 +421,7 @@ public class ShopController implements Initializable {
     cbSizePrice.setItems(observableArrayList);
     cbSizePrice.getSelectionModel().selectFirst();
     if(!cbSizePrice.getValue().isEmpty()){
-        txtPriceDetails.setText(String.valueOf(product.getPrice(cbSizePrice.getValue())));
+        txtPriceDetails.setText(NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(product.getPrice(cbSizePrice.getValue())));
     }
     }
     public void searchProduct(){

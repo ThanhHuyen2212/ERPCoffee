@@ -18,7 +18,7 @@ import java.io.File;
 public class MainApp extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        String filepath = "src/main/java/App/Statitics/View/RevenueChart.fxml";
+        String filepath = "src/main/java/App/View/ShopGUI.fxml";
         FXMLLoader fxmlLoader = new FXMLLoader(new File(filepath).toURI().toURL());
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
