@@ -50,5 +50,6 @@ public class IngredientManagement {
 
     public void delete(Ingredient i) {
 //        ingredientDAO.delete(i);
+        ingredients.remove(i);
     }
 }

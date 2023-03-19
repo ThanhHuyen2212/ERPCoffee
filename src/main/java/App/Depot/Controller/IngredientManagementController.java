@@ -1,6 +1,7 @@
 package App.Depot.Controller;
 
 import App.Depot.Model.IngredientManagementModel;
+import App.Depot.View.MessageDialog;
 import Entity.Ingredient;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -87,14 +88,23 @@ public class IngredientManagementController implements Initializable {
         EventHandler<ActionEvent> buttonAddHandler = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                model.handleCreate(new Ingredient(
-                        1,
-                        "Bot matcha",
-                        "Nguyen lieu kho",
-                        22,
-                        7,
-                        90000));
-                ingredientTable.setItems(model.getList());
+                MessageDialog messageDialog = new MessageDialog(
+                        "Confirm Addition",
+                        "Do you want to add the new ingredient?",
+                        "Your changes will be lost if you don’t save them.",
+                        MessageDialog.TYPES.get("Confirmation")
+                );
+                int rs = messageDialog.showMessage();
+                if(rs == 1) {
+                    model.handleCreate(new Ingredient(
+                            1,
+                            "Bot matcha",
+                            "Nguyen lieu kho",
+                            22,
+                            7,
+                            90000));
+                    ingredientTable.setItems(model.getList());
+                }
             }
         };
 
@@ -104,21 +114,27 @@ public class IngredientManagementController implements Initializable {
                 Ingredient selected = ingredientTable.getSelectionModel().getSelectedItem();
                 int index = ingredientTable.getSelectionModel().getSelectedIndex();
                 try{
-                    System.out.println(selected.getIngredientName());
                     String name = "Bot cacao dua";
                     String type = "Nguyen lieu duoc che bien";
                     int limit = 12;
-
 //                    String name = nameTxf.getText();
 //                    String type = typeTxf.getText();
 //                    int limit = limitTxf.getText();
 
-
-                    model.handleUpdate(selected, index, name, type, limit);
-                    ingredientTable.refresh();
+                    MessageDialog messageDialog = new MessageDialog(
+                            "Confirm Edition",
+                            "Do you want to edit the information?",
+                            "Your changes will be lost if you don’t save them.",
+                            MessageDialog.TYPES.get("Confirmation")
+                    );
+                    int rs = messageDialog.showMessage();
+                    if (rs == 1) {
+                        model.handleUpdate(selected, index, name, type, limit);
+                        ingredientTable.refresh();
 //                    ingredientTable.setItems(model.getList());
+                    }
                 } catch (Exception e) {
-                    System.out.println("Khhong bat duoc selected");
+                    System.out.println("Khong bat duoc selected");
                 }
             }
         };
@@ -126,12 +142,28 @@ public class IngredientManagementController implements Initializable {
         EventHandler<ActionEvent> buttonDeleteHandler = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
+                Ingredient selected = ingredientTable.getSelectionModel().getSelectedItem();
+                try{
+                    MessageDialog messageDialog = new MessageDialog(
+                            "Confirm Delete",
+                            "Do you want to delete the information?",
+                            "Your changes will be lost if you don’t save them.",
+                            MessageDialog.TYPES.get("Confirmation")
+                    );
+                    int rs = messageDialog.showMessage();
+                    if (rs == 1) {
+                        model.handleDelete(selected);
+                    ingredientTable.setItems(model.getList());
+                    }
+                } catch(Exception e) {
+                    System.out.println("Khong bat duoc selected - xoa ingredient");
+                }
             }
         };
 
         addBtn.setOnAction(buttonAddHandler);
         editBtn.setOnAction(buttonUpdateHandler);
+        deleteBtn.setOnAction(buttonDeleteHandler);
     }
 
 

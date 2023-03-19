@@ -6,20 +6,20 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class IngredientManagementModel {
-    private IngredientManagement ingredientManagement;
+    private IngredientManagement ingredientManagementLogic;
     private ObservableList<Ingredient> list;
 
     public IngredientManagementModel() {
-        ingredientManagement = new IngredientManagement();
-        list = FXCollections.observableArrayList(ingredientManagement.getIngredients());
+        ingredientManagementLogic = new IngredientManagement();
+        list = FXCollections.observableArrayList(ingredientManagementLogic.getIngredients());
     }
 
-    public IngredientManagement getIngredientManagement() {
-        return ingredientManagement;
+    public IngredientManagement getIngredientManagementLogic() {
+        return ingredientManagementLogic;
     }
 
-    public void setIngredientManagement(IngredientManagement ingredientManagement) {
-        this.ingredientManagement = ingredientManagement;
+    public void setIngredientManagementLogic(IngredientManagement ingredientManagementLogic) {
+        this.ingredientManagementLogic = ingredientManagementLogic;
     }
 
     public ObservableList<Ingredient> getList() {
@@ -30,21 +30,21 @@ public class IngredientManagementModel {
         this.list = list;
     }
     public void handleCreate(Ingredient i) {
-        ingredientManagement.create(i);
-        list = FXCollections.observableArrayList(ingredientManagement.getIngredients());
+        ingredientManagementLogic.create(i);
+        list = FXCollections.observableArrayList(ingredientManagementLogic.getIngredients());
     }
 
     public void handleUpdate(Ingredient i, int index, String name, String type, int limit) {
         i.setIngredientName(name);
         i.setIngredientType(type);
         i.setIngredientLimit(limit);
-        ingredientManagement.update(index, i);
+        ingredientManagementLogic.update(index, i);
 //        list = FXCollections.observableArrayList(ingredientManagement.getIngredients());
     }
 
     public void handleDelete(Ingredient i) {
-        ingredientManagement.delete(i);
-        list = FXCollections.observableArrayList(ingredientManagement.getIngredients());
+        ingredientManagementLogic.delete(i);
+        list = FXCollections.observableArrayList(ingredientManagementLogic.getIngredients());
     }
 
 
