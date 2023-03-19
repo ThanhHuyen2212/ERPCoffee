@@ -1,14 +1,13 @@
 package App.Statitics.Controller;
 import App.Statitics.Model.RevenueModel;
+import Logic.Statitics.IStatitics;
 import Logic.Statitics.LStatitics;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.*;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.io.File;
@@ -72,7 +71,7 @@ public class RevenueControl implements Initializable{
         this.revenueCateChart.setData(model.getRevenueChartByCategory());
     }
 
-    public void setData(){
+    public void presentData(){
         setDayData();
         setProductData();
         setCateData();
@@ -82,8 +81,11 @@ public class RevenueControl implements Initializable{
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.model = new RevenueModel();
         this.model.setDataGetter(new LStatitics());
+//        this.model.getDataGetter().getData(new IStatitics.Time(new Date(2023,03,01),new Date(2023,03,01)));
+//        this.model.getDataGetter().getData();
+        this.model.getData(new IStatitics.Time(2023,3));
         btmScrollpane.setPrefWidth(400);
-        setData();
+        presentData();
         handleRevChartClick();
         handleProChartClick();
         handleCatChartClick();

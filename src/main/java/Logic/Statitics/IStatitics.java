@@ -7,8 +7,10 @@ import javafx.util.Pair;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public interface IStatitics {
+    public void getData(Time time);
     public ArrayList<Order> getRevenueStatitics();
     public ArrayList<Product> getProductStatitics();
     public ArrayList<Category> getCategoryStatitics();
@@ -62,6 +64,41 @@ public interface IStatitics {
         }
     }
 
+    public class Time{
+        private Date start;
+        private Date end;
+
+        public Time() {
+        }
+
+        public Time(int year, int month){
+            Calendar cal = Calendar.getInstance();
+            this.start = new Date(year-1900,month-1,1);
+            cal.setTime(start);
+            this.end = new Date(year-1900,month-1,cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        }
+
+        public Time(Date start, Date end) {
+            this.start = start;
+            this.end = end;
+        }
+
+        public Date getStart() {
+            return start;
+        }
+
+        public void setStart(Date start) {
+            this.start = start;
+        }
+
+        public Date getEnd() {
+            return end;
+        }
+
+        public void setEnd(Date end) {
+            this.end = end;
+        }
+    }
     public class Product{
 
         private String productName;
