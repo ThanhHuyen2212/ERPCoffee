@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="800.0" prefWidth="1200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="App.Controller.AccountCRUD">
+  <children>
+    <GridPane layoutX="0.0" layoutY="0.0" prefHeight="800.0" prefWidth="1200.0">
+      <children>
+        <Label alignment="CENTER" prefHeight="50.0" prefWidth="809.0" text="Account" GridPane.columnIndex="0" GridPane.rowIndex="0">
+          <font>
+            <Font name="System Bold" size="25.0" fx:id="x1" />
+          </font>
+        </Label>
+        <Label alignment="CENTER" font="$x1" prefHeight="50.0" prefWidth="391.0" text="Detail" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+        <TableView prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
+          <columns>
+            <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="162.0" text="Employee ID" />
+            <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="297.0" text="UserName" />
+            <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="230.0" text="Password" />
+            <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="120.0" text="Role" />
+          </columns>
+        </TableView>
+        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+          <children>
+            <Label alignment="CENTER" layoutX="0.0" layoutY="160.0" prefHeight="40.0" prefWidth="125.0" text="UserName" wrapText="false">
+              <font>
+                <Font name="System Bold" size="18.0" fx:id="x2" />
+              </font>
+            </Label>
+            <TextField id="" layoutX="140.0" layoutY="162.0" prefHeight="40.0" prefWidth="237.0" />
+            <Label alignment="CENTER" font="$x2" layoutX="0.0" layoutY="233.0" prefHeight="40.0" prefWidth="125.0" text="Password" wrapText="false" />
+            <TextField id="" layoutX="140.0" layoutY="235.0" prefHeight="40.0" prefWidth="237.0" />
+            <Label alignment="CENTER" font="$x2" layoutX="0.0" layoutY="307.0" prefHeight="40.0" prefWidth="125.0" text="Role" wrapText="false" />
+            <ComboBox id="" layoutX="140.0" layoutY="312.0" prefWidth="237.0">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="Item 1" />
+                  <String fx:value="Item 2" />
+                  <String fx:value="Item 3" />
+                </FXCollections>
+              </items>
+            </ComboBox>
+            <Button id="" font="$x2" layoutX="9.0" layoutY="526.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="85.0" text="Add" />
+            <Button font="$x2" layoutX="104.0" layoutY="526.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="85.0" text="Edit" />
+            <Button font="$x2" layoutX="294.0" layoutY="526.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" text="Cancel" />
+            <Button font="$x2" layoutX="199.0" layoutY="526.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="85.0" text="Delete" />
+            <Label alignment="CENTER" font="$x2" layoutX="0.0" layoutY="84.0" prefHeight="40.0" prefWidth="125.0" text="Employee ID" wrapText="false" />
+            <TextField id="" layoutX="140.0" layoutY="86.0" prefHeight="40.0" prefWidth="237.0" />
+          </children>
+        </Pane>
+      </children>
+      <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="955.0" minWidth="10.0" prefWidth="809.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="597.0" minWidth="10.0" prefWidth="391.0" />
+      </columnConstraints>
+      <rowConstraints>
+        <RowConstraints maxHeight="394.0" minHeight="10.0" prefHeight="65.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="755.0" minHeight="10.0" prefHeight="735.0" vgrow="SOMETIMES" />
+      </rowConstraints>
+    </GridPane>
+  </children>
+</AnchorPane>
