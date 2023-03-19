@@ -29,6 +29,10 @@ public class RevenueModel {
 
     public void setDataGetter(IStatitics dataGetter) {
         this.dataGetter = dataGetter;
+    }
+
+    public void getData(IStatitics.Time time){
+        dataGetter.getData(time);
         this.revenueData = dataGetter.getRevenueStatitics();
         this.revenueByProduct = dataGetter.getProductStatitics();
         this.revenueByCategory = dataGetter.getCategoryStatitics();
@@ -75,29 +79,4 @@ public class RevenueModel {
         );
     }
 
-    public XYChart.Series getData(){
-        XYChart.Series series1 = new XYChart.Series();
-        series1.setName("2003");
-        series1.getData().add(new XYChart.Data("1994-07-09", 25601.34));
-        series1.getData().add(new XYChart.Data("1994-07-10", 20148.82));
-        series1.getData().add(new XYChart.Data("1994-07-11", 10000));
-        series1.getData().add(new XYChart.Data("1994-07-12", 35407.15));
-        series1.getData().add(new XYChart.Data("1994-07-13", 12000));
-        series1.getData().add(new XYChart.Data("1994-07-14", 25601.34));
-        series1.getData().add(new XYChart.Data("1994-07-15", 20148.82));
-        series1.getData().add(new XYChart.Data("1994-07-16", 10000));
-        series1.getData().add(new XYChart.Data("1994-07-17", 35407.15));
-        series1.getData().add(new XYChart.Data("1994-07-18", 12000));
-        series1.getData().add(new XYChart.Data("1994-07-19", 25601.34));
-        series1.getData().add(new XYChart.Data("1994-07-20", 20148.82));
-        series1.getData().add(new XYChart.Data("1994-07-21", 10000));
-        series1.getData().add(new XYChart.Data("1994-07-22", 35407.15));
-        series1.getData().add(new XYChart.Data("1994-07-23", 12000));
-        series1.getData().add(new XYChart.Data("1994-07-24", 25601.34));
-        series1.getData().add(new XYChart.Data("1994-07-25", 20148.82));
-        series1.getData().add(new XYChart.Data("1994-07-26", 10000));
-        series1.getData().add(new XYChart.Data("1994-07-27", 35407.15));
-        series1.getData().add(new XYChart.Data("1994-07-28", 12000));
-        return  series1;
-    }
 }
