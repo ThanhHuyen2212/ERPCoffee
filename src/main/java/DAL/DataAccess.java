@@ -33,6 +33,7 @@ public abstract class DataAccess {
     }
 
     protected void createConnection(){
+        if(conn != null) closeConnection();
         readRs();
         try {
             conn = DriverManager.getConnection(String.format("jdbc:mysql://%s:%s/erpcoffee?"
@@ -56,6 +57,7 @@ public abstract class DataAccess {
     }
 
     public Connection getConn() {
+        if (conn == null) createConnection();
         return conn;
     }
 
