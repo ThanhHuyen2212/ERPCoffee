@@ -1,30 +1,34 @@
 package App.Depot.Controller;
 
+import App.Depot.Model.IngredientManagementModel;
 import Entity.Ingredient;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ResourceBundle;
 
 public class IngredientManagementController implements Initializable {
-
+    public static final SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
     @FXML
     private TableView<Ingredient> ingredientTable;
     @FXML
-    private TableColumn<Ingredient, ?> idCol;
+    private TableColumn<Ingredient, Integer> idCol;
     @FXML
-    private TableColumn<Ingredient, ?> nameCol;
+    private TableColumn<Ingredient, String> nameCol;
     @FXML
-    private TableColumn<Ingredient, ?> typeCol;
+    private TableColumn<Ingredient, String> typeCol;
     @FXML
-    private TableColumn<Ingredient, ?> storageCol;
+    private TableColumn<Ingredient, Integer> storageCol;
     @FXML
-    private TableColumn<Ingredient, ?> limitCol;
+    private TableColumn<Ingredient, Integer> limitCol;
     @FXML
-    private TableColumn<Ingredient, ?> priceCol;
+    private TableColumn<Ingredient, Integer> priceCol;
     @FXML
     private TextField nameTxf;
     @FXML
@@ -42,6 +46,8 @@ public class IngredientManagementController implements Initializable {
     @FXML
     private Button editBtn;
 
+    private IngredientManagementModel model;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         idCol.setCellValueFactory(new PropertyValueFactory<>("ingredientId"));
@@ -50,6 +56,83 @@ public class IngredientManagementController implements Initializable {
         storageCol.setCellValueFactory(new PropertyValueFactory<>("ingredientStorage"));
         limitCol.setCellValueFactory(new PropertyValueFactory<>("ingredientLimit"));
         priceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+        init();
     }
+
+    public void init() {
+        model = new IngredientManagementModel();
+        ingredientTable.setItems(model.getList());
+        handleActionOnRow();
+        handleActionBtn();
+    }
+
+    public void handleActionOnRow() {
+        ingredientTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                nameTxf.setText(newSelection.getIngredientName());
+                typeTxf.setText(newSelection.getIngredientType());
+                limitTxf.setText(String.valueOf(newSelection.getIngredientLimit()));
+                try{
+                    createdDateLbl.setText(sdf.format(newSelection.getCreateDate()));
+                    deletedDateLbl.setText(sdf.format(newSelection.getDeleteDate()));
+                } catch (Exception ignored) {
+                }
+            }
+        });
+    }
+
+    public void handleActionBtn() {
+
+        EventHandler<ActionEvent> buttonAddHandler = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                model.handleCreate(new Ingredient(
+                        1,
+                        "Bot matcha",
+                        "Nguyen lieu kho",
+                        22,
+                        7,
+                        90000));
+                ingredientTable.setItems(model.getList());
+            }
+        };
+
+        EventHandler<ActionEvent> buttonUpdateHandler = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Ingredient selected = ingredientTable.getSelectionModel().getSelectedItem();
+                int index = ingredientTable.getSelectionModel().getSelectedIndex();
+                try{
+                    System.out.println(selected.getIngredientName());
+                    String name = "Bot cacao dua";
+                    String type = "Nguyen lieu duoc che bien";
+                    int limit = 12;
+
+//                    String name = nameTxf.getText();
+//                    String type = typeTxf.getText();
+//                    int limit = limitTxf.getText();
+
+
+                    model.handleUpdate(selected, index, name, type, limit);
+                    ingredientTable.refresh();
+//                    ingredientTable.setItems(model.getList());
+                } catch (Exception e) {
+                    System.out.println("Khhong bat duoc selected");
+                }
+            }
+        };
+
+        EventHandler<ActionEvent> buttonDeleteHandler = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        };
+
+        addBtn.setOnAction(buttonAddHandler);
+        editBtn.setOnAction(buttonUpdateHandler);
+    }
+
 
 }

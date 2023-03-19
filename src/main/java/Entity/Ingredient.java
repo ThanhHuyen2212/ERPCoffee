@@ -1,15 +1,28 @@
 package Entity;
 
+import java.sql.Date;
+
 public class Ingredient {
     private int ingredientId;
     private String ingredientName;
     private String ingredientType;
     private int ingredientStorage;
     private int ingredientLimit;
-
     private int price;
+    private Date createDate;
+    private Date deleteDate;
 
     public Ingredient() {
+    }
+
+    public Ingredient(int ingredientId, String ingredientName, String ingredientType, int ingredientStorage, int ingredientLimit, int price, Date createDate) {
+        this.ingredientId = ingredientId;
+        this.ingredientName = ingredientName;
+        this.ingredientType = ingredientType;
+        this.ingredientStorage = ingredientStorage;
+        this.ingredientLimit = ingredientLimit;
+        this.price = price;
+        this.createDate = createDate;
     }
 
     public Ingredient(int ingredientId, String ingredientName, String ingredientType, int ingredientStorage, int ingredientLimit, int price) {
@@ -67,5 +80,21 @@ public class Ingredient {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getDeleteDate() {
+        return deleteDate;
+    }
+
+    public void setDeleteDate(Date deleteDate) {
+        this.deleteDate = deleteDate;
     }
 }
