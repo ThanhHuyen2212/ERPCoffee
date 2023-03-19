@@ -1,6 +1,7 @@
 package App.Controller;
 
 import Entity.Category;
+import Entity.Order;
 import Entity.Product;
 import Entity.Size;
 import javafx.collections.FXCollections;
@@ -60,7 +61,7 @@ public class ShopController implements Initializable {
 
     private List<Category> categoryList = new ArrayList<>();
     public static ArrayList<Product> productList  = new ArrayList<>();
-    public ArrayList<Product> orderList = new ArrayList<>();
+    public ArrayList<Order> orderList = new ArrayList<>();
     private List<Size> sizeList = new ArrayList<>();
 
     /**
@@ -77,6 +78,10 @@ public class ShopController implements Initializable {
         category = new Category();
         category.setCategoryId(2);
         category.setCategoryName("milkTea");
+        categories.add(category);
+        category = new Category();
+        category.setCategoryId(3);
+        category.setCategoryName("milkTea1");
         categories.add(category);
         return categories;
     }
@@ -116,6 +121,9 @@ public class ShopController implements Initializable {
         products.add(product);
         return products;
     }
+
+
+
     public void render(ArrayList<Product> products){
         orderList.clear();
         products= (ArrayList<Product>) getDataProducts();
@@ -130,10 +138,7 @@ public class ShopController implements Initializable {
                     btnAdd.setOnAction(new EventHandler<ActionEvent>() {
                         @Override
                         public void handle(ActionEvent actionEvent) {
-                            orderList.add(product);
-                            for (Product p: orderList) {
-                                System.out.println(p.getProductName());
-                            }
+
                         }
                     });
                 }
@@ -187,7 +192,6 @@ public class ShopController implements Initializable {
                 "fx-pref-height:"+ "150px; \n"+
                 "-fx-pref-width:" +"200px; \n"
         );
-
         Label label = new Label(category.getCategoryName());
         label.setStyle("-fx-font-size:"+"20px; \n"+
                 "-fx-padding:"+"0 0 0 10px; \n");
@@ -198,19 +202,32 @@ public class ShopController implements Initializable {
         });
         return anchorPane;
     }
+
+    /**
+     * Hiển thị các thể loại sản phẩm
+     * @throws IOException
+     */
     public void renderCategories() throws IOException {
         categoryList.addAll(getDataCategories());
         hboxCartegory.setStyle("-fx-effect:"+"dropShadow(three-pass-box, rgba(0,0,0,0.1),10.0,0.0,0.0,10.0);");
-        hboxCartegory.getChildren().add(renderCategory(categoryList.get(0)));
-        hboxCartegory.getChildren().add(renderCategory(categoryList.get(1)));
-
+        for(int i=0;i< categoryList.size();i++){
+            hboxCartegory.getChildren().add(renderCategory(categoryList.get(i)));
+        }
     }
+
+    /**
+     * Hiển thị giao diện chi tiết sản phẩm
+     * @param product
+     */
     public void setDetails(Product product){
         ObservableList<String> observableArrayList = FXCollections.observableArrayList(product.getSizeList());
     txtProductNamedetails.setText(product.getProductName());
     cbSizePrice.setItems(observableArrayList);
+    cbSizePrice.getSelectionModel().selectFirst();
+    if(!cbSizePrice.getValue().isEmpty()){
+        txtPriceDetails.setText(String.valueOf(product.getPrice(cbSizePrice.getValue())));
     }
-
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
