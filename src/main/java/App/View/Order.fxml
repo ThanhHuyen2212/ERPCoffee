@@ -1,14 +1,184 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.ButtonType?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="App.Controller.OrderController"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
+<DialogPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Controller.OrderController">
+   <content>
+      <AnchorPane prefHeight="400.0" prefWidth="600.0">
+         <children>
+            <VBox prefHeight="850.0" prefWidth="794.0">
+               <children>
+                  <Pane prefHeight="46.0" prefWidth="794.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="48.0" prefWidth="794.0">
+                           <children>
+                              <Pane prefHeight="61.0" prefWidth="469.0" HBox.hgrow="ALWAYS" />
+                              <Pane prefHeight="61.0" prefWidth="216.0" />
+                              <Label prefHeight="68.0" prefWidth="289.0" text="Label" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </Pane>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Pane prefHeight="100.0" prefWidth="260.0" />
+                        <VBox prefHeight="116.0" prefWidth="265.0">
+                           <children>
+                              <Pane prefHeight="13.0" prefWidth="265.0" />
+                              <Label alignment="CENTER" prefHeight="64.0" prefWidth="263.0" text="HÓA ĐƠN">
+                                 <font>
+                                    <Font name="System Bold" size="38.0" />
+                                 </font>
+                              </Label>
+                              <Pane prefHeight="20.0" prefWidth="265.0" />
+                              <Label alignment="CENTER" prefHeight="25.0" prefWidth="263.0" text="Mã hóa đơn">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                              <Pane prefHeight="8.0" prefWidth="263.0" />
+                           </children>
+                        </VBox>
+                        <Pane prefHeight="100.0" prefWidth="274.0" />
+                     </children>
+                  </HBox>
+                  <Pane prefHeight="24.0" prefWidth="794.0" />
+                  <HBox alignment="CENTER" prefHeight="106.0" prefWidth="794.0">
+                     <children>
+                        <Pane prefHeight="192.0" prefWidth="85.0" HBox.hgrow="ALWAYS" />
+                        <VBox prefHeight="65.0" prefWidth="634.0">
+                           <children>
+                              <Pane prefHeight="16.0" prefWidth="511.0" />
+                              <HBox alignment="CENTER" prefHeight="38.0" prefWidth="511.0">
+                                 <children>
+                                    <Pane prefHeight="38.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
+                                    <Label prefHeight="36.0" prefWidth="170.0" text="Người bán:">
+                                       <font>
+                                          <Font size="21.0" />
+                                       </font>
+                                    </Label>
+                                    <Pane prefHeight="36.0" prefWidth="4.0" HBox.hgrow="ALWAYS" />
+                                    <Label prefHeight="36.0" prefWidth="183.0" text="Nguyễn Văn A">
+                                       <font>
+                                          <Font size="22.0" />
+                                       </font>
+                                    </Label>
+                                    <Pane prefHeight="36.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
+                                 </children>
+                              </HBox>
+                              <Pane prefHeight="16.0" prefWidth="511.0" />
+                              <HBox alignment="CENTER" prefHeight="38.0" prefWidth="511.0">
+                                 <children>
+                                    <Pane prefHeight="36.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
+                                    <Label prefHeight="36.0" prefWidth="170.0" text="Người mua">
+                                       <font>
+                                          <Font size="23.0" />
+                                       </font>
+                                    </Label>
+                                    <Pane prefHeight="36.0" prefWidth="4.0" HBox.hgrow="ALWAYS" />
+                                    <Label prefHeight="36.0" prefWidth="183.0" text="Nguyễn Văn B">
+                                       <font>
+                                          <Font size="22.0" />
+                                       </font>
+                                    </Label>
+                                    <Pane prefHeight="36.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
+                                 </children>
+                              </HBox>
+                              <Pane prefHeight="16.0" prefWidth="511.0" />
+                              <HBox alignment="CENTER" prefHeight="38.0" prefWidth="511.0">
+                                 <children>
+                                    <Pane prefHeight="36.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
+                                    <Label prefHeight="36.0" prefWidth="170.0" text="Số điện thoại">
+                                       <font>
+                                          <Font size="19.0" />
+                                       </font>
+                                    </Label>
+                                    <Pane prefHeight="36.0" prefWidth="4.0" HBox.hgrow="ALWAYS" />
+                                    <Label prefHeight="36.0" prefWidth="183.0" text="Label">
+                                       <font>
+                                          <Font size="22.0" />
+                                       </font>
+                                    </Label>
+                                    <Pane prefHeight="36.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <Pane prefHeight="192.0" prefWidth="32.0" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
+                  <Pane prefHeight="15.0" prefWidth="794.0" />
+                  <AnchorPane prefHeight="537.0" prefWidth="794.0">
+                     <children>
+                        <TableView layoutX="25.0" layoutY="22.0" prefHeight="504.0" prefWidth="748.0">
+                          <columns>
+                            <TableColumn prefWidth="75.0" text="STT" />
+                            <TableColumn prefWidth="238.0" text="Product" />
+                              <TableColumn prefWidth="83.0" text="Size" />
+                              <TableColumn prefWidth="61.0" text="Quantity" />
+                              <TableColumn prefWidth="129.0" text="Đơn giá " />
+                              <TableColumn prefWidth="183.0" text="Total" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+                  <Pane prefHeight="14.0" prefWidth="794.0" />
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Pane prefHeight="100.0" prefWidth="377.0" />
+                        <VBox prefHeight="100.0" prefWidth="306.0">
+                           <children>
+                              <Pane prefHeight="10.0" prefWidth="306.0" />
+                              <HBox prefHeight="28.0" prefWidth="306.0">
+                                 <children>
+                                    <Pane prefHeight="36.0" prefWidth="109.0" HBox.hgrow="ALWAYS" />
+                                    <Label prefHeight="40.0" prefWidth="121.0" text="Label" />
+                                    <Pane prefHeight="36.0" prefWidth="80.0" />
+                                    <Label prefHeight="36.0" prefWidth="168.0" text="Label" />
+                                    <Pane prefHeight="36.0" prefWidth="68.0" />
+                                 </children>
+                              </HBox>
+                              <Pane prefHeight="5.0" prefWidth="306.0" />
+                              <HBox prefHeight="33.0" prefWidth="306.0">
+                                 <children>
+                                    <Pane prefHeight="36.0" prefWidth="109.0" HBox.hgrow="ALWAYS" />
+                                    <Label prefHeight="40.0" prefWidth="121.0" text="Label" />
+                                    <Pane prefHeight="36.0" prefWidth="80.0" />
+                                    <Label prefHeight="36.0" prefWidth="168.0" text="Label" />
+                                    <Pane prefHeight="36.0" prefWidth="68.0" />
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="33.0" prefWidth="306.0">
+                                 <children>
+                                    <Pane prefHeight="36.0" prefWidth="109.0" HBox.hgrow="ALWAYS" />
+                                    <Label prefHeight="40.0" prefWidth="121.0" text="Label" />
+                                    <Pane prefHeight="36.0" prefWidth="80.0" />
+                                    <Label prefHeight="36.0" prefWidth="168.0" text="Label" />
+                                    <Pane prefHeight="36.0" prefWidth="68.0" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <Pane prefHeight="100.0" prefWidth="91.0" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
+                  <Pane prefHeight="19.0" prefWidth="794.0" />
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+   </content>
+   <buttonTypes>
+      <ButtonType fx:constant="YES" />
+      <ButtonType fx:constant="NO" />
+   </buttonTypes>
+</DialogPane>
