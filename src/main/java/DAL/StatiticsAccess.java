@@ -6,7 +6,7 @@ import javafx.util.Pair;
 import java.sql.Date;
 import java.util.ArrayList;
 
-public class StatiticsAccess implements IAccessStatitics{
+public class StatiticsAccess extends DataAccess implements IAccessStatitics{
     @Override
     public ArrayList<IStatitics.Order> getRevenueStatitics(Date start, Date end) {
         return new ArrayList<>(){{
