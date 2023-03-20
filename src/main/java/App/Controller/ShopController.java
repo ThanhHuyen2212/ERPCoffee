@@ -16,6 +16,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -111,6 +112,7 @@ public class ShopController implements Initializable {
 
     }
     public void initTable( ArrayList<OrderTable> orderTables){
+        editOrderDetails();
         orderTableObservableList=FXCollections.observableArrayList(orderTables);
         NoColumn.setCellValueFactory(new PropertyValueFactory<OrderTable, Integer>("No"));
         ProductColumn.setCellValueFactory(new PropertyValueFactory<OrderTable,String>("product"));
@@ -237,9 +239,11 @@ public class ShopController implements Initializable {
     }
     public void AddOrderDetails(OrderDetail product){
         btnAdd.setOnAction(new EventHandler<ActionEvent>() {
+
             @Override
             public void handle(ActionEvent actionEvent) {
-            if(orderList.size()>0){
+                if(orderList.size()>0){
+                    btnEdit.setDisable(true);
                 if(checkProductChoose(product)){
                     System.out.println("San pham cu");
                 }else{
@@ -260,8 +264,24 @@ public class ShopController implements Initializable {
             }
 
 
+
         });
 
+    }
+
+    public void editOrderDetails(){
+        orderDetailsTables.setRowFactory(tv ->{
+            TableRow<OrderTable> row = new TableRow<>();
+            row.setOnMouseClicked(e->{
+                btnAdd.setDisable(true);
+                btnEdit.setDisable(false);
+                if(e.getClickCount()==1 && (!row.isEmpty())){
+                    OrderTable o = row.getItem();
+                    setDetails(o.getOrderDetail());
+                }
+            });
+            return row;
+        });
     }
     public void printOrder(){
         FXMLLoader loader = new FXMLLoader();
@@ -306,12 +326,18 @@ public class ShopController implements Initializable {
             }
         });
     }
+    public void clearOrderList(ActionEvent e){
+        orderList.clear();
+        orderTableObservableList.clear();
+        orderDetailsTables.refresh();
+    }
     public void addOrderChangeSize(Product product){
             cbSizePrice.valueProperty().addListener(new ChangeListener<String>() {
                 @Override
                 public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                     OrderDetail o = orderDetailsChoose(product, t1);
                     AddOrderDetails(o);
+                    editOrderDetails();
                 }
 
 
@@ -319,6 +345,8 @@ public class ShopController implements Initializable {
         }
     public void render(ArrayList<Product> products){
         orderList.clear();
+        btnEdit.setDisable(true);
+        btnCacncel.setDisable(true);
         products= (ArrayList<Product>) getDataProducts();
         sizeList = getDataSize();
         int column=0;
@@ -328,14 +356,19 @@ public class ShopController implements Initializable {
             OrderDetail o = orderDetailsChoose(products.get(0),cbSizePrice.getValue());
             AddOrderDetails(o);
             addOrderChangeSize(products.get(0));
+            editOrderDetails();
 
             myListener = new MyListener() {
                 @Override
                 public void onClickListener(Product product) {
+                    btnAdd.setDisable(false);
+                    btnEdit.setDisable(true);
+                    Quality.setText("1");
                     Event(product);
                     OrderDetail o = orderDetailsChoose(product,cbSizePrice.getValue());
                     AddOrderDetails(o);
-
+                    addOrderChangeSize(product);
+                    editOrderDetails();
                 }
             };
         }
@@ -423,6 +456,57 @@ public class ShopController implements Initializable {
     if(!cbSizePrice.getValue().isEmpty()){
         txtPriceDetails.setText(NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(product.getPrice(cbSizePrice.getValue())));
     }
+    }
+    public void setDetails(OrderDetail orderDetail){
+        ObservableList<String> observableArrayList = FXCollections.observableArrayList(orderDetail.getProduct().getSizeList());
+        txtProductNamedetails.setText(orderDetail.getProduct().getProductName());
+        cbSizePrice.setItems(observableArrayList);
+        cbSizePrice.getSelectionModel().select(orderDetail.getSize().getSign());
+        if(!cbSizePrice.getValue().isEmpty()){
+            txtPriceDetails.setText(NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(orderDetail.getProduct().getPrice(cbSizePrice.getValue())));
+        }
+        Quality.setText(String.valueOf(orderDetail.getQty()));
+        btnEditEvent(orderDetail);
+
+    }
+    public void btnEditEvent(OrderDetail orderDetail){
+        btnEdit.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                   if(orderDetail!=null){
+                       int quantity = Integer.parseInt(Quality.getText());
+                       changeSizePrice(orderDetail.getProduct());
+                       String sizeString=cbSizePrice.getValue();
+                       Size size = null;
+                       for (Size s : sizeList){
+                           if(s.getSign().equalsIgnoreCase(sizeString)){
+                               size=s;
+                           }
+                       }
+                       if(orderDetail.getSize()!=size || orderDetail.getQty()!=quantity){
+                           for(OrderDetail od: orderList){
+                               if(od.getProduct()==orderDetail.getProduct() && od.getSize()==size){
+                                   od.setQty(od.getQty()+quantity);
+                                   od.setSize(size);
+                                   orderList.remove(orderDetail);
+                               }else if(od.getProduct()==orderDetail.getProduct() && od.getSize()!=size){
+                                   orderDetail.setSize(size);
+                                   orderDetail.setQty(quantity);
+                               }
+                           }
+                           initTable(getDataOrderTable(orderList));
+                           orderDetailsTables.refresh();
+                           Integer sumTotal =0;
+                           for(OrderDetail o : orderList){
+                               sumTotal+=o.getProduct().getPrice(o.getSize().getSign())*o.getQty();
+                           }
+
+                           totalmoneyLabel.setText(NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(sumTotal));
+                       }
+
+                   }
+            }
+        });
     }
     public void searchProduct(){
         productList=getDataProducts();
