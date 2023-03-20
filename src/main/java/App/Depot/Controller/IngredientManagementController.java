@@ -11,11 +11,13 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
+import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class IngredientManagementController implements Initializable {
-    public static final SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
+    public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     @FXML
     private TableView<Ingredient> ingredientTable;
     @FXML
@@ -39,7 +41,7 @@ public class IngredientManagementController implements Initializable {
     @FXML
     private Label createdDateLbl;
     @FXML
-    private Label deletedDateLbl;
+    private DatePicker deleteDatePk;
     @FXML
     private Button deleteBtn;
     @FXML
@@ -76,8 +78,14 @@ public class IngredientManagementController implements Initializable {
                 limitTxf.setText(String.valueOf(newSelection.getIngredientLimit()));
                 try{
                     createdDateLbl.setText(sdf.format(newSelection.getCreateDate()));
-                    deletedDateLbl.setText(sdf.format(newSelection.getDeleteDate()));
+//                    Code convert java.sql.Date to Local Date
+                    LocalDate ld = (new Date(newSelection.getDeleteDate().getTime())).toLocalDate();
+                    deleteDatePk.setValue(ld);
+
+//                    Covert LocalDate to java.sql.Date
+//                    java.sql.Date.valueOf(dateToConvert);
                 } catch (Exception ignored) {
+                    System.out.println("error");
                 }
             }
         });
@@ -113,14 +121,15 @@ public class IngredientManagementController implements Initializable {
             public void handle(ActionEvent event) {
                 Ingredient selected = ingredientTable.getSelectionModel().getSelectedItem();
                 int index = ingredientTable.getSelectionModel().getSelectedIndex();
+                LocalDate deleteDate = null;
                 try{
-                    String name = "Bot cacao dua";
-                    String type = "Nguyen lieu duoc che bien";
-                    int limit = 12;
-//                    String name = nameTxf.getText();
-//                    String type = typeTxf.getText();
-//                    int limit = limitTxf.getText();
-
+//                    String name = "Bot cacao dua";
+//                    String type = "Nguyen lieu duoc che bien";
+//                    int limit = 12;
+                    String name = nameTxf.getText();
+                    String type = typeTxf.getText();
+                    int limit = Integer.parseInt(limitTxf.getText());
+                    deleteDate = deleteDatePk.getValue();
                     MessageDialog messageDialog = new MessageDialog(
                             "Confirm Edition",
                             "Do you want to edit the information?",
@@ -129,9 +138,8 @@ public class IngredientManagementController implements Initializable {
                     );
                     int rs = messageDialog.showMessage();
                     if (rs == 1) {
-                        model.handleUpdate(selected, index, name, type, limit);
+                        model.handleUpdate(selected, index, name, type, limit, Date.valueOf(deleteDate));
                         ingredientTable.refresh();
-//                    ingredientTable.setItems(model.getList());
                     }
                 } catch (Exception e) {
                     System.out.println("Khong bat duoc selected");
@@ -153,7 +161,7 @@ public class IngredientManagementController implements Initializable {
                     int rs = messageDialog.showMessage();
                     if (rs == 1) {
                         model.handleDelete(selected);
-                    ingredientTable.setItems(model.getList());
+                        ingredientTable.setItems(model.getList());
                     }
                 } catch(Exception e) {
                     System.out.println("Khong bat duoc selected - xoa ingredient");

@@ -5,6 +5,8 @@ import Logic.Depot.IngredientManagement;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.sql.Date;
+
 public class IngredientManagementModel {
     private IngredientManagement ingredientManagementLogic;
     private ObservableList<Ingredient> list;
@@ -34,10 +36,13 @@ public class IngredientManagementModel {
         list = FXCollections.observableArrayList(ingredientManagementLogic.getIngredients());
     }
 
-    public void handleUpdate(Ingredient i, int index, String name, String type, int limit) {
+    public void handleUpdate(Ingredient i, int index, String name, String type, int limit, Date date) {
         i.setIngredientName(name);
         i.setIngredientType(type);
         i.setIngredientLimit(limit);
+        if(date != null) {
+            i.setDeleteDate(date);
+        }
         ingredientManagementLogic.update(index, i);
 //        list = FXCollections.observableArrayList(ingredientManagement.getIngredients());
     }

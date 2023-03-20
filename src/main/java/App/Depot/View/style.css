@@ -123,7 +123,6 @@
 .combo-box-popup .list-view .list-cell
 {
     -fx-padding: 4 0 4 5;
-
     /* No alternate highlighting */
     -fx-background-color: white;
 }
@@ -143,7 +142,7 @@
 
 .combo-box-base
 {
-    -fx-skin: "com.sun.javafx.scene.control.skin.ComboBoxBaseSkin";
+    /*-fx-skin: "com.sun.javafx.scene.control.skin.ComboBoxBaseSkin";*/
     -fx-background-color: white, white, white, white;
     -fx-background-radius: 5, 5, 4, 3;
     -fx-background-insets: 0 0 -1 0, 0, 1, 2;
