@@ -10,13 +10,14 @@ public class OrderTable {
     private String product;
     private int quantity;
     private String total;
+    private OrderDetail orderDetail;
     public OrderTable (OrderDetail orderDetail){
         this.product="ProductName: "+orderDetail.getProduct().getProductName()+"\n"
                     +"Price Unit: "+ NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(orderDetail.getProduct().getPrice(orderDetail.getSize().getSign()))+"\n"
                     +"Size: "+orderDetail.getSize().getSign()+"\n";
         this.quantity=orderDetail.getQty();
         this.total=NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(orderDetail.getProduct().getPrice(orderDetail.getSize().getSign())*quantity);
-
+        this.orderDetail=orderDetail;
     }
 
     public int getNo() {
@@ -49,5 +50,13 @@ public class OrderTable {
 
     public void setTotal(String total) {
         this.total = total;
+    }
+
+    public OrderDetail getOrderDetail() {
+        return orderDetail;
+    }
+
+    public void setOrderDetail(OrderDetail orderDetail) {
+        this.orderDetail = orderDetail;
     }
 }

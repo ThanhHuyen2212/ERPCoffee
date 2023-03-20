@@ -305,7 +305,7 @@
                         <String fx:value="colorGreen" />
                      </styleClass>
                   </Button>
-                  <Button layoutX="262.0" layoutY="928.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="184.0" text="Cancel">
+                  <Button fx:id="btnClean" layoutX="262.0" layoutY="928.0" mnemonicParsing="false" onAction="#clearOrderList" prefHeight="52.0" prefWidth="184.0" text="Clear">
                      <styleClass>
                         <String fx:value="btnAdd" />
                         <String fx:value="colorRed" />
