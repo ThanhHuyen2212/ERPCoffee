@@ -116,7 +116,7 @@
                   <HBox alignment="CENTER" prefHeight="49.0" prefWidth="387.0">
                      <children>
                         <Pane prefHeight="87.0" prefWidth="27.0" />
-                        <Button mnemonicParsing="false" prefHeight="46.0" prefWidth="44.0" text="-">
+                        <Button fx:id="minusBtn" mnemonicParsing="false" onAction="#Minus" prefHeight="46.0" prefWidth="44.0" text="-">
                            <styleClass>
                               <String fx:value="btnAdd" />
                               <String fx:value="colorRed" />
@@ -127,7 +127,7 @@
                               <Line endX="19.0" endY="48.0" layoutX="-6.0" layoutY="-1.0" startX="19.0" startY="6.0" />
                            </children>
                         </Pane>
-                        <TextField alignment="CENTER" prefHeight="42.0" prefWidth="47.0" styleClass="transparent" stylesheets="@css/style.css" text="1">
+                        <TextField fx:id="Quality" alignment="CENTER" prefHeight="42.0" prefWidth="47.0" styleClass="transparent" stylesheets="@css/style.css" text="1">
                            <font>
                               <Font size="25.0" />
                            </font>
@@ -137,7 +137,7 @@
                               <Line endX="19.0" endY="48.0" layoutX="-6.0" layoutY="-1.0" startX="19.0" startY="6.0" />
                            </children>
                         </Pane>
-                        <Button mnemonicParsing="false" prefHeight="39.0" prefWidth="44.0" text="+">
+                        <Button fx:id="plusBtn" mnemonicParsing="false" onAction="#Plus" prefHeight="39.0" prefWidth="44.0" text="+">
                            <font>
                               <Font size="21.0" />
                            </font>
@@ -266,12 +266,12 @@
                         <Font name="System Bold" size="21.0" />
                      </font>
                   </Label>
-                  <TableView layoutX="7.0" layoutY="66.0" prefHeight="539.0" prefWidth="482.0">
+                  <TableView fx:id="orderDetailsTables" layoutX="7.0" layoutY="66.0" prefHeight="539.0" prefWidth="482.0">
                     <columns>
-                      <TableColumn prefWidth="75.0" text="STT" />
-                      <TableColumn prefWidth="194.0" text="Product" />
-                        <TableColumn prefWidth="87.0" text="Quantity" />
-                        <TableColumn prefWidth="125.0" text="Total" />
+                      <TableColumn fx:id="NoColumn" prefWidth="75.0" text="No," />
+                      <TableColumn fx:id="ProductColumn" prefWidth="194.0" text="Product" />
+                        <TableColumn fx:id="quantityColumn" prefWidth="87.0" text="Quantity" />
+                        <TableColumn fx:id="totalColumn" prefWidth="125.0" text="Total" />
                     </columns>
                   </TableView>
                   <Label layoutX="22.0" layoutY="635.0" prefHeight="53.0" prefWidth="178.0" text="Total money:">
@@ -279,7 +279,7 @@
                         <Font size="22.0" />
                      </font>
                   </Label>
-                  <Label layoutX="240.0" layoutY="632.0" prefHeight="59.0" prefWidth="227.0" text="45.000đ">
+                  <Label fx:id="totalmoneyLabel" layoutX="240.0" layoutY="632.0" prefHeight="59.0" prefWidth="227.0" text="45.000đ">
                      <font>
                         <Font size="24.0" />
                      </font>
@@ -299,13 +299,13 @@
                         <Font size="20.0" />
                      </font>
                   </Label>
-                  <Button layoutX="36.0" layoutY="928.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="184.0" text="Order">
+                  <Button fx:id="btnOrder" layoutX="36.0" layoutY="928.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="184.0" text="Order">
                      <styleClass>
                         <String fx:value="btnAdd" />
                         <String fx:value="colorGreen" />
                      </styleClass>
                   </Button>
-                  <Button layoutX="262.0" layoutY="928.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="184.0" text="Cancel">
+                  <Button fx:id="btnClean" layoutX="262.0" layoutY="928.0" mnemonicParsing="false" onAction="#clearOrderList" prefHeight="52.0" prefWidth="184.0" text="Clear">
                      <styleClass>
                         <String fx:value="btnAdd" />
                         <String fx:value="colorRed" />
