@@ -9,6 +9,7 @@ public class ProductRecipe {
     private int productQty;
 
     public ProductRecipe() {
+        ingredientCosts = new HashMap<>();
     }
 
     public ProductRecipe(HashMap<Ingredient, Integer> ingredientCosts, int productQty) {
