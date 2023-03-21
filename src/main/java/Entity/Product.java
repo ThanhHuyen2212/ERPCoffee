@@ -89,6 +89,9 @@ public class Product {
     }
 
     public ProductRecipe getRecipe() {
+        if(recipe == null) {
+            recipe = new ProductRecipe();
+        }
         return recipe;
     }
 
