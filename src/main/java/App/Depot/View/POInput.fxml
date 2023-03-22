@@ -16,7 +16,7 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="577.0" prefWidth="1048.0" spacing="12.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Depot.Controller.POInputController">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="577.0" prefWidth="1048.0" spacing="12.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Depot.Controller.POInputController">
     <children>
         <Label alignment="CENTER" minWidth="30.0" prefHeight="50.0" prefWidth="1048.0" text="Purchase Order Form" VBox.vgrow="ALWAYS">
             <font>
@@ -39,22 +39,12 @@
                         </HBox>
                         <HBox alignment="CENTER_LEFT" maxHeight="35.0" minHeight="18.0" prefHeight="35.0" prefWidth="503.0">
                             <children>
-                                <Label minWidth="120.0" text="Employee Create">
+                                <Label minWidth="120.0" prefWidth="120.0" text="Staff's ID">
                                     <padding>
                                         <Insets right="20.0" />
                                     </padding>
                                 </Label>
                                 <TextField fx:id="staffCreateTxf" maxWidth="200.0" minWidth="100.0" HBox.hgrow="ALWAYS" />
-                            </children>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" maxHeight="35.0" minHeight="18.0" prefHeight="35.0" prefWidth="503.0">
-                            <children>
-                                <Label minWidth="120.0" text="Employee Confirm">
-                                    <padding>
-                                        <Insets right="20.0" />
-                                    </padding>
-                                </Label>
-                                <TextField fx:id="staffConfirmTxf" maxWidth="200.0" minWidth="100.0" HBox.hgrow="ALWAYS" />
                             </children>
                         </HBox>
                     </children>
@@ -69,7 +59,7 @@
                                         <Insets right="20.0" />
                                     </padding>
                                 </Label>
-                                <TextField fx:id="dateLbl" maxWidth="200.0" minWidth="100.0" HBox.hgrow="ALWAYS" />
+                        <Label fx:id="dateLbl" maxWidth="200.0" minWidth="100.0" prefWidth="200.0" />
                             </children>
                         </HBox>
                         <HBox alignment="CENTER_LEFT" maxHeight="35.0" minHeight="18.0" prefHeight="35.0" prefWidth="503.0">
@@ -79,7 +69,7 @@
                                         <Insets right="20.0" />
                                     </padding>
                                 </Label>
-                                <TextField fx:id="idLbl" editable="false" maxWidth="200.0" minWidth="100.0" HBox.hgrow="ALWAYS" />
+                        <Label fx:id="idLbl" maxWidth="200.0" minWidth="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
                             </children>
                         </HBox>
                     </children>
@@ -91,7 +81,7 @@
                 <TableView fx:id="ingredientTable" prefHeight="515.0" prefWidth="660.0" HBox.hgrow="ALWAYS">
                     <columns>
                         <TableColumn fx:id="idCol" prefWidth="71.24105167388916" text="ID" />
-                        <TableColumn fx:id="ingredientNameCol" prefWidth="178.2589340209961" text="Ingredient" />
+                        <TableColumn fx:id="ingredientCol" prefWidth="178.2589340209961" text="Ingredient" />
                         <TableColumn fx:id="typeCol" minWidth="0.0" prefWidth="192.282470703125" text="Type" />
                         <TableColumn fx:id="qtyCol" prefWidth="84.217529296875" text="Quantity" />
                         <TableColumn fx:id="priceCol" prefWidth="144.7410888671875" text="Price" />
@@ -152,7 +142,63 @@
                         <Pane prefHeight="106.0" prefWidth="391.0" />
                         <HBox alignment="CENTER" prefHeight="65.0" prefWidth="391.0" spacing="40.0" VBox.vgrow="ALWAYS">
                             <children>
-                                <Button minHeight="28.0" minWidth="60.0" mnemonicParsing="false" text="Delete" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                <Button fx:id="addBtn" minHeight="28.0" minWidth="60.0" mnemonicParsing="false" text="Add" textAlignment="CENTER">
+                                    <textFill>
+                                        <LinearGradient endX="1.0" endY="1.0">
+                                            <stops>
+                                                <Stop>
+                                                    <color>
+                                                        <Color />
+                                                    </color>
+                                                </Stop>
+                                                <Stop offset="1.0">
+                                                    <color>
+                                                        <Color />
+                                                    </color>
+                                                </Stop>
+                                            </stops>
+                                        </LinearGradient>
+                                    </textFill>
+                                    <padding>
+                                        <Insets bottom="4.0" left="8.0" right="8.0" top="4.0" />
+                                    </padding>
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                    <styleClass>
+                                        <String fx:value="wrapper-btn" />
+                                        <String fx:value="primary-btn" />
+                                    </styleClass>
+                                </Button>
+                                <Button fx:id="updateBtn" minHeight="28.0" minWidth="60.0" mnemonicParsing="false" text="Update" textAlignment="CENTER">
+                                    <textFill>
+                                        <LinearGradient endX="1.0" endY="1.0">
+                                            <stops>
+                                                <Stop>
+                                                    <color>
+                                                        <Color />
+                                                    </color>
+                                                </Stop>
+                                                <Stop offset="1.0">
+                                                    <color>
+                                                        <Color />
+                                                    </color>
+                                                </Stop>
+                                            </stops>
+                                        </LinearGradient>
+                                    </textFill>
+                                    <padding>
+                                        <Insets bottom="4.0" left="8.0" right="8.0" top="4.0" />
+                                    </padding>
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                    <styleClass>
+                                        <String fx:value="wrapper-btn" />
+                                        <String fx:value="primary-btn" />
+                                    </styleClass>
+                                </Button>
+                                <Button fx:id="deleteBtn" minHeight="28.0" minWidth="60.0" mnemonicParsing="false" text="Delete" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                     <textFill>
                                         <LinearGradient endX="1.0" endY="1.0">
                                             <stops>
@@ -180,62 +226,6 @@
                                         <String fx:value="wrapper-btn" />
                                     </styleClass>
                                 </Button>
-                                <Button minHeight="28.0" minWidth="60.0" mnemonicParsing="false" text="Add" textAlignment="CENTER">
-                                    <textFill>
-                                        <LinearGradient endX="1.0" endY="1.0">
-                                            <stops>
-                                                <Stop>
-                                                    <color>
-                                                        <Color />
-                                                    </color>
-                                                </Stop>
-                                                <Stop offset="1.0">
-                                                    <color>
-                                                        <Color />
-                                                    </color>
-                                                </Stop>
-                                            </stops>
-                                        </LinearGradient>
-                                    </textFill>
-                                    <padding>
-                                        <Insets bottom="4.0" left="8.0" right="8.0" top="4.0" />
-                                    </padding>
-                                    <font>
-                                        <Font size="14.0" />
-                                    </font>
-                                    <styleClass>
-                                        <String fx:value="wrapper-btn" />
-                                        <String fx:value="primary-btn" />
-                                    </styleClass>
-                                </Button>
-                                <Button minHeight="28.0" minWidth="60.0" mnemonicParsing="false" text="Update" textAlignment="CENTER">
-                                    <textFill>
-                                        <LinearGradient endX="1.0" endY="1.0">
-                                            <stops>
-                                                <Stop>
-                                                    <color>
-                                                        <Color />
-                                                    </color>
-                                                </Stop>
-                                                <Stop offset="1.0">
-                                                    <color>
-                                                        <Color />
-                                                    </color>
-                                                </Stop>
-                                            </stops>
-                                        </LinearGradient>
-                                    </textFill>
-                                    <padding>
-                                        <Insets bottom="4.0" left="8.0" right="8.0" top="4.0" />
-                                    </padding>
-                                    <font>
-                                        <Font size="14.0" />
-                                    </font>
-                                    <styleClass>
-                                        <String fx:value="wrapper-btn" />
-                                        <String fx:value="primary-btn" />
-                                    </styleClass>
-                                </Button>
                             </children>
                         </HBox>
                     </children>
@@ -249,16 +239,26 @@
                         <Insets right="20.0" />
                     </padding>
                 </Label>
-                <Label minWidth="150.0" HBox.hgrow="ALWAYS" />
+                <Label fx:id="totalLbl" minWidth="150.0" prefHeight="17.0" prefWidth="170.0" HBox.hgrow="ALWAYS" />
                 <Label text="đ" />
             </children>
         </HBox>
-        <Button mnemonicParsing="false" text="Confirm">
-            <styleClass>
-                <String fx:value="wrapper-btn" />
-                <String fx:value="success-btn" />
-            </styleClass>
-        </Button>
+      <HBox alignment="CENTER" spacing="20.0" VBox.vgrow="ALWAYS">
+         <children>
+              <Button fx:id="confirmBtn" mnemonicParsing="false" text="Confirm">
+                  <styleClass>
+                      <String fx:value="wrapper-btn" />
+                      <String fx:value="success-btn" />
+                  </styleClass>
+              </Button>
+            <Button fx:id="cancelBtn" mnemonicParsing="false" text="Cancel">
+               <styleClass>
+                  <String fx:value="wrapper-btn" />
+                  <String fx:value="cancel-btn" />
+               </styleClass>
+            </Button>
+         </children>
+      </HBox>
     </children>
     <padding>
         <Insets bottom="12.0" left="12.0" right="12.0" />

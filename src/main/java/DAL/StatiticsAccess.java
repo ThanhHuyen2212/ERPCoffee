@@ -7,6 +7,10 @@ import java.sql.Date;
 import java.util.ArrayList;
 
 public class StatiticsAccess extends DataAccess implements IAccessStatitics{
+    public StatiticsAccess() {
+        createConnection();
+    }
+
     @Override
     public ArrayList<IStatitics.Order> getRevenueStatitics(Date start, Date end) {
         return new ArrayList<>(){{
