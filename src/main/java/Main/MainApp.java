@@ -6,24 +6,33 @@ import Logic.Statitics.LStatitics;
 import Util.DateTool;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 
 
 public class MainApp extends Application {
+
+    private static BorderPane mainView;
+    private ToggleGroup mainMenu;
+
+    public static void show(Node view){
+        mainView.setCenter(view);
+    }
+
     @Override
     public void start(Stage stage) throws Exception {
-        String filepath = "src/main/java/App/View/ShopGUI.fxml";
-        FXMLLoader fxmlLoader = new FXMLLoader(new File(filepath).toURI().toURL());
-        Parent root = fxmlLoader.load();
-        Scene scene = new Scene(root);
+        mainView = new BorderPane();
+        Scene scene = new Scene(mainView);
         stage.setScene(scene);
         stage.show();
-
     }
 }
