@@ -36,7 +36,7 @@ public abstract class DataAccess {
         if(conn != null) closeConnection();
         readRs();
         try {
-            conn = DriverManager.getConnection(String.format("jdbc:mysql://%s:%s/erpcoffee?"
+            conn = DriverManager.getConnection(String.format("jdbc:mysql://%s:%s/erpcoffee"
                     ,host,port),username,pass);
             PreparedStatement preparedStatement = conn.prepareStatement("{call set_timezone()}");
             preparedStatement.execute();

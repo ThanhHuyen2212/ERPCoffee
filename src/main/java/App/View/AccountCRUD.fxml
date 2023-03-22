@@ -21,9 +21,9 @@
         <TableView prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
           <columns>
             <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="162.0" text="Employee ID" />
-            <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="297.0" text="UserName" />
-            <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="230.0" text="Password" />
-            <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="120.0" text="Role" />
+            <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="255.0" text="UserName" />
+            <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="243.0" text="Password" />
+            <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="151.0" text="Role" />
           </columns>
         </TableView>
         <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
