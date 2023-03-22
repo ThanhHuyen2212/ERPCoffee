@@ -30,8 +30,10 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        String defaultpath = "src/main/java/App/View/ShopGUI.fxml";
         mainView = new BorderPane();
         Scene scene = new Scene(mainView);
+        MainApp.show(FXMLLoader.load(new File(defaultpath).toURI().toURL()));
         stage.setScene(scene);
         stage.show();
     }
