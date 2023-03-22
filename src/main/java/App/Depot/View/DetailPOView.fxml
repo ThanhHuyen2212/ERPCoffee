@@ -52,18 +52,50 @@
             <children>
                 <TableView fx:id="detailTable" prefHeight="427.0" prefWidth="1024.0" HBox.hgrow="ALWAYS">
                     <columns>
-                        <TableColumn fx:id="idCol" prefWidth="172.55186367034912" text="ID" />
-                        <TableColumn fx:id="ingredientNameCol" prefWidth="313.94810485839844" text="Ingredient" />
-                        <TableColumn fx:id="qtyCol" minWidth="0.0" prefWidth="185.23782348632812" text="Order Quantity" />
-                        <TableColumn fx:id="receiveCol" prefWidth="167.10223388671875" text="Received" />
-                        <TableColumn fx:id="priceCol" prefWidth="173.40704345703125" text="Unit Price" />
+                        <TableColumn fx:id="idCol" prefWidth="86.19086742401123" text="ID" />
+                        <TableColumn fx:id="ingredientNameCol" prefWidth="377.5" text="Ingredient" />
+                        <TableColumn fx:id="qtyCol" minWidth="0.0" prefWidth="196.0" text="Order Quantity" />
+                        <TableColumn fx:id="receiveCol" prefWidth="175.5" text="Received" />
+                        <TableColumn fx:id="priceCol" prefWidth="187.5" text="Unit Price" />
                     </columns>
                 </TableView>
             </children>
         </HBox>
+      <VBox alignment="CENTER_RIGHT" spacing="8.0" VBox.vgrow="ALWAYS">
+         <children>
+            <HBox alignment="CENTER_RIGHT" prefHeight="34.0" prefWidth="254.0">
+               <children>
+                  <Label minWidth="20.0" prefHeight="17.0" prefWidth="120.0" text="Total Order">
+                     <padding>
+                        <Insets right="20.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="totalOrderLbl" minWidth="150.0" prefHeight="17.0" prefWidth="179.0" HBox.hgrow="ALWAYS" />
+                  <Label text="đ" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_RIGHT" prefHeight="34.0" prefWidth="254.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <Label minWidth="20.0" prefHeight="17.0" prefWidth="120.0" text="Total Receive">
+                     <padding>
+                        <Insets right="20.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="totalRevLbl" minWidth="150.0" prefHeight="17.0" prefWidth="179.0" HBox.hgrow="ALWAYS" />
+                  <Label text="đ" />
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </HBox>
+         </children>
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin>
+      </VBox>
         <HBox alignment="CENTER" minHeight="35.0" prefHeight="55.0" prefWidth="1024.0" spacing="20.0" VBox.vgrow="ALWAYS">
             <VBox.margin>
-                <Insets top="18.0" />
+                <Insets />
             </VBox.margin>
             <children>
                 <Button fx:id="confirmBtn" minHeight="28.0" minWidth="60.0" mnemonicParsing="false" text="Confirm" textAlignment="CENTER">
