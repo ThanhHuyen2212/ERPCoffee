@@ -2,6 +2,7 @@ package App.Depot.Controller;
 
 import App.Controller.ShopController;
 import Entity.Product;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -24,14 +25,12 @@ public class RecipeManagementController implements Initializable {
     private TableView<Product> productTable;
     @FXML
     private TableColumn<Product, ?> unitCol;
-
     @FXML
     private TableColumn<Product, ?> idCol;
     @FXML
     private TableColumn<Product, ?> productNameCol;
-
     @FXML
-    private TableColumn<Product, Integer> qtyCol;
+    private TableColumn<Product, String> qtyCol;
     @FXML
     private TextField searchTxf;
     @FXML
@@ -48,9 +47,9 @@ public class RecipeManagementController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         idCol.setCellValueFactory(new PropertyValueFactory<>("productId"));
         productNameCol.setCellValueFactory(new PropertyValueFactory<>("productName"));
-//        qtyCol.setCellValueFactory(
-//                data -> new SimpleStringProperty(String.valueOf(data.getValue().getRecipe().getProductQty()))
-//        );
+        qtyCol.setCellValueFactory(data -> new SimpleStringProperty(
+                String.valueOf(data.getValue().getRecipe().getProductQty())
+        ));
         unitCol.setCellValueFactory(new PropertyValueFactory<>(""));
 
         init();

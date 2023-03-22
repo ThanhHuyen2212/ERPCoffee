@@ -9,7 +9,7 @@ public class PurchaseOrder {
     private Date purchaseOrderDate;
     private int totalPrice;
     private Employee employeeCreate;
-    private Employee employeeComfirm;
+    private Employee employeeConfirm;
 
     private ArrayList<PurchaseDetail> details;
 
@@ -24,16 +24,24 @@ public class PurchaseOrder {
         this.purchaseOrderDate = purchaseOrderDate;
         this.totalPrice = totalPrice;
         this.employeeCreate = employeeCreate;
-        this.employeeComfirm = employeeComfirm;
+        this.employeeConfirm = employeeComfirm;
         this.details = details;
     }
 
-    public PurchaseOrder(int purchaseOrderId, String supplier, Date purchaseOrderDate, int totalPrice, Employee employeeCreate) {
+    public PurchaseOrder(int purchaseOrderId, String supplier, Date purchaseOrderDate, int totalPrice, Employee employeeCreate, String status) {
         this.purchaseOrderId = purchaseOrderId;
         this.supplier = supplier;
         this.purchaseOrderDate = purchaseOrderDate;
         this.totalPrice = totalPrice;
         this.employeeCreate = employeeCreate;
+        this.details = new ArrayList<>();
+    }
+
+    public PurchaseOrder(int purchaseOrderId, String supplier, Date purchaseOrderDate, int totalPrice) {
+        this.purchaseOrderId = purchaseOrderId;
+        this.supplier = supplier;
+        this.purchaseOrderDate = purchaseOrderDate;
+        this.totalPrice = totalPrice;
         this.details = new ArrayList<>();
     }
 
@@ -77,12 +85,12 @@ public class PurchaseOrder {
         this.employeeCreate = employeeCreate;
     }
 
-    public Employee getEmployeeComfirm() {
-        return employeeComfirm;
+    public Employee getEmployeeConfirm() {
+        return employeeConfirm;
     }
 
-    public void setEmployeeComfirm(Employee employeeComfirm) {
-        this.employeeComfirm = employeeComfirm;
+    public void setEmployeeConfirm(Employee employeeConfirm) {
+        this.employeeConfirm = employeeConfirm;
     }
 
     public ArrayList<PurchaseDetail> getDetails() {
@@ -93,8 +101,22 @@ public class PurchaseOrder {
         this.details = details;
     }
 
-    public void addIngredient(Ingredient ingredient,int qty){
+    public void addDetails(Ingredient ingredient, int qty){
         PurchaseDetail tmp = new PurchaseDetail(ingredient,qty);
+        boolean existed = false;
+        for(PurchaseDetail pd : details){
+            if(pd.equal(tmp)){
+                pd.setOrderQty(pd.getOrderQty() + tmp.getOrderQty());
+                existed = true;
+            }
+        }
+        if(!existed){
+            details.add(tmp);
+        }
+    }
+
+    public void addDetails(Ingredient ingredient, int orderQty, int revAty){
+        PurchaseDetail tmp = new PurchaseDetail(ingredient, orderQty, revAty);
         boolean existed = false;
         for(PurchaseDetail pd : details){
             if(pd.equal(tmp)){

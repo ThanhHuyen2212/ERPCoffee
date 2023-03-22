@@ -52,7 +52,9 @@ public class DetailRecipeController implements Initializable {
         model = new DetailRecipeModel();
         idCol.setCellValueFactory(new PropertyValueFactory<>("ingredientId"));
         componentCol.setCellValueFactory(new PropertyValueFactory<>("ingredientName"));
-        qtyCol.setCellValueFactory(data -> new SimpleStringProperty(model.getDetails().get(data.getValue()).toString()));
+        qtyCol.setCellValueFactory(data -> new SimpleStringProperty(
+                model.getDetails().get(data.getValue()).toString()
+        ));
 //        unitCol.setCellValueFactory(new PropertyValueFactory<>("ingredientStorage"));
     }
 

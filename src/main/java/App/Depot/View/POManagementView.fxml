@@ -14,8 +14,8 @@
 <?import javafx.scene.text.Font?>
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="577.0"
-      prefWidth="1048.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="App.Depot.Controller.POManagementController">
+      prefWidth="1048.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/18"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Depot.Controller.POManagementController">
     <children>
         <Label alignment="CENTER" minHeight="50.0" prefHeight="50.0" prefWidth="1048.0" styleClass="filler"
                text="Purchase Orders" VBox.vgrow="ALWAYS">
@@ -77,7 +77,7 @@
         </HBox>
         <HBox prefHeight="501.0" prefWidth="838.0" VBox.vgrow="ALWAYS">
             <children>
-                <TableView fx:id="ingredientTable" prefHeight="538.0" prefWidth="575.0" HBox.hgrow="ALWAYS">
+                <TableView fx:id="poTable" prefHeight="538.0" prefWidth="575.0" HBox.hgrow="ALWAYS">
                     <columns>
                         <TableColumn fx:id="idCol" prefWidth="130.03749752044678" text="ID"/>
                         <TableColumn fx:id="vendorCol" prefWidth="295.36863708496094" text="Vendor"/>
