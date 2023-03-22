@@ -15,6 +15,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
+import javafx.stage.StageStyle;
 
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.NumberFormat;
+import java.time.Year;
 import java.util.*;
 
 public class ShopController implements Initializable {
@@ -543,9 +545,19 @@ public class ShopController implements Initializable {
         Dialog<ButtonType> dialog = new Dialog<>();
         customerController customerController = loader.getController();
         dialog.setDialogPane((DialogPane) customerPane);
+        dialog.initStyle(StageStyle.TRANSPARENT);
         customerBtn.setOnAction(actionEvent -> {
-            dialog.show();
             shopHBox.setStyle("-fx-opacity:" + "0.5; \n");
+            Optional<ButtonType> btn=dialog.showAndWait();
+            if(btn.get()==ButtonType.YES){
+                shopHBox.setStyle("-fx-opacity:" + "1; \n");
+                //code
+            }else if(btn.get()==ButtonType.NO){
+                shopHBox.setStyle("-fx-opacity:" + "1; \n");
+                dialog.close();
+            }
+
+
         });
     }
 
