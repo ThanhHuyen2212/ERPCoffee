@@ -48,7 +48,7 @@
                         <Pane prefHeight="87.0" prefWidth="105.0" />
                         <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="285.0" prefWidth="187.0">
                            <graphic>
-                              <ImageView fitHeight="224.0" fitWidth="154.0" pickOnBounds="true" preserveRatio="true" styleClass="shadow">
+                              <ImageView fx:id="imgProduct" fitHeight="224.0" fitWidth="154.0" pickOnBounds="true" preserveRatio="true" styleClass="shadow">
                                  <image>
                                     <Image url="@../../Assets/Images/WhiteCoffee.png" />
                                  </image>
