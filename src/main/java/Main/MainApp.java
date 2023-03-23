@@ -53,10 +53,10 @@ public class MainApp extends Application {
         mainView = new BorderPane();
         mainMenu = new VBox();
         group = new ToggleGroup();
+        mainView.setPrefWidth(Screen.getPrimary().getBounds().getWidth());
         ScrollPane scrollPane = new ScrollPane(mainMenu);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         scrollPane.setMaxHeight(Screen.getPrimary().getBounds().getHeight()-200);
-        mainMenu.setFillWidth(true);
         mainView.setLeft(scrollPane);
     }
 
