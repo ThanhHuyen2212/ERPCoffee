@@ -8,6 +8,7 @@ import Main.MainApp;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -52,7 +53,7 @@ public class AppControl {
         put("statistic","src/main/java/Assets/Icons/analytics.png");
     }};
 
-    private HashMap<String,Node> views;
+    private HashMap<String, Node> views;
 
     public AppControl() {
     }
