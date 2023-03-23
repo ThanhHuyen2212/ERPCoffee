@@ -64,6 +64,8 @@ public class MainApp extends Application {
     public void start(Stage stage) throws Exception {
         String defaultpath = "src/main/java/App/Statitics/View/RevenueChart.fxml";
         initGUI();
+        stage.getIcons().add(new Image(new FileInputStream("src/main/java/Assets/Icons/coffee-shop.png")));
+        stage.setTitle("ERP Coffee");
         getFunction(new String[]{
                 "product","size","category","ingredient","recipe","customer","purchase","staff","statistic","sale"
         });
