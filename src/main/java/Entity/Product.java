@@ -116,7 +116,7 @@ public class Product {
 //                        .toList());
 //    }
     public ArrayList<String> getSizeList(){
-        return (ArrayList<String>) priceList.keySet();
+        return  new ArrayList<>(priceList.keySet().stream().toList());
     }
 
     public ProductRecipe getRecipe() {

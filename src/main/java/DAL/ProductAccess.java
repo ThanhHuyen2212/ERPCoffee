@@ -10,17 +10,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ProductAccess extends DataAccess {
-    public static  boolean checkProduct(String name, ArrayList<Product> products){
-        for (Product p: products){
-            if(p.getProductName().equalsIgnoreCase(name)){
-                return  true;
-            }
-        }
-        return  false;
-    }
+
     public static ArrayList<Product> retrieve(){
         ProductAccess productAccess = new ProductAccess();
-        ProductManagement productManagement = new ProductManagement();
+        //ProductManagement productManagement = new ProductManagement();
         ArrayList<Product> products = new ArrayList<>();
         try {
             productAccess.createConnection();
@@ -38,24 +31,26 @@ public class ProductAccess extends DataAccess {
             throw new RuntimeException();
         }
         try {
-            PreparedStatement preparedStatement = productAccess.getConn().prepareStatement("call select_productsize()");
-            ResultSet resultSet= preparedStatement.executeQuery();
-            for(Product p : products){
-                HashMap<String, Integer> sizePrice = new HashMap<>();
+            PreparedStatement preparedStatement = productAccess.getConn().prepareStatement("call select_productsize_with_id(?)");
+            for(Product  p: products){
+                preparedStatement.setInt(1,p.getProductId());
+                HashMap<String, Integer> sizePrice= new HashMap<>();
+                ResultSet resultSet= preparedStatement.executeQuery();
                 while (resultSet!=null && resultSet.next()){
-                if(p.getProductName().equalsIgnoreCase(resultSet.getString(1))){
-                        sizePrice.put(resultSet.getString(2),resultSet.getInt(3));
-                    }
-                p.setPriceList(sizePrice);
+                    sizePrice.put(resultSet.getString(2), resultSet.getInt(3));
                 }
+                p.setPriceList(sizePrice);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        for(Product p : products){
+            System.out.println(p.getProductName()+p.getPrice("M"));
+        }
         return products;
     }
-    public void create(Product product){
-
+    public int create(Product product){
+        return 1;
     }
     public void Update(Product product){
 
@@ -64,7 +59,4 @@ public class ProductAccess extends DataAccess {
 
     }
 
-    public static void main(String[] args) {
-        retrieve();
-    }
 }
