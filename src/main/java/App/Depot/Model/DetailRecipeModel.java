@@ -2,7 +2,6 @@ package App.Depot.Model;
 
 import Entity.Ingredient;
 import Entity.Product;
-import Logic.Depot.IngredientManagement;
 import Logic.Depot.RecipeManagement;
 
 import java.util.HashMap;
@@ -50,9 +49,18 @@ public class DetailRecipeModel {
         this.details = details;
     }
 
-    public void handleCreate(String name, int qty) {
-        selected.getRecipe().addIngredient(new IngredientManagement().findByName(name), qty);
-        logic.create(selected);
-        System.out.println(selected.getRecipe().getIngredientCosts().size());
+    public void handleAdd(String name, int qty) {
+        logic.handleAdd(selected, name, qty);
     }
+
+    public void handleUpdate(Ingredient selectedIg, String value, int qty) {
+        logic.handleUpdate(selected, selectedIg, value, qty);
+    }
+
+    public void handleDelete(Ingredient selectedIg) {
+        logic.handleDelete(selected, selectedIg);
+    }
+
+
+
 }

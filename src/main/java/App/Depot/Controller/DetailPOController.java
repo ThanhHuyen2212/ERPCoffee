@@ -1,24 +1,21 @@
 package App.Depot.Controller;
 
 import App.Depot.Model.POModel;
+import App.Depot.View.MessageDialog;
 import Entity.PurchaseDetail;
 import Entity.PurchaseOrder;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
-import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -62,7 +59,8 @@ public class DetailPOController implements Initializable {
         priceCol.setCellValueFactory(data -> new SimpleStringProperty(
                 String.valueOf(data.getValue().getIngredient().getPrice())
         ));
-        editableCols();
+
+        confirmBtn.setVisible(false);
     }
 
     public void init(POModel modelOfSib, PurchaseOrder selected) {
@@ -87,9 +85,10 @@ public class DetailPOController implements Initializable {
         }
         totalRevLbl.setText(String.valueOf(sum));
 
-//        If PO is confirmed, the confirmation button is hidden
-        if(model.isConfirm()) {
-            confirmBtn.setVisible(false);
+//        If PO has been not confirmed, the confirmation button is visible
+        if(!model.isConfirm()) {
+            confirmBtn.setVisible(true);
+            editableCols();
         }
     }
 
@@ -113,8 +112,8 @@ public class DetailPOController implements Initializable {
             }
         }));
 
-        receiveCol.setOnEditCommit(e -> {e.getTableView().getItems().get(
-                e.getTablePosition().getRow()).setReceiveQty(e.getNewValue());
+        receiveCol.setOnEditCommit(e -> {
+            e.getTableView().getItems().get(e.getTablePosition().getRow()).setReceiveQty(e.getNewValue());
 //            System.out.println(model.getCurrent().getDetails().get(
 //                    detailTable.getSelectionModel().getSelectedIndex()).getReceiveQty());
         });
@@ -123,21 +122,30 @@ public class DetailPOController implements Initializable {
     }
 
     public void handleActionBtn() {
-        EventHandler<ActionEvent> buttonAddHandler = new EventHandler<ActionEvent>() {
+        EventHandler<ActionEvent> buttonConfirmHandler = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Node source = (Node) event.getSource();
-                Stage theCurrStage = (Stage) source.getScene().getWindow();
-
-                String filepath = "src/main/java/App/Depot/View/POInput.fxml";
-                try {
-                    FXMLLoader fxmlLoader = new FXMLLoader(new File(filepath).toURI().toURL());
-                    theCurrStage.setScene(new Scene(fxmlLoader.load()));
-
-                    POInputController controller = fxmlLoader.getController();
-                    controller.init(model);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                MessageDialog messageDialog = new MessageDialog(
+                        "Confirm",
+                        "Do you want to confirm the purchase order?",
+                        "Your changes will be lost if you don’t save them.",
+                        MessageDialog.TYPES.get("Confirmation")
+                );
+                int rs = messageDialog.showMessage();
+                if(rs == 1) {
+                    boolean legal = true;
+                    for(PurchaseDetail pd : model.getCurrent().getDetails()) {
+                        if(pd.getReceiveQty() < 0 && legal) {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Error");
+                            alert.setHeaderText("Invalid receive quantity");
+                            legal = false;
+                        }
+                    }
+                    if(legal) {
+                        model.handleUpdateRevQty();
+                        ((Stage) ((Node)event.getSource()).getScene().getWindow()).close();
+                    }
                 }
             }
         };
@@ -145,23 +153,20 @@ public class DetailPOController implements Initializable {
         EventHandler<ActionEvent> buttonCancelHandler = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Node source = (Node) event.getSource();
-                Stage theCurrStage = (Stage) source.getScene().getWindow();
-
-                String filepath = "src/main/java/App/Depot/View/POInput.fxml";
-                try {
-                    FXMLLoader fxmlLoader = new FXMLLoader(new File(filepath).toURI().toURL());
-                    theCurrStage.setScene(new Scene(fxmlLoader.load()));
-
-                    POInputController controller = fxmlLoader.getController();
-                    controller.init(model);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                MessageDialog messageDialog = new MessageDialog(
+                        "Quit",
+                        "Do you want to quit ?",
+                        "Your changes will be lost if you don’t save them.",
+                        MessageDialog.TYPES.get("Confirmation")
+                );
+                int rs = messageDialog.showMessage();
+                if(rs == 1) {
+                    ((Stage) ((Node)event.getSource()).getScene().getWindow()).close();
                 }
             }
         };
 
-        confirmBtn.setOnAction(buttonAddHandler);
+        confirmBtn.setOnAction(buttonConfirmHandler);
         cancelBtn.setOnAction(buttonCancelHandler);
     }
 

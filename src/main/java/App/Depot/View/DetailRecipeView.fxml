@@ -117,6 +117,62 @@
                         <Pane prefHeight="70.0" prefWidth="320.0" />
                         <HBox alignment="CENTER" prefHeight="65.0" prefWidth="391.0" spacing="40.0" VBox.vgrow="ALWAYS">
                             <children>
+                                <Button fx:id="addBtn" maxWidth="70.0" minHeight="28.0" minWidth="60.0" mnemonicParsing="false" prefWidth="70.0" text="Add" textAlignment="CENTER">
+                                    <textFill>
+                                        <LinearGradient endX="1.0" endY="1.0">
+                                            <stops>
+                                                <Stop>
+                                                    <color>
+                                                        <Color />
+                                                    </color>
+                                                </Stop>
+                                                <Stop offset="1.0">
+                                                    <color>
+                                                        <Color />
+                                                    </color>
+                                                </Stop>
+                                            </stops>
+                                        </LinearGradient>
+                                    </textFill>
+                                    <padding>
+                                        <Insets bottom="4.0" left="8.0" right="8.0" top="4.0" />
+                                    </padding>
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                    <styleClass>
+                                        <String fx:value="wrapper-btn" />
+                                        <String fx:value="primary-btn" />
+                                    </styleClass>
+                                </Button>
+                                <Button fx:id="editBtn" minHeight="28.0" minWidth="60.0" mnemonicParsing="false" text="Update" textAlignment="CENTER">
+                                    <textFill>
+                                        <LinearGradient endX="1.0" endY="1.0">
+                                            <stops>
+                                                <Stop>
+                                                    <color>
+                                                        <Color />
+                                                    </color>
+                                                </Stop>
+                                                <Stop offset="1.0">
+                                                    <color>
+                                                        <Color />
+                                                    </color>
+                                                </Stop>
+                                            </stops>
+                                        </LinearGradient>
+                                    </textFill>
+                                    <padding>
+                                        <Insets bottom="4.0" left="8.0" right="8.0" top="4.0" />
+                                    </padding>
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                    <styleClass>
+                                        <String fx:value="wrapper-btn" />
+                                        <String fx:value="primary-btn" />
+                                    </styleClass>
+                                </Button>
                                 <Button fx:id="deleteBtn" minHeight="28.0" minWidth="60.0" mnemonicParsing="false" text="Delete" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                     <textFill>
                                         <LinearGradient endX="1.0" endY="1.0">
@@ -145,96 +201,50 @@
                                         <String fx:value="wrapper-btn" />
                                     </styleClass>
                                 </Button>
-                                <Button fx:id="addBtn" minHeight="28.0" minWidth="60.0" mnemonicParsing="false" text="Add" textAlignment="CENTER">
-                                    <textFill>
-                                        <LinearGradient endX="1.0" endY="1.0">
-                                            <stops>
-                                                <Stop>
-                                                    <color>
-                                                        <Color />
-                                                    </color>
-                                                </Stop>
-                                                <Stop offset="1.0">
-                                                    <color>
-                                                        <Color />
-                                                    </color>
-                                                </Stop>
-                                            </stops>
-                                        </LinearGradient>
-                                    </textFill>
-                                    <padding>
-                                        <Insets bottom="4.0" left="8.0" right="8.0" top="4.0" />
-                                    </padding>
-                                    <font>
-                                        <Font size="14.0" />
-                                    </font>
-                                    <styleClass>
-                                        <String fx:value="wrapper-btn" />
-                                        <String fx:value="primary-btn" />
-                                    </styleClass>
-                                </Button>
-                                <Button fx:id="editBtn" minHeight="28.0" minWidth="60.0" mnemonicParsing="false" text="Edit" textAlignment="CENTER">
-                                    <textFill>
-                                        <LinearGradient endX="1.0" endY="1.0">
-                                            <stops>
-                                                <Stop>
-                                                    <color>
-                                                        <Color />
-                                                    </color>
-                                                </Stop>
-                                                <Stop offset="1.0">
-                                                    <color>
-                                                        <Color />
-                                                    </color>
-                                                </Stop>
-                                            </stops>
-                                        </LinearGradient>
-                                    </textFill>
-                                    <padding>
-                                        <Insets bottom="4.0" left="8.0" right="8.0" top="4.0" />
-                                    </padding>
-                                    <font>
-                                        <Font size="14.0" />
-                                    </font>
-                                    <styleClass>
-                                        <String fx:value="wrapper-btn" />
-                                        <String fx:value="primary-btn" />
-                                    </styleClass>
-                                </Button>
                             </children>
                         </HBox>
                     </children>
                 </VBox>
             </children>
         </HBox>
-        <Button fx:id="saveBtn" minHeight="33.0" minWidth="60.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="62.0" text="Save" textAlignment="CENTER">
-            <textFill>
-                <LinearGradient endX="1.0" endY="1.0">
-                    <stops>
-                        <Stop>
-                            <color>
-                                <Color />
-                            </color>
-                        </Stop>
-                        <Stop offset="1.0">
-                            <color>
-                                <Color />
-                            </color>
-                        </Stop>
-                    </stops>
-                </LinearGradient>
-            </textFill>
-            <padding>
-                <Insets bottom="4.0" left="8.0" right="8.0" top="4.0" />
-            </padding>
-            <font>
-                <Font size="14.0" />
-            </font>
-            <styleClass>
-                <String fx:value="wrapper-btn" />
-                <String fx:value="success-btn" />
-            </styleClass>
-        </Button>
+      <HBox alignment="CENTER" spacing="20.0">
+         <children>
+              <Button fx:id="saveBtn" minHeight="33.0" minWidth="60.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="70.0" text="Save" textAlignment="CENTER">
+                  <textFill>
+                      <LinearGradient endX="1.0" endY="1.0">
+                          <stops>
+                              <Stop>
+                                  <color>
+                                      <Color />
+                                  </color>
+                              </Stop>
+                              <Stop offset="1.0">
+                                  <color>
+                                      <Color />
+                                  </color>
+                              </Stop>
+                          </stops>
+                      </LinearGradient>
+                  </textFill>
+                  <padding>
+                      <Insets bottom="4.0" left="8.0" right="8.0" top="4.0" />
+                  </padding>
+                  <font>
+                      <Font size="14.0" />
+                  </font>
+                  <styleClass>
+                      <String fx:value="wrapper-btn" />
+                      <String fx:value="success-btn" />
+                  </styleClass>
+              </Button>
+            <Button fx:id="cancelBtn" maxWidth="70.5" mnemonicParsing="false" prefWidth="70.5" text="Cancel">
+               <styleClass>
+                  <String fx:value="wrapper-btn" />
+                  <String fx:value="cancel-btn" />
+               </styleClass>
+            </Button>
+         </children>
+      </HBox>
     </children>
     <padding>
         <Insets bottom="12.0" left="12.0" right="12.0" />
