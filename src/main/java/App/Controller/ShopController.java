@@ -173,42 +173,42 @@ public class ShopController implements Initializable {
 //        return sizes;
 //    }
 
-    private ArrayList<Product> getDataProducts() {
-        Size sizeS = new Size("S", "Size sieu nho");
-        Size sizeM = new Size("M", "Size sieu vua");
-        Size sizeL = new Size("L", "Size sieu lon");
-        HashMap<Size, Integer> priceList = new HashMap<>();
-        priceList.put(sizeS, 40000);
-        priceList.put(sizeM, 45000);
-        priceList.put(sizeL, 50000);
-        ArrayList<Product> products = new ArrayList<>();
-        Product product;
-        product = new Product();
-        product.setProductId(1);
-        product.setProductName("White Coffee");
-        product.setImagePath("src/main/java/Assets/Images/3.jpeg");
-        product.setPriceList(priceList);
-        products.add(product);
-        product = new Product();
-        product.setProductId(2);
-        product.setProductName("White Coffee1");
-        product.setImagePath("src/main/java/Assets/Images/1.png");
-        product.setPriceList(priceList);
-        products.add(product);
-        product = new Product();
-        product.setProductId(3);
-        product.setProductName("White Coffee3");
-        product.setImagePath("src/main/java/Assets/Images/WhiteCoffee.png");
-        product.setPriceList(priceList);
-        products.add(product);
-        product = new Product();
-        product.setProductId(4);
-        product.setProductName("White Coffee4");
-        product.setImagePath("src/main/java/Assets/Images/6.png");
-        product.setPriceList(priceList);
-        products.add(product);
-        return products;
-    }
+//    private ArrayList<Product> getDataProducts() {
+//        Size sizeS = new Size("S", "Size sieu nho");
+//        Size sizeM = new Size("M", "Size sieu vua");
+//        Size sizeL = new Size("L", "Size sieu lon");
+//        HashMap<Size, Integer> priceList = new HashMap<>();
+//        priceList.put(sizeS, 40000);
+//        priceList.put(sizeM, 45000);
+//        priceList.put(sizeL, 50000);
+//        ArrayList<Product> products = new ArrayList<>();
+//        Product product;
+//        product = new Product();
+//        product.setProductId(1);
+//        product.setProductName("White Coffee");
+//        product.setImagePath("src/main/java/Assets/Images/3.jpeg");
+//        product.setPriceList(priceList);
+//        products.add(product);
+//        product = new Product();
+//        product.setProductId(2);
+//        product.setProductName("White Coffee1");
+//        product.setImagePath("src/main/java/Assets/Images/1.png");
+//        product.setPriceList(priceList);
+//        products.add(product);
+//        product = new Product();
+//        product.setProductId(3);
+//        product.setProductName("White Coffee3");
+//        product.setImagePath("src/main/java/Assets/Images/WhiteCoffee.png");
+//        product.setPriceList(priceList);
+//        products.add(product);
+//        product = new Product();
+//        product.setProductId(4);
+//        product.setProductName("White Coffee4");
+//        product.setImagePath("src/main/java/Assets/Images/6.png");
+//        product.setPriceList(priceList);
+//        products.add(product);
+//        return products;
+//    }
 
 
     //plusBtn
@@ -372,7 +372,6 @@ public class ShopController implements Initializable {
         orderList.clear();
         btnEdit.setDisable(true);
         btnCacncel.setDisable(true);
-        products = (ArrayList<Product>) getDataProducts();
         int column = 0;
         int row = 1;
         if (products.size() > 0) {
@@ -475,25 +474,25 @@ public class ShopController implements Initializable {
      * @param product
      */
     public void setDetails(Product product) {
-        ObservableList<String> observableArrayList = FXCollections.observableArrayList(product.getSizeList());
-        txtProductNamedetails.setText(product.getProductName());
-        cbSizePrice.setItems(observableArrayList);
-        cbSizePrice.getSelectionModel().selectFirst();
-        if (!cbSizePrice.getValue().isEmpty()) {
-            txtPriceDetails.setText(NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(product.getPrice(cbSizePrice.getValue())));
-        }
+//        ObservableList<String> observableArrayList = FXCollections.observableArrayList(product.getSizeList());
+//        txtProductNamedetails.setText(product.getProductName());
+//        cbSizePrice.setItems(observableArrayList);
+//        cbSizePrice.getSelectionModel().selectFirst();
+//        if (!cbSizePrice.getValue().isEmpty()) {
+//            txtPriceDetails.setText(NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(product.getPrice(cbSizePrice.getValue())));
+//        }
     }
 
     public void setDetails(OrderDetail orderDetail) {
-        ObservableList<String> observableArrayList = FXCollections.observableArrayList(orderDetail.getProduct().getSizeList());
-        txtProductNamedetails.setText(orderDetail.getProduct().getProductName());
-        cbSizePrice.setItems(observableArrayList);
-        cbSizePrice.getSelectionModel().select(orderDetail.getSize().getSign());
-        if (!cbSizePrice.getValue().isEmpty()) {
-            txtPriceDetails.setText(NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(orderDetail.getProduct().getPrice(cbSizePrice.getValue())));
-        }
-        Quality.setText(String.valueOf(orderDetail.getQty()));
-        btnEditEvent(orderDetail);
+//        ObservableList<String> observableArrayList = FXCollections.observableArrayList(orderDetail.getProduct().getSizeList());
+//        txtProductNamedetails.setText(orderDetail.getProduct().getProductName());
+//        cbSizePrice.setItems(observableArrayList);
+//        cbSizePrice.getSelectionModel().select(orderDetail.getSize().getSign());
+//        if (!cbSizePrice.getValue().isEmpty()) {
+//            txtPriceDetails.setText(NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(orderDetail.getProduct().getPrice(cbSizePrice.getValue())));
+//        }
+//        Quality.setText(String.valueOf(orderDetail.getQty()));
+//        btnEditEvent(orderDetail);
 
     }
 
@@ -570,7 +569,6 @@ public class ShopController implements Initializable {
     }
 
     public void searchProduct() {
-        productList = getDataProducts();
         FXMLLoader loader = new FXMLLoader();
         try {
             loader.setLocation(new File("src/main/java/App/View/Alert.fxml").toURI().toURL());
