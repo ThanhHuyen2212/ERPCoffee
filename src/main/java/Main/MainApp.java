@@ -56,12 +56,13 @@ public class MainApp extends Application {
         ScrollPane scrollPane = new ScrollPane(mainMenu);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         scrollPane.setMaxHeight(Screen.getPrimary().getBounds().getHeight()-200);
+        mainMenu.setFillWidth(true);
         mainView.setLeft(scrollPane);
     }
 
     @Override
     public void start(Stage stage) throws Exception {
-        String defaultpath = "src/main/java/App/View/ShopGUI.fxml";
+        String defaultpath = "src/main/java/App/Statitics/View/RevenueChart.fxml";
         initGUI();
         getFunction(new String[]{
                 "product","size","category","ingredient","recipe","customer","purchase","staff","statistic","sale"
