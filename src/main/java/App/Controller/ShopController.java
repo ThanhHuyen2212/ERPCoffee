@@ -1,7 +1,10 @@
 package App.Controller;
 
 import App.Model.OrderTable;
+import DAL.CategoryAccess;
 import Entity.*;
+import Logic.CategoryManagement;
+import Logic.SizeManagement;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -15,6 +18,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
+import javafx.stage.StageStyle;
 
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -22,6 +26,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.NumberFormat;
+import java.time.Year;
 import java.util.*;
 
 public class ShopController implements Initializable {
@@ -93,12 +98,18 @@ public class ShopController implements Initializable {
     private Label totalmoneyLabel;
 
     private MyListener myListener;
+    private CategoryManagement categoryManagement = new CategoryManagement();
+    private SizeManagement sizeManagement = new SizeManagement();
 
     private List<Category> categoryList = new ArrayList<>();
     public static ArrayList<Product> productList = new ArrayList<>();
     public ArrayList<OrderDetail> orderList = new ArrayList<>();
     private List<Size> sizeList = new ArrayList<>();
     ObservableList<OrderTable> orderTableObservableList;
+    public void getData(){
+        categoryList = categoryManagement.getCategoriesList();
+        sizeList=sizeManagement.getSizes();
+    }
 
     public ArrayList<OrderTable> getDataOrderTable(ArrayList<OrderDetail> orderList) {
         ArrayList<OrderTable> orderTables = new ArrayList<>();
@@ -128,38 +139,39 @@ public class ShopController implements Initializable {
     /**
      * Fake dữ liệu
      */
-    private List<Category> getDataCategories() throws IOException {
-        List<Category> categories = new ArrayList<>();
-        Category category;
-        category = new Category();
-        category.setCategoryId(0);
-        category.setCategoryName("All");
-        categories.add(category);
-        category = new Category();
-        category.setCategoryId(1);
-        category.setCategoryName("Coffee");
+//    private List<Category> getDataCategories() throws IOException {
+//        List<Category> categories = new ArrayList<>();
+////        Category category;
+////        category = new Category();
+////        category.setCategoryId(0);
+////        category.setCategoryName("All");
+////        categories.add(category);
+////        category = new Category();
+////        category.setCategoryId(1);
+////        category.setCategoryName("Coffee");
+////
+////        category = new Category();
+////        category.setCategoryId(2);
+////        category.setCategoryName("milkTea");
+////        categories.add(category);
+////        category = new Category();
+////        category.setCategoryId(3);
+////        category.setCategoryName("milkTea1");
+////        categories.add(category);
+//        categories = categoryManagement.getCategoriesList();
+//        return categories;
+//    }
 
-        category = new Category();
-        category.setCategoryId(2);
-        category.setCategoryName("milkTea");
-        categories.add(category);
-        category = new Category();
-        category.setCategoryId(3);
-        category.setCategoryName("milkTea1");
-        categories.add(category);
-        return categories;
-    }
-
-    private ArrayList<Size> getDataSize() {
-        ArrayList<Size> sizes = new ArrayList<>();
-        Size sizeS = new Size("S", "Size sieu nho");
-        Size sizeM = new Size("M", "Size sieu vua");
-        Size sizeL = new Size("L", "Size sieu lon");
-        sizes.add(sizeS);
-        sizes.add(sizeM);
-        sizes.add(sizeL);
-        return sizes;
-    }
+//    private ArrayList<Size> getDataSize() {
+//        ArrayList<Size> sizes = new ArrayList<>();
+//        Size sizeS = new Size("S", "Size sieu nho");
+//        Size sizeM = new Size("M", "Size sieu vua");
+//        Size sizeL = new Size("L", "Size sieu lon");
+//        sizes.add(sizeS);
+//        sizes.add(sizeM);
+//        sizes.add(sizeL);
+//        return sizes;
+//    }
 
     private ArrayList<Product> getDataProducts() {
         Size sizeS = new Size("S", "Size sieu nho");
@@ -361,7 +373,6 @@ public class ShopController implements Initializable {
         btnEdit.setDisable(true);
         btnCacncel.setDisable(true);
         products = (ArrayList<Product>) getDataProducts();
-        sizeList = getDataSize();
         int column = 0;
         int row = 1;
         if (products.size() > 0) {
@@ -451,10 +462,9 @@ public class ShopController implements Initializable {
      * @throws IOException
      */
     public void renderCategories() throws IOException {
-        categoryList.addAll(getDataCategories());
         hboxCartegory.setStyle("-fx-effect:" + "dropShadow(three-pass-box, rgba(0,0,0,0.1),10.0,0.0,0.0,10.0);");
-        hboxCartegory.getChildren().add(renderCategory(categoryList.get(0)));
-        for (int i = 1; i < categoryList.size(); i++) {
+        hboxCartegory.getChildren().add(renderCategory(new Category(0, "All")));
+        for (int i = 0; i < categoryList.size(); i++) {
             hboxCartegory.getChildren().add(renderCategory(categoryList.get(i)));
         }
     }
@@ -543,9 +553,19 @@ public class ShopController implements Initializable {
         Dialog<ButtonType> dialog = new Dialog<>();
         customerController customerController = loader.getController();
         dialog.setDialogPane((DialogPane) customerPane);
+        dialog.initStyle(StageStyle.TRANSPARENT);
         customerBtn.setOnAction(actionEvent -> {
-            dialog.show();
             shopHBox.setStyle("-fx-opacity:" + "0.5; \n");
+            Optional<ButtonType> btn=dialog.showAndWait();
+            if(btn.get()==ButtonType.YES){
+                shopHBox.setStyle("-fx-opacity:" + "1; \n");
+                //code
+            }else if(btn.get()==ButtonType.NO){
+                shopHBox.setStyle("-fx-opacity:" + "1; \n");
+                dialog.close();
+            }
+
+
         });
     }
 
@@ -612,6 +632,7 @@ public class ShopController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
+            getData();
             searchProduct();
             renderCategories();
             printOrder();

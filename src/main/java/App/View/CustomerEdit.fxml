@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ButtonType?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<DialogPane fx:id="dialogCategoryAdd" prefHeight="319.0" prefWidth="574.0" styleClass="dialog" stylesheets="@css/AddApplication.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Controller.CustomerEdit">
+    <content>
+        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="331.0" prefWidth="572.0">
+            <children>
+                <TextField fx:id="txtName" layoutX="286.0" layoutY="89.0" prefHeight="44.0" prefWidth="202.0" promptText="Enter CustomName" styleClass="TextFieldInput" />
+                <Label prefHeight="43.0" prefWidth="574.0" styleClass="header" text="Add Customer" />
+                <Label layoutX="78.0" layoutY="92.0" prefHeight="39.0" prefWidth="183.0" styleClass="LabelTilte" text="Customer Name" />
+                <Label layoutX="78.0" layoutY="156.0" prefHeight="39.0" prefWidth="183.0" styleClass="LabelTilte" text="Customer Phone" />
+                <Label layoutX="78.0" layoutY="226.0" prefHeight="39.0" prefWidth="183.0" styleClass="LabelTilte" text="Customer Point" />
+                <TextField fx:id="txtPhone" layoutX="286.0" layoutY="154.0" prefHeight="44.0" prefWidth="202.0" promptText="Enter Customer Phone" styleClass="TextFieldInput" />
+                <TextField fx:id="txtPoint" layoutX="286.0" layoutY="224.0" prefHeight="44.0" prefWidth="202.0" promptText="Enter Point" styleClass="TextFieldInput" text="0">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </TextField>
+            </children>
+        </AnchorPane>
+    </content>
+    <buttonTypes>
+        <ButtonType fx:id="saveCategory" fx:constant="APPLY" />
+        <ButtonType fx:constant="CLOSE" />
+    </buttonTypes>
+</DialogPane>
