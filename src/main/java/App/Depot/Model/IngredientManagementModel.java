@@ -36,15 +36,13 @@ public class IngredientManagementModel {
         list = FXCollections.observableArrayList(ingredientManagementLogic.getIngredients());
     }
 
-    public void handleUpdate(Ingredient i, int index, String name, String type, int limit, Date date) {
+    public void handleUpdate(Ingredient i, int index, String name, String type, int price, int limit, Date date) {
         i.setIngredientName(name);
         i.setIngredientType(type);
+        i.setPrice(price);
         i.setIngredientLimit(limit);
-        if(date != null) {
-            i.setDeleteDate(date);
-        }
+        i.setDeleteDate(date);
         ingredientManagementLogic.update(index, i);
-//        list = FXCollections.observableArrayList(ingredientManagement.getIngredients());
     }
 
     public void handleDelete(Ingredient i) {

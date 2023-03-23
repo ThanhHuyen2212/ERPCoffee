@@ -2,9 +2,12 @@ package App.Depot.Model;
 
 import Entity.PurchaseDetail;
 import Entity.PurchaseOrder;
+import Logic.Depot.IngredientManagement;
 import Logic.Depot.PurchaseOrderManagement;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+import java.sql.Date;
 
 public class POModel {
     private PurchaseOrderManagement logic;
@@ -61,4 +64,35 @@ public class POModel {
         return false;
     }
 
+    public void handleUpdateRevQty() {
+        logic.handleUpdateRevQty(current);
+    }
+
+    public void handleAddDetail(String value, int qty) {
+        logic.handleAddDetail(current, new IngredientManagement().findByName(value), qty);
+        currentDetails = FXCollections.observableArrayList(current.getDetails());
+    }
+
+    public void handleUpdateDetail(PurchaseDetail selected, String value, int qty) {
+        logic.handleUpdateDetail(selected, new IngredientManagement().findByName(value), qty);
+//        currentDetails = FXCollections.observableArrayList(current.getDetails());
+    }
+
+    public void handleDeleteDetail(PurchaseDetail selected) {
+        logic.handleDeleteDetail(current, selected);
+        currentDetails = FXCollections.observableArrayList(current.getDetails());
+    }
+
+    public void handleAdd(PurchaseOrder current, String vendor, Integer staffId, Date date, int total) {
+        logic.handleAdd(current, vendor, staffId, date, total);
+        purchaseOrderObservableList = FXCollections.observableArrayList(logic.getPurchaseOrders());
+    }
+
+    public float calTotal() {
+        float sum = 0;
+        for(PurchaseDetail pd : current.getDetails()) {
+            sum += pd.getOrderQty() * pd.getIngredient().getPrice();
+        }
+        return sum;
+    }
 }

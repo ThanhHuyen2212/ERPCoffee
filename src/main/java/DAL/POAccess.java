@@ -59,4 +59,49 @@ public class POAccess extends DataAccess {
 
     public void create(PurchaseOrder selected) {
     }
+
+    public void update(PurchaseOrder curr) {
+//        Update quantity and update employee confirm
+    }
+
+    public int add(PurchaseOrder current) {
+        POAccess poAccess = new POAccess();
+        int id = 0;
+        try {
+            poAccess.createConnection();
+            PreparedStatement prSt = poAccess.getConn().prepareStatement(
+                    "call insert_purchaseorder(?, ?, ?)");
+//            "call insert_purchaseorder(name_supplier, totalprice_purchase, phone_emp_create)");
+            prSt.setString(1, current.getSupplier());
+            prSt.setInt(2, current.getTotalPrice());
+            prSt.setString(3, current.getEmployeeCreate().getPhone());
+            ResultSet rs = prSt.executeQuery();
+            while (rs.next()) {
+                id = rs.getInt(1);
+            }
+            addDetails(current);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return id;
+    }
+
+    public void addDetails(PurchaseOrder current) {
+        POAccess poAccess = new POAccess();
+        try {
+            poAccess.createConnection();
+            for(PurchaseDetail pd : current.getDetails()) {
+                PreparedStatement prSt = poAccess.getConn().prepareStatement(
+                        "call insert_purchaseorderdetail(phone_emp_create, name_ingredient, qty_order)");
+//            call insert_purchaseorderdetail(phone_emp_create, name_ingredient, qty_order)
+                prSt.setInt(1, current.getEmployeeCreate().getEmployeeId());
+                prSt.setString(2, pd.getIngredient().getIngredientName());
+                prSt.setInt(3, pd.getOrderQty());
+                ResultSet rs = prSt.executeQuery();
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

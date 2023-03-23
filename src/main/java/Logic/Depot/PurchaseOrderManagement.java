@@ -1,8 +1,12 @@
 package Logic.Depot;
 
 import DAL.POAccess;
+import Entity.Employee;
+import Entity.Ingredient;
+import Entity.PurchaseDetail;
 import Entity.PurchaseOrder;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
 public class PurchaseOrderManagement {
@@ -20,5 +24,40 @@ public class PurchaseOrderManagement {
 
     public void setPurchaseOrders(ArrayList<PurchaseOrder> purchaseOrders) {
         this.purchaseOrders = purchaseOrders;
+    }
+
+    public void handleUpdateRevQty(PurchaseOrder curr) {
+        for(PurchaseOrder po : purchaseOrders) {
+            if (po.equals(curr)) {
+                curr.setEmployeeConfirm(
+                        new Employee()
+                );
+            }
+        }
+        purchaseOrderDAO.update(curr);
+    }
+
+    public void handleAddDetail(PurchaseOrder current, Ingredient ingredient, int qty) {
+        current.addDetails(ingredient, qty);
+    }
+
+    public void handleUpdateDetail(PurchaseDetail selected, Ingredient ingredient, int qty) {
+        selected.setIngredient(ingredient);
+        selected.setOrderQty(qty);
+    }
+
+    public void handleDeleteDetail(PurchaseOrder current, PurchaseDetail selected) {
+        current.getDetails().remove(selected);
+    }
+
+    public void handleAdd(PurchaseOrder current, String vendor, Integer staffId, Date date, int total) {
+        current.setSupplier(vendor);
+//        Xu ly findById employee
+        current.setEmployeeCreate(new Employee());
+        current.setPurchaseOrderDate(date);
+        current.setTotalPrice(total);
+        purchaseOrders.add(current);
+        int id = purchaseOrderDAO.add(current);
+        current.setPurchaseOrderId(id);
     }
 }
