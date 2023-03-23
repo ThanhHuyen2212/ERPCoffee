@@ -82,9 +82,10 @@
                     <columns>
                         <TableColumn fx:id="idCol" prefWidth="71.24105167388916" text="ID" />
                         <TableColumn fx:id="ingredientCol" prefWidth="178.2589340209961" text="Ingredient" />
-                        <TableColumn fx:id="typeCol" minWidth="0.0" prefWidth="192.282470703125" text="Type" />
-                        <TableColumn fx:id="qtyCol" prefWidth="84.217529296875" text="Quantity" />
-                        <TableColumn fx:id="priceCol" prefWidth="144.7410888671875" text="Price" />
+                        <TableColumn fx:id="typeCol" minWidth="0.0" prefWidth="107.22406005859375" text="Type" />
+                        <TableColumn fx:id="qtyCol" prefWidth="76.07284545898438" text="Quantity" />
+                        <TableColumn fx:id="priceCol" prefWidth="111.70404052734375" text="Unit Price" />
+                  <TableColumn fx:id="subtotalCol" prefWidth="129.0" text="Subtotal" />
                     </columns>
                 </TableView>
                 <VBox prefHeight="499.0" prefWidth="309.0" HBox.hgrow="ALWAYS">

@@ -39,7 +39,9 @@ public class IngredientManagementController implements Initializable {
     @FXML
     private TextField typeTxf;
     @FXML
-    private Label createdDateLbl;
+    private TextField priceTxf;
+    @FXML
+    private Label createDateLbl;
     @FXML
     private DatePicker deleteDatePk;
     @FXML
@@ -75,12 +77,15 @@ public class IngredientManagementController implements Initializable {
             if (newSelection != null) {
                 nameTxf.setText(newSelection.getIngredientName());
                 typeTxf.setText(newSelection.getIngredientType());
+                priceTxf.setText(String.valueOf(newSelection.getPrice()));
                 limitTxf.setText(String.valueOf(newSelection.getIngredientLimit()));
                 try{
-                    createdDateLbl.setText(sdf.format(newSelection.getCreateDate()));
+                    createDateLbl.setText(sdf.format(newSelection.getCreateDate()));
 //                    Code convert java.sql.Date to Local Date
-                    LocalDate ld = (new Date(newSelection.getDeleteDate().getTime())).toLocalDate();
-                    deleteDatePk.setValue(ld);
+                    if(newSelection.getDeleteDate() != null) {
+                        LocalDate ld = (new Date(newSelection.getDeleteDate().getTime())).toLocalDate();
+                        deleteDatePk.setValue(ld);
+                    }
 
 //                    Covert LocalDate to java.sql.Date
 //                    java.sql.Date.valueOf(dateToConvert);
@@ -104,14 +109,17 @@ public class IngredientManagementController implements Initializable {
                 );
                 int rs = messageDialog.showMessage();
                 if(rs == 1) {
-                    model.handleCreate(new Ingredient(
-                            1,
-                            "Bot matcha",
-                            "Nguyen lieu kho",
-                            22,
-                            7,
-                            90000));
-                    ingredientTable.setItems(model.getList());
+                    try{
+                        model.handleCreate(new Ingredient(
+                                nameTxf.getText(),
+                                typeTxf.getText(),
+                                Integer.parseInt(priceTxf.getText()),
+                                Integer.parseInt(limitTxf.getText())
+                        ));
+                        ingredientTable.setItems(model.getList());
+                    } catch (Exception exception){
+                        System.out.println("Khong parse duoc so luong nhap vao");
+                    }
                 }
             }
         };
@@ -123,12 +131,10 @@ public class IngredientManagementController implements Initializable {
                 int index = ingredientTable.getSelectionModel().getSelectedIndex();
                 LocalDate deleteDate = null;
                 try{
-//                    String name = "Bot cacao dua";
-//                    String type = "Nguyen lieu duoc che bien";
-//                    int limit = 12;
                     String name = nameTxf.getText();
                     String type = typeTxf.getText();
                     int limit = Integer.parseInt(limitTxf.getText());
+                    int price = Integer.parseInt(priceTxf.getText());
                     deleteDate = deleteDatePk.getValue();
                     MessageDialog messageDialog = new MessageDialog(
                             "Confirm Edition",
@@ -138,7 +144,11 @@ public class IngredientManagementController implements Initializable {
                     );
                     int rs = messageDialog.showMessage();
                     if (rs == 1) {
-                        model.handleUpdate(selected, index, name, type, limit, Date.valueOf(deleteDate));
+                        Date tempDate = null;
+                        if(deleteDate != null) {
+                            tempDate = Date.valueOf(deleteDate);
+                        }
+                        model.handleUpdate(selected, index, name, type, price, limit, tempDate);
                         ingredientTable.refresh();
                     }
                 } catch (Exception e) {
@@ -161,7 +171,7 @@ public class IngredientManagementController implements Initializable {
                     int rs = messageDialog.showMessage();
                     if (rs == 1) {
                         model.handleDelete(selected);
-                        ingredientTable.setItems(model.getList());
+                        ingredientTable.refresh();
                     }
                 } catch(Exception e) {
                     System.out.println("Khong bat duoc selected - xoa ingredient");

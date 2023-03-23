@@ -12,10 +12,12 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
+
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class DetailRecipeController implements Initializable {
@@ -44,12 +46,15 @@ public class DetailRecipeController implements Initializable {
     @FXML
     private Button saveBtn;
     @FXML
+    private Button cancelBtn;
+    @FXML
     private ComboBox<String> componentCb;
     private DetailRecipeModel model;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         model = new DetailRecipeModel();
+
         idCol.setCellValueFactory(new PropertyValueFactory<>("ingredientId"));
         componentCol.setCellValueFactory(new PropertyValueFactory<>("ingredientName"));
         qtyCol.setCellValueFactory(data -> new SimpleStringProperty(
@@ -65,8 +70,10 @@ public class DetailRecipeController implements Initializable {
         ));
 
         productLbl.setText(selected.getProductName());
+
         handleActionOnRow();
         handleActionBtn();
+        handleActionForm();
     }
 
     public void handleActionOnRow() {
@@ -96,7 +103,15 @@ public class DetailRecipeController implements Initializable {
                 int rs = messageDialog.showMessage();
 
                 if(rs == 1) {
-                    model.handleCreate("Ca phe hat", 12);
+//                    model.handleCreate("Ca phe hat", 12);
+                    try{
+                        model.handleAdd(
+                                componentCb.getValue(),
+                                Integer.parseInt(qtyComponentTxf.getText())
+                        );
+                    } catch(Exception e) {
+
+                    }
                     detailTable.refresh();
                     detailTable.setItems(FXCollections.observableArrayList(model.getDetails().keySet()));
                 }
@@ -106,8 +121,9 @@ public class DetailRecipeController implements Initializable {
         EventHandler<ActionEvent> buttonUpdateHandler = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                LocalDate deleteDate = null;
+//                LocalDate deleteDate = null;
                 try{
+                    Ingredient selectedIg = detailTable.getSelectionModel().getSelectedItem();
                     MessageDialog messageDialog = new MessageDialog(
                             "Confirm Edition",
                             "Do you want to edit the information?",
@@ -116,12 +132,23 @@ public class DetailRecipeController implements Initializable {
                     );
                     int rs = messageDialog.showMessage();
                     if (rs == 1) {
+                        try{
+                            model.handleUpdate(
+                                    selectedIg,
+                                    componentCb.getValue(),
+                                    Integer.parseInt(qtyComponentTxf.getText())
+                            );
+                        } catch(Exception e) {
+
+                        }
 //                        model.handleUpdate(selected, index, name, type, limit, Date.valueOf(deleteDate));
 //                        ingredientTable.refresh();
                     }
                 } catch (Exception e) {
                     System.out.println("Khong bat duoc selected");
                 }
+                detailTable.refresh();
+                detailTable.setItems(FXCollections.observableArrayList(model.getDetails().keySet()));
             }
         };
 
@@ -129,6 +156,7 @@ public class DetailRecipeController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 try{
+                    Ingredient selectedIg = detailTable.getSelectionModel().getSelectedItem();
                     MessageDialog messageDialog = new MessageDialog(
                             "Confirm Delete",
                             "Do you want to delete the information?",
@@ -137,15 +165,21 @@ public class DetailRecipeController implements Initializable {
                     );
                     int rs = messageDialog.showMessage();
                     if (rs == 1) {
-//                        model.handleDelete(selected);
-//                        ingredientTable.setItems(model.getList());
+                        model.handleDelete(selectedIg);
                     }
                 } catch(Exception e) {
                     System.out.println("Khong bat duoc selected");
                 }
+                detailTable.setItems(FXCollections.observableArrayList(model.getDetails().keySet()));
             }
         };
 
+        addBtn.setOnAction(buttonAddHandler);
+        editBtn.setOnAction(buttonUpdateHandler);
+        deleteBtn.setOnAction(buttonDeleteHandler);
+    }
+
+    public void handleActionForm() {
         EventHandler<ActionEvent> buttonSaveHandler = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -154,11 +188,24 @@ public class DetailRecipeController implements Initializable {
                 }
             }
         };
+        EventHandler<ActionEvent> buttonCancelHandler = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                MessageDialog messageDialog = new MessageDialog(
+                        "Quit",
+                        "Do you want to quit ?",
+                        "Your changes will be lost if you don’t save them.",
+                        MessageDialog.TYPES.get("Confirmation")
+                );
+                int rs = messageDialog.showMessage();
+                if(rs == 1) {
+                    ((Stage) ((Node)event.getSource()).getScene().getWindow()).close();
+                }
+            }
+        };
 
-        addBtn.setOnAction(buttonAddHandler);
-        editBtn.setOnAction(buttonUpdateHandler);
-        deleteBtn.setOnAction(buttonDeleteHandler);
         saveBtn.setOnAction(buttonSaveHandler);
+        cancelBtn.setOnAction(buttonCancelHandler);
     }
 
 }
