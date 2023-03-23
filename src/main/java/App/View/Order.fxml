@@ -23,7 +23,17 @@
                            <children>
                               <Pane prefHeight="61.0" prefWidth="469.0" HBox.hgrow="ALWAYS" />
                               <Pane prefHeight="61.0" prefWidth="216.0" />
-                              <Label prefHeight="68.0" prefWidth="289.0" text="Label" />
+                              <Label fx:id="hhmmssLabel" alignment="CENTER" prefHeight="68.0" prefWidth="289.0" text="14:05:00 ">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font></Label>
+                              <Pane prefHeight="48.0" prefWidth="56.0" />
+                              <Label fx:id="dateLabel" alignment="CENTER" prefHeight="68.0" prefWidth="289.0" text="14/03/2023">
+                                 <font>
+                                    <Font size="22.0" />
+                                 </font>
+                              </Label>
+                              <Pane prefHeight="61.0" prefWidth="216.0" />
                            </children>
                         </HBox>
                      </children>
@@ -34,7 +44,7 @@
                         <VBox prefHeight="116.0" prefWidth="265.0">
                            <children>
                               <Pane prefHeight="13.0" prefWidth="265.0" />
-                              <Label alignment="CENTER" prefHeight="64.0" prefWidth="263.0" text="HÓA ĐƠN">
+                              <Label alignment="CENTER" prefHeight="64.0" prefWidth="263.0" text="RECEIPT">
                                  <font>
                                     <Font name="System Bold" size="38.0" />
                                  </font>
@@ -61,13 +71,13 @@
                               <HBox alignment="CENTER" prefHeight="38.0" prefWidth="511.0">
                                  <children>
                                     <Pane prefHeight="38.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
-                                    <Label prefHeight="36.0" prefWidth="170.0" text="Người bán:">
+                                    <Label prefHeight="36.0" prefWidth="170.0" text="Cashier:">
                                        <font>
                                           <Font size="21.0" />
                                        </font>
                                     </Label>
                                     <Pane prefHeight="36.0" prefWidth="4.0" HBox.hgrow="ALWAYS" />
-                                    <Label prefHeight="36.0" prefWidth="183.0" text="Nguyễn Văn A">
+                                    <Label fx:id="cashierLabel" prefHeight="36.0" prefWidth="183.0" text="Nguyễn Văn A">
                                        <font>
                                           <Font size="22.0" />
                                        </font>
@@ -79,13 +89,13 @@
                               <HBox alignment="CENTER" prefHeight="38.0" prefWidth="511.0">
                                  <children>
                                     <Pane prefHeight="36.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
-                                    <Label prefHeight="36.0" prefWidth="170.0" text="Người mua">
+                                    <Label prefHeight="36.0" prefWidth="170.0" text="Customer:">
                                        <font>
                                           <Font size="23.0" />
                                        </font>
                                     </Label>
                                     <Pane prefHeight="36.0" prefWidth="4.0" HBox.hgrow="ALWAYS" />
-                                    <Label prefHeight="36.0" prefWidth="183.0" text="Nguyễn Văn B">
+                                    <Label fx:id="CustomerLabel" prefHeight="36.0" prefWidth="183.0" text="Nguyễn Văn B">
                                        <font>
                                           <Font size="22.0" />
                                        </font>
@@ -97,13 +107,13 @@
                               <HBox alignment="CENTER" prefHeight="38.0" prefWidth="511.0">
                                  <children>
                                     <Pane prefHeight="36.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
-                                    <Label prefHeight="36.0" prefWidth="170.0" text="Số điện thoại">
+                                    <Label prefHeight="36.0" prefWidth="170.0" text="Customer's Phone:">
                                        <font>
                                           <Font size="19.0" />
                                        </font>
                                     </Label>
                                     <Pane prefHeight="36.0" prefWidth="4.0" HBox.hgrow="ALWAYS" />
-                                    <Label prefHeight="36.0" prefWidth="183.0" text="Label">
+                                    <Label fx:id="PhoneLabel" prefHeight="36.0" prefWidth="183.0" text="09999999">
                                        <font>
                                           <Font size="22.0" />
                                        </font>
@@ -119,14 +129,14 @@
                   <Pane prefHeight="15.0" prefWidth="794.0" />
                   <AnchorPane prefHeight="537.0" prefWidth="794.0">
                      <children>
-                        <TableView layoutX="25.0" layoutY="22.0" prefHeight="504.0" prefWidth="748.0">
+                        <TableView fx:id="OrderDetailsTable" layoutX="25.0" layoutY="22.0" prefHeight="504.0" prefWidth="748.0">
                           <columns>
-                            <TableColumn prefWidth="75.0" text="STT" />
-                            <TableColumn prefWidth="238.0" text="Product" />
-                              <TableColumn prefWidth="83.0" text="Size" />
-                              <TableColumn prefWidth="61.0" text="Quantity" />
-                              <TableColumn prefWidth="129.0" text="Đơn giá " />
-                              <TableColumn prefWidth="183.0" text="Total" />
+                            <TableColumn fx:id="NoTableColunm" prefWidth="52.0" text="No." />
+                            <TableColumn fx:id="ProductColunm" prefWidth="261.0" text="Product" />
+                              <TableColumn fx:id="SizeColum" prefWidth="83.0" text="Size" />
+                              <TableColumn fx:id="QuantityColmn" prefWidth="61.0" text="Quantity" />
+                              <TableColumn fx:id="PriceColumn" prefWidth="129.0" text="Unit Price" />
+                              <TableColumn fx:id="TotalColumn" prefWidth="183.0" text="Total" />
                           </columns>
                         </TableView>
                      </children>
@@ -140,29 +150,47 @@
                               <Pane prefHeight="10.0" prefWidth="306.0" />
                               <HBox prefHeight="28.0" prefWidth="306.0">
                                  <children>
-                                    <Pane prefHeight="36.0" prefWidth="109.0" HBox.hgrow="ALWAYS" />
-                                    <Label prefHeight="40.0" prefWidth="121.0" text="Label" />
+                                    <Pane prefHeight="26.0" prefWidth="41.0" HBox.hgrow="ALWAYS" />
+                                    <Label prefHeight="31.0" prefWidth="169.0" text="Total Price:">
+                                       <font>
+                                          <Font size="21.0" />
+                                       </font></Label>
                                     <Pane prefHeight="36.0" prefWidth="80.0" />
-                                    <Label prefHeight="36.0" prefWidth="168.0" text="Label" />
+                                    <Label fx:id="TotalPriceLabel" prefHeight="36.0" prefWidth="168.0" text="500.000đ">
+                                       <font>
+                                          <Font size="17.0" />
+                                       </font></Label>
                                     <Pane prefHeight="36.0" prefWidth="68.0" />
                                  </children>
                               </HBox>
                               <Pane prefHeight="5.0" prefWidth="306.0" />
                               <HBox prefHeight="33.0" prefWidth="306.0">
                                  <children>
-                                    <Pane prefHeight="36.0" prefWidth="109.0" HBox.hgrow="ALWAYS" />
-                                    <Label prefHeight="40.0" prefWidth="121.0" text="Label" />
-                                    <Pane prefHeight="36.0" prefWidth="80.0" />
-                                    <Label prefHeight="36.0" prefWidth="168.0" text="Label" />
+                                    <Pane prefHeight="27.0" prefWidth="49.0" HBox.hgrow="ALWAYS" />
+                                    <Label contentDisplay="CENTER" prefHeight="31.0" prefWidth="185.0" text="Receive:">
+                                       <font>
+                                          <Font size="21.0" />
+                                       </font></Label>
+                                    <Pane prefHeight="31.0" prefWidth="62.0" />
+                                    <Label fx:id="ReceiveLabel" prefHeight="36.0" prefWidth="168.0" text="500.000đ">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font></Label>
                                     <Pane prefHeight="36.0" prefWidth="68.0" />
                                  </children>
                               </HBox>
                               <HBox prefHeight="33.0" prefWidth="306.0">
                                  <children>
-                                    <Pane prefHeight="36.0" prefWidth="109.0" HBox.hgrow="ALWAYS" />
-                                    <Label prefHeight="40.0" prefWidth="121.0" text="Label" />
+                                    <Pane prefHeight="26.0" prefWidth="37.0" HBox.hgrow="ALWAYS" />
+                                    <Label prefHeight="28.0" prefWidth="145.0" text="Change:">
+                                       <font>
+                                          <Font size="19.0" />
+                                       </font></Label>
                                     <Pane prefHeight="36.0" prefWidth="80.0" />
-                                    <Label prefHeight="36.0" prefWidth="168.0" text="Label" />
+                                    <Label fx:id="changeLabel" prefHeight="28.0" prefWidth="143.0" text="0đ">
+                                       <font>
+                                          <Font size="17.0" />
+                                       </font></Label>
                                     <Pane prefHeight="36.0" prefWidth="68.0" />
                                  </children>
                               </HBox>
