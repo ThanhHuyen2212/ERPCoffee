@@ -2,6 +2,7 @@ package Entity;
 
 import javafx.collections.ObservableList;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -10,15 +11,26 @@ public class Product {
     private int productId;
     private String productName;
     private String imagePath;
-    private Category category;
-    private HashMap<Size,Integer> priceList;
+    private String category;
+    private Date createAt;
+    private Date deleteAt;
+
+    private HashMap<String,Integer> priceList;
 
     private ProductRecipe recipe;
 
     public Product() {
     }
+    public Product(int productId, String productName, Date createAt, Date deleteAt, String imagePath, String category){
+        this.productId=productId;
+        this.productName=productName;
+        this.createAt= createAt;
+        this.deleteAt=deleteAt;
+        this.imagePath=imagePath;
+        this.category=category;
 
-    public Product(int productId, String productName, String imagePath, Category category, HashMap<Size, Integer> priceList) {
+    }
+    public Product(int productId, String productName, String imagePath, String category, HashMap<String, Integer> priceList) {
         this.productId = productId;
         this.productName = productName;
         this.imagePath = imagePath;
@@ -50,19 +62,19 @@ public class Product {
         this.imagePath = imagePath;
     }
 
-    public Category getCategory() {
+    public String getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(String category) {
         this.category = category;
     }
 
-    public HashMap<Size, Integer> getPriceList() {
+    public HashMap<String, Integer> getPriceList() {
         return priceList;
     }
 
-    public void setPriceList(HashMap<Size, Integer> priceList) {
+    public void setPriceList(HashMap<String, Integer> priceList) {
         this.priceList = priceList;
     }
 
@@ -70,22 +82,41 @@ public class Product {
         return priceList.get(size);
     }
 
+    public Date getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
+    }
+
+    public Date getDeleteAt() {
+        return deleteAt;
+    }
+
+    public void setDeleteAt(Date deleteAt) {
+        this.deleteAt = deleteAt;
+    }
+
     public int getPrice(String size){
-        for(Size s : priceList.keySet()){
-            if(s.getSign().equals(size)){
+        for(String s : priceList.keySet()){
+            if(s.equals(size)){
                 return priceList.get(s);
             }
         }
         return 0;
     }
 
+//    public ArrayList<String> getSizeList(){
+//        return new ArrayList<>(
+//                priceList.keySet()
+//                        .stream().map(
+//                            (Size::getSign)
+//                        )
+//                        .toList());
+//    }
     public ArrayList<String> getSizeList(){
-        return new ArrayList<>(
-                priceList.keySet()
-                        .stream().map(
-                            (Size::getSign)
-                        )
-                        .toList());
+        return (ArrayList<String>) priceList.keySet();
     }
 
     public ProductRecipe getRecipe() {

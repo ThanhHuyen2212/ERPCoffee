@@ -2,6 +2,7 @@ package App.Controller;
 
 import App.Model.OrderTable;
 import Entity.Member;
+import Logic.MemberManagement;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -56,36 +57,16 @@ public class customerController implements Initializable {
     @FXML
     private TextField txtSearchCustomer;
     ArrayList<Member> memberList = new ArrayList<>();
+
+    private MemberManagement memberManagement = new MemberManagement();
     ObservableList<Member> MemberObservableList;
 
     /**
      * Fake dữ liệu
      */
 
-    private ArrayList<Member> getDataMemberList(){
-        ArrayList<Member> mbList = new ArrayList<>();
-        Member member;
-        member = new Member();
-        member.setFullName("Nguyễn Hữu Đại");
-        member.setPhoneNumber("0900000");
-        member.setPoint(10000);
-        mbList.add(member);
-        member = new Member();
-        member.setFullName("Lê Ngô Hậu");
-        member.setPhoneNumber("0900001");
-        member.setPoint(10000);
-        mbList.add(member);
-        member = new Member();
-        member.setFullName("Nguyễn Thị Thanh Huyền");
-        member.setPhoneNumber("0900002");
-        member.setPoint(10000);
-        mbList.add(member);
-        member = new Member();
-        member.setFullName("Nguyễn Hoàng Gia Đại");
-        member.setPhoneNumber("0900003");
-        member.setPoint(10000);
-        mbList.add(member);
-        return  mbList;
+    private void getDataMemberList(){
+        memberList=memberManagement.getMembers();
     }
     private void initTable(ArrayList<Member> memberList){
         MemberObservableList = FXCollections.observableArrayList(memberList);
@@ -94,42 +75,6 @@ public class customerController implements Initializable {
         customerPhone.setCellValueFactory(new PropertyValueFactory<Member, String>("phoneNumber"));
         customerPoint.setCellValueFactory(new PropertyValueFactory<Member, Integer>("point"));
         customerTable.setItems(MemberObservableList);
-
-    }
-    public void SceneEditEvent() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        try {
-            fxmlLoader.setLocation(new File("src/main/java/App/View/CustomerAdd.fxml").toURI().toURL());
-        } catch (MalformedURLException ex) {
-            throw new RuntimeException(ex);
-        }
-        Pane customerAddView = null;
-        try {
-            customerAddView = fxmlLoader.load();
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-        Dialog<ButtonType> dialog = new Dialog<>();
-        dialog.initStyle(StageStyle.TRANSPARENT);
-        dialog.setDialogPane((DialogPane) customerAddView);
-        Optional<ButtonType> ClickButton = dialog.showAndWait();
-        CustomerAdd customerAdd = fxmlLoader.load();
-        if(ClickButton.get()==ButtonType.APPLY){
-            customerTable.refresh();
-            System.out.println("YES");
-        }else if(ClickButton.get()==ButtonType.CANCEL){
-            System.out.println("No");
-            dialog.close();
-        }
-    }
-    public void changeSceneAddEvent() {
-        btnAdd.setOnAction(e->{
-            try {
-                SceneEditEvent();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
 
     }
     public void changeSceneAddEvent(ActionEvent e) throws IOException {
@@ -178,9 +123,8 @@ public class customerController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        memberList=getDataMemberList();
+        getDataMemberList();
         System.out.println(memberList.size());
         initTable(memberList);
-       // changeSceneAddEvent();
     }
 }
