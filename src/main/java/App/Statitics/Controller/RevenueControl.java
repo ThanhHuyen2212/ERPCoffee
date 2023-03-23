@@ -37,6 +37,9 @@ public class RevenueControl implements Initializable{
     private PieChart revenueCateChart;
 
     @FXML
+    private BarChart<String, Number> ingChart;
+
+    @FXML
     private BarChart<String, Number> revenueDayChart;
 
     @FXML
@@ -92,11 +95,18 @@ public class RevenueControl implements Initializable{
         this.revenueCateChart.setData(model.getRevenueChartByCategory());
     }
 
+    public void setIngData(){
+        this.ingChart.getData().clear();
+        this.ingChart.getData().add(model.getIngData());
+        this.ingChart.getData().add(model.getPurchaseData());
+    }
+
     public void presentData(){
         setDayData();
         setProductData();
         setCateData();
         showRevenueTable();
+        setIngData();
     }
 
     @Override

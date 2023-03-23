@@ -42,9 +42,9 @@
       <ScrollPane fx:id="btmScrollpane" fitToHeight="true" fitToWidth="true" hbarPolicy="ALWAYS" prefHeight="745.0" prefWidth="245.0" BorderPane.alignment="CENTER" />
    </right>
    <center>
-      <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="ALWAYS" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minViewportHeight="400.0" prefHeight="712.0" prefWidth="755.0" vbarPolicy="ALWAYS" BorderPane.alignment="CENTER">
+      <ScrollPane fitToHeight="false" fitToWidth="true" hbarPolicy="ALWAYS" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minViewportHeight="400.0" prefHeight="712.0" prefWidth="755.0" vbarPolicy="ALWAYS" BorderPane.alignment="CENTER">
          <content>
-                <GridPane minHeight="900.0" prefHeight="900.0" prefWidth="240.0">
+                <GridPane minHeight="900.0" prefHeight="1400.0" prefWidth="240.0">
                   <columnConstraints>
                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
                   </columnConstraints>
@@ -52,6 +52,7 @@
                       <RowConstraints minHeight="10.0" prefHeight="350.0" vgrow="NEVER" />
                   <RowConstraints minHeight="10.0" prefHeight="350.0" vgrow="NEVER" />
                     <RowConstraints minHeight="10.0" prefHeight="350.0" vgrow="NEVER" />
+                  <RowConstraints minHeight="10.0" prefHeight="350.0" vgrow="NEVER" />
                   </rowConstraints>
                    <children>
                       <BarChart fx:id="revenueDayChart" alternativeColumnFillVisible="true" minHeight="200.0" title="Revenue By Day">
@@ -71,6 +72,14 @@
                          </yAxis>
                       </BarChart>
                       <PieChart fx:id="revenueCateChart" legendSide="RIGHT" title="Revenue By Category" GridPane.rowIndex="2" />
+                  <BarChart fx:id="ingChart" legendSide="RIGHT" title="Ingredient" GridPane.rowIndex="3">
+                    <xAxis>
+                      <CategoryAxis side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis side="LEFT" />
+                    </yAxis>
+                  </BarChart>
                    </children>
                 </GridPane>
          </content>
