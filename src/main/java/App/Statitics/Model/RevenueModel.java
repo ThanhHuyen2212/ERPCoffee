@@ -1,6 +1,11 @@
 package App.Statitics.Model;
 
+import Entity.Ingredient;
 import Entity.Order;
+import Entity.PurchaseDetail;
+import Entity.PurchaseOrder;
+import Logic.Depot.IngredientManagement;
+import Logic.Depot.PurchaseOrderManagement;
 import Logic.Statitics.IStatitics;
 import Logic.Statitics.LStatitics;
 import javafx.collections.FXCollections;
@@ -11,6 +16,7 @@ import javafx.scene.chart.XYChart;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class RevenueModel {
 
@@ -20,7 +26,15 @@ public class RevenueModel {
     private ArrayList<IStatitics.Product> revenueByProduct;
     private ArrayList<IStatitics.Category> revenueByCategory;
 
+    private ArrayList<PurchaseOrder> purchases;
+    private ArrayList<Ingredient> ingredients;
+
+    private IngredientManagement ingDataGetter;
+    private PurchaseOrderManagement purChaseDataGetter;
+
     public RevenueModel() {
+        ingDataGetter = new IngredientManagement();
+        purChaseDataGetter = new PurchaseOrderManagement();
     }
 
     public IStatitics getDataGetter() {
@@ -36,6 +50,15 @@ public class RevenueModel {
         this.revenueData = dataGetter.getRevenueStatitics();
         this.revenueByProduct = dataGetter.getProductStatitics();
         this.revenueByCategory = dataGetter.getCategoryStatitics();
+
+        purchases = new ArrayList<>(purChaseDataGetter.getPurchaseOrders()
+                .stream().filter(
+                        e-> e.getPurchaseOrderDate().compareTo(time.getStart()) >= 0
+                                && e.getPurchaseOrderDate().compareTo(time.getEnd()) <= 0)
+                .toList());
+
+        ingredients = new ArrayList<>(ingDataGetter.getIngredients());
+
     }
 
     public ArrayList<IStatitics.Order> getRevenueData() {
@@ -77,6 +100,33 @@ public class RevenueModel {
                                 Double.parseDouble(data.getTotalRevenue().toString()))
                 ).toList()
         );
+    }
+
+    public XYChart.Series<String,Number> getIngData(){
+        return new XYChart.Series<String,Number>("In Stock", FXCollections.observableList(
+                    this.ingredients.stream().map(
+                        data -> new XYChart.Data<>(data.getIngredientName(),(Number)data.getIngredientStorage())
+                    ).toList()));
+    }
+
+    public XYChart.Series<String,Number> getPurchaseData(){
+        ArrayList<String> ingName = new ArrayList<>(
+                ingredients.stream().map(Ingredient::getIngredientName).toList());
+        HashMap<String,Integer> ingOrder = new HashMap<>();
+        for(String name :ingName){
+            ingOrder.put(name, (int) (Math.random()*50));
+//            ingOrder.put(name, 0);
+        }
+        for(PurchaseOrder order : purchases){
+            for(PurchaseDetail detail : order.getDetails()){
+                int value = ingOrder.get(detail.getIngredient().getIngredientName()) + detail.getReceiveQty();
+                ingOrder.put(detail.getIngredient().getIngredientName(),value);
+                System.out.println(value);
+            }
+        }
+
+        return new XYChart.Series<>("Order", FXCollections.observableList(
+                ingName.stream().map(e->new XYChart.Data<>(e,(Number)ingOrder.get(e))).toList()));
     }
 
 }

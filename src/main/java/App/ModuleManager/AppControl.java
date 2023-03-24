@@ -5,7 +5,10 @@ import App.Controller.AlertController;
 import App.Model.Alert;
 import Entity.Function;
 import Main.MainApp;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -50,6 +53,22 @@ public class AppControl {
         put("statistic","src/main/java/Assets/Icons/analytics.png");
     }};
 
+    private HashMap<String, Node> views;
+
+    public AppControl() {
+    }
+
+    public AppControl(ArrayList<String> functions) {
+        views = new HashMap<>();
+        for(String func : functions){
+            try {
+                views.put(func,FXMLLoader.load(
+                        new File(modulePath.get(func)).toURI().toURL()));
+            } catch (IOException e) {
+                views.put(func,null);
+            }
+        }
+    }
 
     public ToggleButton getPOSButton(String functionName){
         ToggleButton btn = new ToggleButton(functionName.toUpperCase());
@@ -66,11 +85,8 @@ public class AppControl {
             }
         }
         btn.setOnMouseClicked(e->{
-            try {
-                MainApp.show(FXMLLoader.load(new File(modulePath.get(functionName)).toURI().toURL()));
-            } catch (IOException ex) {
-                showAlert("error","This function not ready yet !!!");
-            }
+            if(views.get(functionName) != null) MainApp.show(views.get(functionName));
+            else showAlert("error","This function not ready yet !!!");
         });
         return btn;
     }

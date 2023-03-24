@@ -29,12 +29,12 @@ public class itemController {
         this.myListener= myListener;
         Image newImage;
         if(product != null){
-            newImage = new Image(String.valueOf((new File(product.getImagePath()).toURI()).toURL()));
+            newImage = new Image(String.valueOf((new File("src/main/java/Assets/Images/"+product.getImagePath()).toURI()).toURL()));
         }else{
             newImage = new Image(String.valueOf((new File("src/main/java/Assets/Images/WhiteCoffee.png").toURI()).toURL()));
         }
         imgProduct.setImage(newImage);
         textName.setText(product.getProductName());
-        //textCategory.setText(product.getCategory().getCategoryName());
+        textCategory.setText(product.getCategory());
     }
 }

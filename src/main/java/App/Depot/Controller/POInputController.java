@@ -1,13 +1,16 @@
 package App.Depot.Controller;
 
 import App.Depot.Model.POModel;
-import Entity.Ingredient;
+import App.Depot.View.MessageDialog;
+import Entity.PurchaseDetail;
 import Logic.Depot.IngredientManagement;
+import Main.MainApp;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 
 import javafx.scene.control.*;
@@ -16,25 +19,35 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Date;
 import java.util.ResourceBundle;
 
 public class POInputController implements Initializable {
     @FXML
-    private TableView<Ingredient> ingredientTable;
+    private TableView<PurchaseDetail> ingredientTable;
     @FXML
-    private TableColumn<Ingredient, String> ingredientCol;
+    private TableColumn<PurchaseDetail, String> ingredientCol;
     @FXML
-    private TableColumn<Ingredient, String> priceCol;
+    private TableColumn<PurchaseDetail, String> priceCol;
     @FXML
-    private TableColumn<Ingredient, String> qtyCol;
+    private TableColumn<PurchaseDetail, String> qtyCol;
     @FXML
-    private TableColumn<Ingredient, Integer> idCol;
+    private TableColumn<PurchaseDetail, String> idCol;
     @FXML
-    private TableColumn<Ingredient, ?> typeCol;
+    private TableColumn<PurchaseDetail, String> typeCol;
+    @FXML
+    private TableColumn<PurchaseDetail, String> subtotalCol;
     @FXML
     private ComboBox<String> ingredientCb;
+    @FXML
+    private Label dateLbl;
+    @FXML
+    private Label idLbl;
     @FXML
     private TextField qtyTxf;
     @FXML
@@ -43,10 +56,6 @@ public class POInputController implements Initializable {
     private Label totalLbl;
     @FXML
     private TextField vendorTxf;
-    @FXML
-    private Label dateLbl;
-    @FXML
-    private Label idLbl;
     @FXML
     private Button addBtn;
     @FXML
@@ -58,22 +67,27 @@ public class POInputController implements Initializable {
     @FXML
     private Button cancelBtn;
 
-
     private POModel model;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         model = new POModel();
 
-        idCol.setCellValueFactory(new PropertyValueFactory<>("ingredientId"));
-        ingredientCol.setCellValueFactory(new PropertyValueFactory<>("ingredientName"));
-        typeCol.setCellValueFactory(new PropertyValueFactory<>("ingredientType"));
-        qtyCol.setCellValueFactory(data -> new SimpleStringProperty(String.valueOf(
-                model.getCurrent().getDetails().get(data.getValue().getIngredientId()).getOrderQty()
-        )));
-        priceCol.setCellValueFactory(data -> new SimpleStringProperty(String.valueOf(
-                (float) (model.getCurrent().getDetails().get(data.getValue().getIngredientId()).getOrderQty()
-                        * data.getValue().getPrice())
+        idCol.setCellValueFactory(data -> new SimpleStringProperty(
+                String.valueOf(data.getValue().getIngredient().getIngredientId())
+        ));
+        ingredientCol.setCellValueFactory(data -> new SimpleStringProperty(
+                data.getValue().getIngredient().getIngredientName()
+        ));
+        typeCol.setCellValueFactory(data -> new SimpleStringProperty(
+                data.getValue().getIngredient().getIngredientType()
+        ));
+        qtyCol.setCellValueFactory(new PropertyValueFactory<>("orderQty"));
+        priceCol.setCellValueFactory(data -> new SimpleStringProperty(
+                String.valueOf(data.getValue().getIngredient().getPrice())
+        ));
+        subtotalCol.setCellValueFactory(data -> new SimpleStringProperty(String.valueOf(
+                (float) (data.getValue().getOrderQty()* data.getValue().getIngredient().getPrice())
         )));
 
         dateLbl.setText(IngredientManagementController.sdf.format(new Date(new java.util.Date().getTime())));
@@ -84,11 +98,17 @@ public class POInputController implements Initializable {
         this.model = modelOfSib;
 
         idLbl.setText(String.valueOf(model.getCurrent().getPurchaseOrderId()));
+
+        handleActionOnRow();
+        handleActionBtn();
+        handleActionForm();
     }
 
     public void handleActionOnRow() {
         ingredientTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
+                ingredientCb.getSelectionModel().select(newSelection.getIngredient().getIngredientName());
+                qtyTxf.setText(String.valueOf(newSelection.getOrderQty()));
             }
         });
     }
@@ -97,10 +117,145 @@ public class POInputController implements Initializable {
         EventHandler<ActionEvent> buttonAddHandler = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                MessageDialog messageDialog = new MessageDialog(
+                        "Confirm Addition",
+                        "Do you want to add the new ingredient?",
+                        "Your changes will be lost if you don’t save them.",
+                        MessageDialog.TYPES.get("Confirmation")
+                );
+                int rs = messageDialog.showMessage();
+                if(rs == 1) {
+                    try {
+                        model.handleAddDetail(
+                                ingredientCb.getValue(),
+                                Integer.parseInt(qtyTxf.getText())
+                        );
+                    } catch(Exception e) {
+                        System.out.println("Loi khong parse duoc so luong");
+                    }
+                    ingredientTable.refresh();
+                    ingredientTable.setItems(model.getCurrentDetails());
+                    totalLbl.setText(String.valueOf(model.calTotal()));
+                }
+            }
+        };
 
+
+        EventHandler<ActionEvent> buttonUpdateHandler = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                PurchaseDetail selected = ingredientTable.getSelectionModel().getSelectedItem();
+                int index = ingredientTable.getSelectionModel().getSelectedIndex();
+
+                MessageDialog messageDialog = new MessageDialog(
+                        "Confirm Update",
+                        "Do you want to add the new ingredient?",
+                        "Your changes will be lost if you don’t save them.",
+                        MessageDialog.TYPES.get("Confirmation")
+                );
+                int rs = messageDialog.showMessage();
+                if(rs == 1) {
+                    try {
+                        model.handleUpdateDetail(
+                                selected,
+                                ingredientCb.getValue(),
+                                Integer.parseInt(qtyTxf.getText())
+                        );
+                    } catch(Exception e) {
+                        System.out.println("Loi khong parse duoc so luong");
+                    }
+                    ingredientTable.refresh();
+                    totalLbl.setText(String.valueOf(model.calTotal()));
+                }
+            }
+        };
+
+        EventHandler<ActionEvent> buttonDeleteHandler = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                PurchaseDetail selected = ingredientTable.getSelectionModel().getSelectedItem();
+
+                MessageDialog messageDialog = new MessageDialog(
+                        "Confirm Delete",
+                        "Do you want to add the new ingredient?",
+                        "Your changes will be lost if you don’t save them.",
+                        MessageDialog.TYPES.get("Confirmation")
+                );
+                int rs = messageDialog.showMessage();
+                if(rs == 1) {
+                    try {
+                        model.handleDeleteDetail(selected);
+                    } catch(Exception e) {
+                        System.out.println("Loi khong parse duoc so luong");
+                    }
+                    ingredientTable.setItems(model.getCurrentDetails());
+                    totalLbl.setText(String.valueOf(model.calTotal()));
+                }
             }
         };
 
         addBtn.setOnAction(buttonAddHandler);
+        updateBtn.setOnAction(buttonUpdateHandler);
+        deleteBtn.setOnAction(buttonDeleteHandler);
     }
+
+    public void handleActionForm() {
+        EventHandler<ActionEvent> buttonConfirmHandler = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                MessageDialog messageDialog = new MessageDialog(
+                        "Confirm",
+                        "Do you want to add the new ingredient?",
+                        "Your changes will be lost if you don’t save them.",
+                        MessageDialog.TYPES.get("Confirmation")
+                );
+                int rs = messageDialog.showMessage();
+                if(rs == 1) {
+                    try {
+                        String vendor = vendorTxf.getText();
+                        Integer staffId = Integer.parseInt(staffCreateTxf.getText());
+                        Date date = Date.valueOf(dateLbl.getText());
+                        int total = Integer.parseInt(totalLbl.getText());
+                        model.handleAdd(
+                                model.getCurrent(),
+                                vendor,
+                                staffId,
+                                date,
+                                total
+                        );
+                    } catch(Exception e) {
+                        System.out.println("Loi khong parse duoc so luong");
+                    }
+                    ingredientTable.setItems(model.getCurrentDetails());
+                }
+            }
+        };
+
+
+        EventHandler<ActionEvent> buttonCancelHandler = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                MessageDialog messageDialog = new MessageDialog(
+                        "Quit",
+                        "Do you want to quit ?",
+                        "Your changes will be lost if you don’t save them.",
+                        MessageDialog.TYPES.get("Confirmation")
+                );
+                int rs = messageDialog.showMessage();
+                if(rs == 1) {
+                    String filepath = "src/main/java/App/Depot/View/POManagementView.fxml";
+                    try {
+                        FXMLLoader fxmlLoader = new FXMLLoader(new File(filepath).toURI().toURL());
+                        MainApp.show(fxmlLoader.load());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        };
+
+        confirmBtn.setOnAction(buttonConfirmHandler);
+        cancelBtn.setOnAction(buttonCancelHandler);
+    }
+
 }

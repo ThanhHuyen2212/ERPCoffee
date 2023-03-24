@@ -1,9 +1,8 @@
 package App.Controller;
-
 import App.Model.OrderTable;
-import DAL.CategoryAccess;
 import Entity.*;
 import Logic.CategoryManagement;
+import Logic.ProductManagement;
 import Logic.SizeManagement;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -16,22 +15,29 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.StageStyle;
-
-import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.NumberFormat;
-import java.time.Year;
 import java.util.*;
+import java.util.List;
 
 public class ShopController implements Initializable {
     @FXML
     private Button BtnSearch;
+    @FXML
+    private ImageView imgProduct;
 
     @FXML
     private TableColumn<OrderTable, Integer> NoColumn;
@@ -100,7 +106,7 @@ public class ShopController implements Initializable {
     private MyListener myListener;
     private CategoryManagement categoryManagement = new CategoryManagement();
     private SizeManagement sizeManagement = new SizeManagement();
-
+    private ProductManagement productManagement = new ProductManagement();
     private List<Category> categoryList = new ArrayList<>();
     public static ArrayList<Product> productList = new ArrayList<>();
     public ArrayList<OrderDetail> orderList = new ArrayList<>();
@@ -109,6 +115,7 @@ public class ShopController implements Initializable {
     public void getData(){
         categoryList = categoryManagement.getCategoriesList();
         sizeList=sizeManagement.getSizes();
+        productList=productManagement.getProducts();
     }
 
     public ArrayList<OrderTable> getDataOrderTable(ArrayList<OrderDetail> orderList) {
@@ -173,42 +180,42 @@ public class ShopController implements Initializable {
 //        return sizes;
 //    }
 
-    private ArrayList<Product> getDataProducts() {
-        Size sizeS = new Size("S", "Size sieu nho");
-        Size sizeM = new Size("M", "Size sieu vua");
-        Size sizeL = new Size("L", "Size sieu lon");
-        HashMap<Size, Integer> priceList = new HashMap<>();
-        priceList.put(sizeS, 40000);
-        priceList.put(sizeM, 45000);
-        priceList.put(sizeL, 50000);
-        ArrayList<Product> products = new ArrayList<>();
-        Product product;
-        product = new Product();
-        product.setProductId(1);
-        product.setProductName("White Coffee");
-        product.setImagePath("src/main/java/Assets/Images/3.jpeg");
-        product.setPriceList(priceList);
-        products.add(product);
-        product = new Product();
-        product.setProductId(2);
-        product.setProductName("White Coffee1");
-        product.setImagePath("src/main/java/Assets/Images/1.png");
-        product.setPriceList(priceList);
-        products.add(product);
-        product = new Product();
-        product.setProductId(3);
-        product.setProductName("White Coffee3");
-        product.setImagePath("src/main/java/Assets/Images/WhiteCoffee.png");
-        product.setPriceList(priceList);
-        products.add(product);
-        product = new Product();
-        product.setProductId(4);
-        product.setProductName("White Coffee4");
-        product.setImagePath("src/main/java/Assets/Images/6.png");
-        product.setPriceList(priceList);
-        products.add(product);
-        return products;
-    }
+//    private ArrayList<Product> getDataProducts() {
+//        Size sizeS = new Size("S", "Size sieu nho");
+//        Size sizeM = new Size("M", "Size sieu vua");
+//        Size sizeL = new Size("L", "Size sieu lon");
+//        HashMap<Size, Integer> priceList = new HashMap<>();
+//        priceList.put(sizeS, 40000);
+//        priceList.put(sizeM, 45000);
+//        priceList.put(sizeL, 50000);
+//        ArrayList<Product> products = new ArrayList<>();
+//        Product product;
+//        product = new Product();
+//        product.setProductId(1);
+//        product.setProductName("White Coffee");
+//        product.setImagePath("src/main/java/Assets/Images/3.jpeg");
+//        product.setPriceList(priceList);
+//        products.add(product);
+//        product = new Product();
+//        product.setProductId(2);
+//        product.setProductName("White Coffee1");
+//        product.setImagePath("src/main/java/Assets/Images/1.png");
+//        product.setPriceList(priceList);
+//        products.add(product);
+//        product = new Product();
+//        product.setProductId(3);
+//        product.setProductName("White Coffee3");
+//        product.setImagePath("src/main/java/Assets/Images/WhiteCoffee.png");
+//        product.setPriceList(priceList);
+//        products.add(product);
+//        product = new Product();
+//        product.setProductId(4);
+//        product.setProductName("White Coffee4");
+//        product.setImagePath("src/main/java/Assets/Images/6.png");
+//        product.setPriceList(priceList);
+//        products.add(product);
+//        return products;
+//    }
 
 
     //plusBtn
@@ -372,7 +379,6 @@ public class ShopController implements Initializable {
         orderList.clear();
         btnEdit.setDisable(true);
         btnCacncel.setDisable(true);
-        products = (ArrayList<Product>) getDataProducts();
         int column = 0;
         int row = 1;
         if (products.size() > 0) {
@@ -429,7 +435,18 @@ public class ShopController implements Initializable {
         }
     }
 
-    public AnchorPane renderCategory(Category category) {
+    public AnchorPane renderCategory(Category category, ArrayList<Product> products) {
+        ArrayList<Product> productFilter;
+        if(category.getCategoryName().equalsIgnoreCase("All")){
+            productFilter=products;
+        }else{
+            productFilter = new ArrayList<>();
+            for(Product p : products){
+                if(p.getCategory().equalsIgnoreCase(category.getCategoryName())){
+                    productFilter.add(p);
+                }
+            }
+        }
         AnchorPane anchorPane = new AnchorPane();
         anchorPane.setPrefHeight(200);
         HBox vbox = new HBox();
@@ -451,6 +468,7 @@ public class ShopController implements Initializable {
         anchorPane.getChildren().add(vbox);
         anchorPane.setOnMouseClicked(e -> {
             grid.getChildren().clear();
+            render(productFilter);
         });
         return anchorPane;
     }
@@ -463,9 +481,9 @@ public class ShopController implements Initializable {
      */
     public void renderCategories() throws IOException {
         hboxCartegory.setStyle("-fx-effect:" + "dropShadow(three-pass-box, rgba(0,0,0,0.1),10.0,0.0,0.0,10.0);");
-        hboxCartegory.getChildren().add(renderCategory(new Category(0, "All")));
+        hboxCartegory.getChildren().add(renderCategory(new Category(0, "All"),productList));
         for (int i = 0; i < categoryList.size(); i++) {
-            hboxCartegory.getChildren().add(renderCategory(categoryList.get(i)));
+            hboxCartegory.getChildren().add(renderCategory(categoryList.get(i),productList));
         }
     }
 
@@ -475,9 +493,25 @@ public class ShopController implements Initializable {
      * @param product
      */
     public void setDetails(Product product) {
-        ObservableList<String> observableArrayList = FXCollections.observableArrayList(product.getSizeList());
+       ObservableList<String> observableArrayList = FXCollections.observableArrayList(product.getSizeList());
         txtProductNamedetails.setText(product.getProductName());
+        javafx.scene.image.Image newImage;
+        if(product != null){
+            try {
+                newImage = new Image(String.valueOf((new File("src/main/java/Assets/Images/"+product.getImagePath()).toURI()).toURL()));
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
+            }
+        }else{
+            try {
+                newImage = new Image(String.valueOf((new File("src/main/java/Assets/Images/WhiteCoffee.png").toURI()).toURL()));
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        imgProduct.setImage(newImage);
         cbSizePrice.setItems(observableArrayList);
+
         cbSizePrice.getSelectionModel().selectFirst();
         if (!cbSizePrice.getValue().isEmpty()) {
             txtPriceDetails.setText(NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(product.getPrice(cbSizePrice.getValue())));
@@ -487,6 +521,21 @@ public class ShopController implements Initializable {
     public void setDetails(OrderDetail orderDetail) {
         ObservableList<String> observableArrayList = FXCollections.observableArrayList(orderDetail.getProduct().getSizeList());
         txtProductNamedetails.setText(orderDetail.getProduct().getProductName());
+        javafx.scene.image.Image newImage;
+        if(orderDetail != null){
+            try {
+                newImage = new Image(String.valueOf((new File("src/main/java/Assets/Images/"+orderDetail.getProduct().getImagePath()).toURI()).toURL()));
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
+            }
+        }else{
+            try {
+                newImage = new Image(String.valueOf((new File("src/main/java/Assets/Images/WhiteCoffee.png").toURI()).toURL()));
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        imgProduct.setImage(newImage);
         cbSizePrice.setItems(observableArrayList);
         cbSizePrice.getSelectionModel().select(orderDetail.getSize().getSign());
         if (!cbSizePrice.getValue().isEmpty()) {
@@ -570,7 +619,6 @@ public class ShopController implements Initializable {
     }
 
     public void searchProduct() {
-        productList = getDataProducts();
         FXMLLoader loader = new FXMLLoader();
         try {
             loader.setLocation(new File("src/main/java/App/View/Alert.fxml").toURI().toURL());
@@ -633,11 +681,11 @@ public class ShopController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
             getData();
+            render(productList);
             searchProduct();
             renderCategories();
             printOrder();
             disLayCustomer();
-            render(productList);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

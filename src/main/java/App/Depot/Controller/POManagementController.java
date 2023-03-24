@@ -2,6 +2,7 @@ package App.Depot.Controller;
 
 import App.Depot.Model.POModel;
 import Entity.PurchaseOrder;
+import Main.MainApp;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -96,15 +97,10 @@ public class POManagementController implements Initializable {
         EventHandler<ActionEvent> buttonAddHandler = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-//                Node source = (Node) event.getSource();
-//                Stage theCurrStage = (Stage) source.getScene().getWindow();
-                Stage newStage = new Stage();
-
                 String filepath = "src/main/java/App/Depot/View/POInput.fxml";
                 try {
                     FXMLLoader fxmlLoader = new FXMLLoader(new File(filepath).toURI().toURL());
-                    newStage.setScene(new Scene(fxmlLoader.load()));
-
+                    MainApp.show(fxmlLoader.load());
                     POInputController controller = fxmlLoader.getController();
                     controller.init(model);
                 } catch (IOException e) {
