@@ -2,17 +2,19 @@ package App.ModuleManager;
 
 
 import App.Controller.AlertController;
+import App.Model.Alert;
 import Entity.Function;
 import Main.MainApp;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.DialogPane;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -34,9 +36,35 @@ public class AppControl {
         put("staff","");
         put("statistic","src/main/java/App/Statitics/View/RevenueChart.fxml");
     }};
+    HashMap<String,String> iconPath = new HashMap<>(){{
+        put("sale","src/main/java/Assets/Icons/cashier.png");
+        put("product","src/main/java/Assets/Icons/latte.png");
+        put("size","src/main/java/Assets/Icons/ruler.png");
+        put("system","src/main/java/Assets/Icons/data-complexity.png");
+        put("category","src/main/java/Assets/Icons/category.png");
+        put("customer","src/main/java/Assets/Icons/rating.png");
+        put("ingredient","src/main/java/Assets/Icons/olive-oil.png");
+        put("recipe","src/main/java/Assets/Icons/recipe.png");
+        put("purchase","src/main/java/Assets/Icons/checklist.png");
+        put("staff","src/main/java/Assets/Icons/latte.png");
+        put("statistic","src/main/java/Assets/Icons/analytics.png");
+    }};
+
 
     public ToggleButton getPOSButton(String functionName){
         ToggleButton btn = new ToggleButton(functionName.toUpperCase());
+        btn.getStyleClass().add("button-admin");
+        btn.setContentDisplay(ContentDisplay.TOP);
+        if(!iconPath.get(functionName).equals("")){
+            try {
+                ImageView img = new ImageView(new Image(new FileInputStream(iconPath.get(functionName))));
+                img.setFitHeight(50);
+                img.setFitWidth(50);
+                btn.setGraphic(img);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
         btn.setOnMouseClicked(e->{
             try {
                 MainApp.show(FXMLLoader.load(new File(modulePath.get(functionName)).toURI().toURL()));
@@ -57,15 +85,13 @@ public class AppControl {
             btnType.setDialogPane((DialogPane) alert);
             AlertController alert1 = fxmlLoader.getController();
             try {
-                alert1.RenderAlert(type,message);
+                alert1.RenderAlert("error",message);
             } catch (MalformedURLException exc) {
                 throw new RuntimeException(exc);
             }
             btnType.showAndWait();
-        } catch (MalformedURLException exc) {
+        } catch (IOException exc) {
             throw new RuntimeException(exc);
-        } catch (IOException exception) {
-            throw new RuntimeException(exception);
         }
     }
 }
