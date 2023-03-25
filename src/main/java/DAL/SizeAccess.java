@@ -18,7 +18,6 @@ public class SizeAccess extends DataAccess {
             PreparedStatement prSt = categoryAccess.getConn().prepareStatement("call select_sizes()");
             ResultSet rs = prSt.executeQuery();
             while (rs!=null && rs.next()){
-                System.out.println(rs.getString(1));
                 sizes.add(new Size(rs.getString(1),rs.getString(2)));
             }
         } catch (SQLException e) {
