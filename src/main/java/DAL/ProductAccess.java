@@ -44,9 +44,6 @@ public class ProductAccess extends DataAccess {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        for(Product p : products){
-            System.out.println(p.getProductName()+p.getPrice("M"));
-        }
         return products;
     }
     public int create(Product product){
