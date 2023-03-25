@@ -15,17 +15,25 @@ public class Ingredient {
     public Ingredient() {
     }
 
-    public Ingredient(int ingredientId, String ingredientName, String ingredientType, int ingredientStorage, int ingredientLimit, int price, Date createDate) {
+    public Ingredient(int ingredientId, String ingredientName, String ingredientType, int price, int ingredientStorage, int ingredientLimit, Date createDate, Date deleteDate) {
         this.ingredientId = ingredientId;
         this.ingredientName = ingredientName;
         this.ingredientType = ingredientType;
+        this.price = price;
         this.ingredientStorage = ingredientStorage;
         this.ingredientLimit = ingredientLimit;
-        this.price = price;
         this.createDate = createDate;
+        this.deleteDate = deleteDate;
     }
 
-    public Ingredient(int ingredientId, String ingredientName, String ingredientType, int ingredientStorage, int ingredientLimit, int price) {
+    public Ingredient(String ingredientName, String ingredientType, int price, int ingredientLimit) {
+        this.ingredientName = ingredientName;
+        this.ingredientType = ingredientType;
+        this.price = price;
+        this.ingredientLimit = ingredientLimit;
+    }
+
+    public Ingredient(int ingredientId, String ingredientName, String ingredientType, int price, int ingredientStorage, int ingredientLimit) {
         this.ingredientId = ingredientId;
         this.ingredientName = ingredientName;
         this.ingredientType = ingredientType;

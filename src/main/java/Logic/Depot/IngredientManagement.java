@@ -14,22 +14,22 @@ public class IngredientManagement {
 
     public IngredientManagement() {
         ingredientDAO = new IngredientAccess();
-//        ingredients = ingredientDAO.retrieve();
-        ingredients = new ArrayList<>();
-        ingredients.add(new Ingredient(
-                1,
-                "Ca phe hat",
-                "Nguyen lieu kho",
-                12,
-                10,
-                120000));
-        ingredients.add(new Ingredient(
-                1,
-                "Bot matcha",
-                "Nguyen lieu kho",
-                22,
-                7,
-                90000));
+        ingredients = ingredientDAO.retrieve();
+//        ingredients = new ArrayList<>();
+//        ingredients.add(new Ingredient(
+//                1,
+//                "Ca phe hat",
+//                "Nguyen lieu kho",
+//                12,
+//                10,
+//                120000));
+//        ingredients.add(new Ingredient(
+//                2,
+//                "Bot matcha",
+//                "Nguyen lieu kho",
+//                22,
+//                7,
+//                90000));
 
 //        Code initialize java.sql.Date
 
@@ -52,18 +52,24 @@ public class IngredientManagement {
         this.ingredients = ingredients;
     }
     public void create(Ingredient i) {
-//        int id = ingredientDAO.create(i);
+        ingredientDAO.create(i);
+        long millis=System.currentTimeMillis();
+        i.setCreateDate(new java.sql.Date(millis));
+        i.setIngredientId(ingredients.size());
         ingredients.add(i);
     }
 
     public void update(int index, Ingredient i) {
-//        int id = ingredientDAO.create(i);
+        ingredientDAO.update(i);
         ingredients.set(index, i);
     }
 
     public void delete(Ingredient i) {
-//        ingredientDAO.delete(i);
-        ingredients.remove(i);
+        long millis=System.currentTimeMillis();
+        Date now = new java.sql.Date(millis);
+        i.setCreateDate(now);
+        ingredientDAO.delete(i, now);
+//        ingredients.remove(i);
     }
 
     public Ingredient findById(int id) {
