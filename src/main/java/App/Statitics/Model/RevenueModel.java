@@ -1,13 +1,12 @@
 package App.Statitics.Model;
 
 import Entity.Ingredient;
-import Entity.Order;
 import Entity.PurchaseDetail;
 import Entity.PurchaseOrder;
 import Logic.Depot.IngredientManagement;
 import Logic.Depot.PurchaseOrderManagement;
 import Logic.Statitics.IStatitics;
-import Logic.Statitics.LStatitics;
+import Util.DateTool;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.PieChart;
@@ -16,7 +15,6 @@ import javafx.scene.chart.XYChart;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class RevenueModel {
 
@@ -31,10 +29,9 @@ public class RevenueModel {
 
     private IngredientManagement ingDataGetter;
     private PurchaseOrderManagement purChaseDataGetter;
+    private IStatitics.Time timeline;
 
     public RevenueModel() {
-        ingDataGetter = new IngredientManagement();
-        purChaseDataGetter = new PurchaseOrderManagement();
     }
 
     public IStatitics getDataGetter() {
@@ -47,6 +44,7 @@ public class RevenueModel {
 
     public void getData(IStatitics.Time time){
         dataGetter.getData(time);
+        this.timeline = time;
         this.revenueData = dataGetter.getRevenueStatitics();
         this.revenueByProduct = dataGetter.getProductStatitics();
         this.revenueByCategory = dataGetter.getCategoryStatitics();
@@ -67,11 +65,18 @@ public class RevenueModel {
     }
 
     public XYChart.Series<String,Number> getRevenueChartData(){
-        return new XYChart.Series<>("Revenue", FXCollections.observableList(
-                revenueData.stream().map(
-                        data -> new XYChart.Data<>(data.getDate().toString(),data.getTotalRevenue())
-                ).toList()
-        ));
+        XYChart.Series<String,Number> revenues = new XYChart.Series<>();
+        revenues.setName("Revenue");
+        if(timeline != null){
+            for(Date d : DateTool.getDateBetween(timeline.getStart(), timeline.getEnd())){
+                revenues.getData().add(new XYChart.Data<>(d.toString(),0));
+            }
+            for(IStatitics.Order od : revenueData){
+                revenues.getData().add(new XYChart.Data<>(od.getDate().toString(),od.getTotalRevenue()));
+            }
+        }
+
+        return revenues;
     }
 
     public ArrayList<IStatitics.Product> getRevenueByProduct() {
@@ -129,4 +134,27 @@ public class RevenueModel {
                 ingName.stream().map(e->new XYChart.Data<>(e,(Number)ingOrder.get(e))).toList()));
     }
 
+    public ArrayList<PurchaseOrder> getPurchases() {
+        return purchases;
+    }
+
+    public ArrayList<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public IngredientManagement getIngDataGetter() {
+        return ingDataGetter;
+    }
+
+    public PurchaseOrderManagement getPurChaseDataGetter() {
+        return purChaseDataGetter;
+    }
+
+    public void setIngDataGetter(IngredientManagement ingDataGetter) {
+        this.ingDataGetter = ingDataGetter;
+    }
+
+    public void setPurChaseDataGetter(PurchaseOrderManagement purChaseDataGetter) {
+        this.purChaseDataGetter = purChaseDataGetter;
+    }
 }
