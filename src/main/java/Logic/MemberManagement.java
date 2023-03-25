@@ -8,6 +8,7 @@ import Entity.Member;
 import java.util.ArrayList;
 
 public class MemberManagement {
+    MemberAccess memberAccess = new MemberAccess();
     private ArrayList<Member> members;
     public MemberManagement(){
         init();
@@ -18,5 +19,8 @@ public class MemberManagement {
     }
     public ArrayList<Member> getMembers(){
         return members;
+    }
+    public void createMember(Member member){
+        memberAccess.createMember(member);
     }
 }
