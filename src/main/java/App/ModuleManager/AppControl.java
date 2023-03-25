@@ -72,7 +72,7 @@ public class AppControl {
 
     public ToggleButton getPOSButton(String functionName){
         ToggleButton btn = new ToggleButton(functionName.toUpperCase());
-        btn.getStyleClass().add("button-admin");
+        btn.getStyleClass().add("hau-menu-button");
         btn.setContentDisplay(ContentDisplay.TOP);
         if(!iconPath.get(functionName).equals("")){
             try {

@@ -1,0 +1,17 @@
+.hau-menu-button{
+    -fx-background-color: transparent;
+
+}
+.hau-menu-button:hover{
+    -fx-effect: dropshadow(three-pass-box, #5F50F1,10,0,0,0);
+}
+
+.hau-table-label{
+    -fx-background-color: #5F50F1;
+    -fx-text-fill: #fff;
+    -fx-font-size: 20;
+    -fx-font-weight: 800;
+    -fx-max-width: 3000px;
+    -fx-pref-height: 50px;
+    -fx-alignment: center;
+}

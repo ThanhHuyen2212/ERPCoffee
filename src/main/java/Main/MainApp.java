@@ -73,6 +73,9 @@ public class MainApp extends Application {
         scene.getStylesheets().add(
                 new File("src/main/java/App/View/css/Application.css")
                         .toURI().toURL().toExternalForm());
+        scene.getStylesheets().add(
+                new File("src/main/java/App/View/css/Hau_Style.css")
+                        .toURI().toURL().toExternalForm());
 
         MainApp.show(FXMLLoader.load(new File(defaultpath).toURI().toURL()));
         stage.setScene(scene);
