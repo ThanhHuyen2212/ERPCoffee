@@ -1,5 +1,7 @@
 package DAL;
 
+import App.ModuleManager.AppControl;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.*;
@@ -33,17 +35,20 @@ public abstract class DataAccess {
     }
 
     protected void createConnection(){
-        if(conn != null) closeConnection();
-        readRs();
-        try {
-            conn = DriverManager.getConnection(String.format("jdbc:mysql://%s:%s/erpcoffee"
-                    ,host,port),username,pass);
-            PreparedStatement preparedStatement = conn.prepareStatement("{call set_timezone()}");
-            preparedStatement.execute();
-        } catch (SQLException e) {
-            System.out.println("fail");
-            throw new RuntimeException(e);
+        if(AppControl.conn == null){
+            readRs();
+            try {
+                AppControl.conn = DriverManager.getConnection(String.format("jdbc:mysql://%s:%s/erpcoffee"
+                        ,host,port),username,pass);
+                PreparedStatement preparedStatement = AppControl.conn.prepareStatement("{call set_timezone()}");
+                preparedStatement.execute();
+            } catch (SQLException e) {
+                System.out.println("fail");
+                throw new RuntimeException(e);
+            }
         }
+
+
     }
 
     protected void closeConnection(){
@@ -58,7 +63,7 @@ public abstract class DataAccess {
 
     public Connection getConn() {
         if (conn == null) createConnection();
-        return conn;
+        return AppControl.conn;
     }
 
 }
