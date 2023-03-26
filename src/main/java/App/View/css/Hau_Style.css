@@ -42,3 +42,8 @@
     -fx-padding: 5px;
     -fx-effect: dropshadow(three-pass-box, #5F50F1,10,0,0,0);
 }
+
+.hau-container-color{
+    -fx-background-color: linear-gradient(to right bottom, #0F2027,#203A43,#2C5364);
+    -fx-opacity: 0.95;
+}
