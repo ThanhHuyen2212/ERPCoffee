@@ -18,6 +18,9 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static Main.MainApp.addButton;
+import static Main.MainApp.getFunction;
+
 public class AppControl {
     HashMap<String,String> modulePath = new HashMap<>(){{
         put("sale","src/main/java/App/View/ShopGUI.fxml");
@@ -46,21 +49,33 @@ public class AppControl {
         put("statistic","src/main/java/Assets/Icons/analytics.png");
     }};
 
+
     private HashMap<String, Node> views;
+    private ArrayList<String> permissons;
+
 
     public AppControl() {
+        views = new HashMap<>();
     }
 
-    public AppControl(ArrayList<String> functions) {
-        views = new HashMap<>();
-        for(String func : functions){
+    public AppControl(ArrayList<String> permissons) {
+        this.permissons = permissons;
+    }
+
+    public void setPermissons(ArrayList<String> permissons){
+        this.permissons = permissons;
+        permissons.add("statistic");
+        for(String func : this.permissons){
             try {
                 views.put(func,FXMLLoader.load(
                         new File(modulePath.get(func)).toURI().toURL()));
+
             } catch (IOException e) {
                 views.put(func,null);
             }
         }
+        getFunction();
+
     }
 
     public ToggleButton getPOSButton(String functionName){
@@ -102,5 +117,9 @@ public class AppControl {
         } catch (IOException exc) {
             throw new RuntimeException(exc);
         }
+    }
+
+    public ArrayList<String> getPermission() {
+        return this.permissons;
     }
 }
