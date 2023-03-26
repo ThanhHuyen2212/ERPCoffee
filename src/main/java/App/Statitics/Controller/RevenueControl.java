@@ -12,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
@@ -29,6 +30,7 @@ public class RevenueControl implements Initializable{
     private BorderPane statisticView;
     @FXML
     private ScrollPane chartScrollpane;
+
     @FXML
     private Button btnShowTable;
     @FXML
@@ -139,6 +141,7 @@ public class RevenueControl implements Initializable{
     }
 
     private void initGUI(){
+
         tableScrollpane = new ScrollPane();
         tableScrollpane.setPrefWidth(chartScrollpane.getPrefWidth());
         tableScrollpane.setFitToWidth(true);
@@ -198,8 +201,6 @@ public class RevenueControl implements Initializable{
             ((RevenueTableControl)fxmlLoader.getController()).setData(model.getRevenueData());
             table.setPrefWidth(tableScrollpane.getPrefWidth());
 
-        } catch (MalformedURLException ex) {
-            throw new RuntimeException(ex);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
