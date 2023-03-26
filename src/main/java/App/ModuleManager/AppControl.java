@@ -2,17 +2,12 @@ package App.ModuleManager;
 
 
 import App.Controller.AlertController;
-import App.Model.Alert;
-import Entity.Function;
 import Main.MainApp;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 
 import java.io.File;
@@ -22,8 +17,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
-import java.util.Optional;
 
 import static Main.MainApp.addButton;
 import static Main.MainApp.getFunction;
@@ -36,9 +29,9 @@ public class AppControl {
         put("system","");
         put("category","");
         put("customer","");
-        put("ingredient","");
-        put("recipe","");
-        put("purchase","");
+        put("ingredient","src/main/java/App/Depot/View/IngredientManagementView.fxml");
+        put("recipe","src/main/java/App/Depot/View/RecipeManagementView.fxml");
+        put("purchase","src/main/java/App/Depot/View/POManagementView.fxml");
         put("staff","");
         put("statistic","src/main/java/App/Statitics/View/RevenueChart.fxml");
     }};

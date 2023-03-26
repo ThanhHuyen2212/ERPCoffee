@@ -15,30 +15,6 @@ public class IngredientManagement {
     public IngredientManagement() {
         ingredientDAO = new IngredientAccess();
         ingredients = ingredientDAO.retrieve();
-//        ingredients = new ArrayList<>();
-//        ingredients.add(new Ingredient(
-//                1,
-//                "Ca phe hat",
-//                "Nguyen lieu kho",
-//                12,
-//                10,
-//                120000));
-//        ingredients.add(new Ingredient(
-//                2,
-//                "Bot matcha",
-//                "Nguyen lieu kho",
-//                22,
-//                7,
-//                90000));
-
-//        Code initialize java.sql.Date
-
-        try {
-            ingredients.get(0).setDeleteDate(new Date(
-                    IngredientManagementController.sdf.parse("2002-12-22").getTime()));
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public IngredientManagement(ArrayList<Ingredient> ingredients) {

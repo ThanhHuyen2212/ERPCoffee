@@ -105,4 +105,8 @@ public class Ingredient {
     public void setDeleteDate(Date deleteDate) {
         this.deleteDate = deleteDate;
     }
+
+    public boolean isDeleted() {
+        return this.getDeleteDate() != null;
+    }
 }

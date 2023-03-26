@@ -18,6 +18,9 @@ import java.util.ResourceBundle;
 
 public class IngredientManagementController implements Initializable {
     public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//    Code convert java.sql.Date to Local Date
+//    Covert LocalDate to java.sql.Date
+//    java.sql.Date.valueOf(dateToConvert);
     @FXML
     private TableView<Ingredient> ingredientTable;
     @FXML
@@ -43,7 +46,7 @@ public class IngredientManagementController implements Initializable {
     @FXML
     private Label createDateLbl;
     @FXML
-    private DatePicker deleteDatePk;
+    private Label deleteDateLbl;
     @FXML
     private Button deleteBtn;
     @FXML
@@ -81,16 +84,18 @@ public class IngredientManagementController implements Initializable {
                 limitTxf.setText(String.valueOf(newSelection.getIngredientLimit()));
                 try{
                     createDateLbl.setText(sdf.format(newSelection.getCreateDate()));
-//                    Code convert java.sql.Date to Local Date
                     if(newSelection.getDeleteDate() != null) {
-                        LocalDate ld = (new Date(newSelection.getDeleteDate().getTime())).toLocalDate();
-                        deleteDatePk.setValue(ld);
+                        deleteDateLbl.setText(sdf.format(newSelection.getDeleteDate()));
                     }
-
-//                    Covert LocalDate to java.sql.Date
-//                    java.sql.Date.valueOf(dateToConvert);
                 } catch (Exception ignored) {
                     System.out.println("error");
+                }
+                if(newSelection.isDeleted()) {
+                    handleDeletedIngredient();
+                } else {
+                    addBtn.setVisible(true);
+                    editBtn.setVisible(true);
+                    deleteBtn.setVisible(true);
                 }
             }
         });
@@ -129,13 +134,11 @@ public class IngredientManagementController implements Initializable {
             public void handle(ActionEvent event) {
                 Ingredient selected = ingredientTable.getSelectionModel().getSelectedItem();
                 int index = ingredientTable.getSelectionModel().getSelectedIndex();
-                LocalDate deleteDate = null;
                 try{
                     String name = nameTxf.getText();
                     String type = typeTxf.getText();
                     int limit = Integer.parseInt(limitTxf.getText());
                     int price = Integer.parseInt(priceTxf.getText());
-                    deleteDate = deleteDatePk.getValue();
                     MessageDialog messageDialog = new MessageDialog(
                             "Confirm Edition",
                             "Do you want to edit the information?",
@@ -144,11 +147,7 @@ public class IngredientManagementController implements Initializable {
                     );
                     int rs = messageDialog.showMessage();
                     if (rs == 1) {
-                        Date tempDate = null;
-                        if(deleteDate != null) {
-                            tempDate = Date.valueOf(deleteDate);
-                        }
-                        model.handleUpdate(selected, index, name, type, price, limit, tempDate);
+                        model.handleUpdate(selected, index, name, type, price, limit);
                         ingredientTable.refresh();
                     }
                 } catch (Exception e) {
@@ -182,6 +181,12 @@ public class IngredientManagementController implements Initializable {
         addBtn.setOnAction(buttonAddHandler);
         editBtn.setOnAction(buttonUpdateHandler);
         deleteBtn.setOnAction(buttonDeleteHandler);
+    }
+
+    public void handleDeletedIngredient() {
+        addBtn.setVisible(false);
+        editBtn.setVisible(false);
+        deleteBtn.setVisible(false);
     }
 
 
