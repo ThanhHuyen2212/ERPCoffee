@@ -22,6 +22,8 @@
                   <TableColumn fx:id="customerName" prefWidth="203.0" text="CustomerName" />
                   <TableColumn fx:id="orderDate" prefWidth="177.0" text="Date" />
                   <TableColumn fx:id="totalPrice" prefWidth="125.0" text="TotalPrice" />
+                  <TableColumn fx:id="receipt" prefWidth="82.0" />
+                  <TableColumn fx:id="totalPrice11" prefWidth="105.0" text="TotalPrice" />
                </columns>
             </TableView>
             <TextField fx:id="txtSearchOrder" layoutX="37.0" layoutY="49.0" prefHeight="34.0" prefWidth="235.0" promptText="Search  here">
