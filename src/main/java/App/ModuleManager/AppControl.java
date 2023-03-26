@@ -16,6 +16,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -24,6 +25,8 @@ import static Main.MainApp.getFunction;
 
 public class AppControl {
     public static Employee currentUser;
+    public static Connection conn;
+
 
     HashMap<String,String> modulePath = new HashMap<>(){{
         put("sale","src/main/java/App/View/ShopGUI.fxml");
