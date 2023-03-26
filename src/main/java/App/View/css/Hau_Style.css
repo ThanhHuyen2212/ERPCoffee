@@ -1,6 +1,5 @@
 .hau-menu-button{
     -fx-background-color: transparent;
-
 }
 .hau-menu-button:hover{
     -fx-effect: dropshadow(three-pass-box, #5F50F1,10,0,0,0);
@@ -68,3 +67,33 @@
     -fx-fill: #fff;
     -fx-font-size: 13;
 }
+
+.default-color0.chart-bar{-fx-bar-fill: #71C9CE;}
+.default-color1.chart-bar{-fx-bar-fill: #A6E3E9;}
+.default-color2.chart-bar{-fx-bar-fill: #CBF1F5;}
+.default-color3.chart-bar{-fx-bar-fill: #08D9D6;}
+.default-color4.chart-bar{-fx-bar-fill: #FCE38A;}
+.default-color5.chart-bar{-fx-bar-fill: #F38181;}
+
+
+.data0.chart-pie{-fx-pie-color: #71C9CE;}
+.data1.chart-pie{-fx-pie-color: #A6E3E9;}
+.data2.chart-pie{-fx-pie-color: #CBF1F5;}
+.data3.chart-pie{-fx-pie-color: #08D9D6;}
+.data4.chart-pie{-fx-pie-color: #FCE38A;}
+.data5.chart-pie{-fx-pie-color: #F38181;}
+
+.default-color0.chart-series-area-fill { -fx-fill: #71C9CE; }
+.default-color1.chart-series-area-fill { -fx-fill: #A6E3E9; }
+.default-color2.chart-series-area-fill { -fx-fill: #CBF1F5; }
+.default-color3.chart-series-area-fill { -fx-fill: #08D9D6; }
+.default-color4.chart-series-area-fill { -fx-fill: #FCE38A; }
+.default-color5.chart-series-area-fill { -fx-fill: #F38181; }
+
+.default-color0.chart-series-area-line { -fx-stroke: white; }
+.default-color1.chart-series-area-line { -fx-stroke: white; }
+.default-color2.chart-series-area-line { -fx-stroke: white; }
+.default-color3.chart-series-area-line { -fx-stroke: white; }
+.default-color4.chart-series-area-line { -fx-stroke: white; }
+.default-color5.chart-series-area-line { -fx-stroke: white; }
+
