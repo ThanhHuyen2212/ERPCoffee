@@ -58,6 +58,8 @@ public class OrderController implements Initializable{
 
     @FXML
     private Label changeLabel;
+    @FXML
+    private Label orderIdLabel;
 
     @FXML
     private Label dateLabel;
@@ -99,6 +101,7 @@ public class OrderController implements Initializable{
         }
         TotalPriceLabel.setText(String.valueOf(order.getTotalPrice()));
         dateLabel.setText(String.valueOf(order.getOrderDate()));
+        orderIdLabel.setText(String.valueOf(order.getOrderId()));
     }
 
         @Override
