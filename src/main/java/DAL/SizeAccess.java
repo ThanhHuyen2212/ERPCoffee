@@ -26,5 +26,22 @@ public class SizeAccess extends DataAccess {
         }
         return sizes;
     }
+    public Size findByName(String size){
+        SizeAccess sizeAccess = new SizeAccess();
+        Size newSize = new Size();
+        sizeAccess.createConnection();
+        try {
+            PreparedStatement prSt = sizeAccess.getConn().prepareStatement("call select_sizes_with_sign(?)");
+            prSt.setString(1,size);
+            ResultSet rs= prSt.executeQuery();
+            while (rs!=null && rs.next()){
+                newSize.setSign(rs.getString(1));
+                newSize.setDescription(rs.getString(2));
+            }
+        }catch (SQLException e){
+            throw new RuntimeException();
+        }
+        return newSize;
+    }
 
 }
