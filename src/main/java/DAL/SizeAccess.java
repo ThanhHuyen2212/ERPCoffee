@@ -9,13 +9,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class SizeAccess extends DataAccess {
-    public static ArrayList<Size> retrieve(){
-        SizeAccess categoryAccess =new SizeAccess();
-        //CategoryManagement categoryManagement = new CategoryManagement();
+
+    public  ArrayList<Size> retrieve(){
         ArrayList<Size> sizes = new ArrayList<>();
         try {
-            categoryAccess.createConnection();
-            PreparedStatement prSt = categoryAccess.getConn().prepareStatement("call select_sizes()");
+            PreparedStatement prSt = getConn().prepareStatement("call select_sizes()");
             ResultSet rs = prSt.executeQuery();
             while (rs!=null && rs.next()){
                 sizes.add(new Size(rs.getString(1),rs.getString(2)));
@@ -27,11 +25,9 @@ public class SizeAccess extends DataAccess {
         return sizes;
     }
     public Size findByName(String size){
-        SizeAccess sizeAccess = new SizeAccess();
         Size newSize = new Size();
-        sizeAccess.createConnection();
         try {
-            PreparedStatement prSt = sizeAccess.getConn().prepareStatement("call select_sizes_with_sign(?)");
+            PreparedStatement prSt = getConn().prepareStatement("call select_sizes_with_sign(?)");
             prSt.setString(1,size);
             ResultSet rs= prSt.executeQuery();
             while (rs!=null && rs.next()){
