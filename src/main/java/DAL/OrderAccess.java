@@ -20,6 +20,7 @@ public class OrderAccess extends DataAccess {
         OrderAccess orderAccess = new OrderAccess();
         MemberAccess memberAccess = new MemberAccess();
         ProductAccess productAccess = new ProductAccess();
+        SizeAccess sizeAccess = new SizeAccess();
         orderAccess.createConnection();
         try {
             PreparedStatement prSt = orderAccess.getConn().prepareStatement("call select_orders()");
@@ -45,7 +46,7 @@ public class OrderAccess extends DataAccess {
             while (rs!=null && rs.next()){
                 orderDetails.add(new OrderDetail(
                         productAccess.findByName(rs.getString(2)),
-                        "",
+                        sizeAccess.findByName(rs.getString(4)),
                         rs.getInt(3)
                 ));
             }
