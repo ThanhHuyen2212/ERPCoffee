@@ -50,7 +50,7 @@
                                  </font>
                               </Label>
                               <Pane prefHeight="20.0" prefWidth="265.0" />
-                              <Label alignment="CENTER" prefHeight="25.0" prefWidth="263.0" text="Mã hóa đơn">
+                              <Label fx:id="orderIdLabel" alignment="CENTER" prefHeight="25.0" prefWidth="263.0" text="Mã hóa đơn">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
