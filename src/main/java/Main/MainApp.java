@@ -1,6 +1,7 @@
 package Main;
 
 import App.ModuleManager.AppControl;
+import Entity.Employee;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -24,6 +25,7 @@ public class MainApp extends Application {
 
     private static BorderPane mainView;
     private static VBox mainMenu;
+    public static Employee currentUser;
 
     private static ToggleGroup group;
 
