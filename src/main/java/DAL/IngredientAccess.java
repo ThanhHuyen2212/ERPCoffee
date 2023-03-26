@@ -57,13 +57,14 @@ public class IngredientAccess extends DataAccess {
         try {
             ingredientAccess.createConnection();
             PreparedStatement prSt = ingredientAccess.getConn().prepareStatement(
-                    "call insert_ingredient(?, ?, ?, ?);");
-//            call insert_ingredient(name_ingredient, type_ingredient, price_ingredient, limit_inventory);
-            prSt.setString(1, i.getIngredientName());
-            prSt.setString(2, i.getIngredientType());
-            prSt.setInt(3, i.getPrice());
-            prSt.setInt(4, i.getIngredientLimit());
-            prSt.setDate(5, i.getDeleteDate());
+                    "call update_ingredient(?, ?, ?, ?, ?);");
+//            call update_ingredient(id_ingredient, name_ingredient, type_ingredient,
+//                                      price_ingredient, limit_ingredient, date_delete)
+            prSt.setInt(1, i.getIngredientId());
+            prSt.setString(2, i.getIngredientName());
+            prSt.setString(3, i.getIngredientType());
+            prSt.setInt(4, i.getPrice());
+            prSt.setInt(5, i.getIngredientLimit());
             prSt.executeQuery();
         } catch (SQLException e) {
             throw new RuntimeException(e);

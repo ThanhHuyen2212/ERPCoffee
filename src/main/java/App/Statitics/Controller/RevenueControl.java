@@ -120,6 +120,11 @@ public class RevenueControl implements Initializable{
         setProductData();
         setCateData();
         setIngData();
+        tableBox.getChildren().clear();
+        showRevenueTable();
+        showProductTable();
+        showIngredientTable();
+        showCateTable();
     }
 
     @Override
@@ -155,10 +160,7 @@ public class RevenueControl implements Initializable{
         });
         createTransition();
 
-        showRevenueTable();
-        showProductTable();
-        showIngredientTable();
-        showCateTable();
+
     }
 
     private void createTransition(){

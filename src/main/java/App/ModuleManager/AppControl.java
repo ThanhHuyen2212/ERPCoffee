@@ -2,17 +2,12 @@ package App.ModuleManager;
 
 
 import App.Controller.AlertController;
-import App.Model.Alert;
-import Entity.Function;
 import Main.MainApp;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 
 import java.io.File;
@@ -22,8 +17,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
-import java.util.Optional;
+
+import static Main.MainApp.addButton;
+import static Main.MainApp.getFunction;
 
 public class AppControl {
     HashMap<String,String> modulePath = new HashMap<>(){{
@@ -33,9 +29,9 @@ public class AppControl {
         put("system","");
         put("category","");
         put("customer","");
-        put("ingredient","");
-        put("recipe","");
-        put("purchase","");
+        put("ingredient","src/main/java/App/Depot/View/IngredientManagementView.fxml");
+        put("recipe","src/main/java/App/Depot/View/RecipeManagementView.fxml");
+        put("purchase","src/main/java/App/Depot/View/POManagementView.fxml");
         put("staff","");
         put("statistic","src/main/java/App/Statitics/View/RevenueChart.fxml");
     }};
@@ -53,21 +49,33 @@ public class AppControl {
         put("statistic","src/main/java/Assets/Icons/analytics.png");
     }};
 
+
     private HashMap<String, Node> views;
+    private ArrayList<String> permissons;
+
 
     public AppControl() {
+        views = new HashMap<>();
     }
 
-    public AppControl(ArrayList<String> functions) {
-        views = new HashMap<>();
-        for(String func : functions){
+    public AppControl(ArrayList<String> permissons) {
+        this.permissons = permissons;
+    }
+
+    public void setPermissons(ArrayList<String> permissons){
+        this.permissons = permissons;
+        permissons.add("statistic");
+        for(String func : this.permissons){
             try {
                 views.put(func,FXMLLoader.load(
                         new File(modulePath.get(func)).toURI().toURL()));
+
             } catch (IOException e) {
                 views.put(func,null);
             }
         }
+        getFunction();
+
     }
 
     public ToggleButton getPOSButton(String functionName){
@@ -109,5 +117,9 @@ public class AppControl {
         } catch (IOException exc) {
             throw new RuntimeException(exc);
         }
+    }
+
+    public ArrayList<String> getPermission() {
+        return this.permissons;
     }
 }

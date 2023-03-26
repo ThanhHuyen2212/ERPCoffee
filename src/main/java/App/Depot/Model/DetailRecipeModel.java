@@ -2,13 +2,10 @@ package App.Depot.Model;
 
 import Entity.Ingredient;
 import Entity.Product;
+import Entity.ProductRecipe;
 import Logic.Depot.RecipeManagement;
-
-import java.util.HashMap;
-
 public class DetailRecipeModel {
     private Product selected;
-    private HashMap<Ingredient,Integer> details;
     private RecipeManagement logic;
 
     public DetailRecipeModel(Product selected) {
@@ -25,32 +22,13 @@ public class DetailRecipeModel {
 
     public void setSelected(Product selected) {
         this.selected = selected;
+        if(selected.getRecipe() == null) {
+            selected.setRecipe(new ProductRecipe());
+        }
     }
 
-    public HashMap<Ingredient, Integer> getDetails() {
-        if(details == null) details = new HashMap<>(){{
-            Ingredient ig = new Ingredient();
-            ig.setIngredientName("asdasd");
-            put(ig,1);
-            ig = new Ingredient();
-            ig.setIngredientName("asdasd");
-            put(ig,1);
-            ig = new Ingredient();
-            ig.setIngredientName("asdasd");
-            put(ig,1);
-            ig = new Ingredient();
-            ig.setIngredientName("asdasd");
-            put(ig,1);
-        }};
-        return details;
-    }
-
-    public void setDetails(HashMap<Ingredient, Integer> details) {
-        this.details = details;
-    }
-
-    public void handleAdd(String name, int qty) {
-        logic.handleAdd(selected, name, qty);
+    public void handleAdd(String ingredientName, int qty) {
+        logic.handleAdd(selected, ingredientName, qty);
     }
 
     public void handleUpdate(Ingredient selectedIg, String value, int qty) {
@@ -61,6 +39,7 @@ public class DetailRecipeModel {
         logic.handleDelete(selected, selectedIg);
     }
 
-
-
+    public void handleUpdatePrdQty(int newQty) {
+        logic.handleUpdatePrdQty(selected, newQty);
+    }
 }
