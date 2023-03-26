@@ -54,7 +54,7 @@ public class RevenueControl implements Initializable{
     private BarChart<String, Number> ingChart;
 
     @FXML
-    private BarChart<String, Number> revenueDayChart;
+    private AreaChart<String, Number> revenueDayChart;
 
     @FXML
     private BarChart<String, Number> revenueProductChart;

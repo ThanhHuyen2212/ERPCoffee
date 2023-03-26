@@ -16,6 +16,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.chart.AreaChart?>
 <BorderPane fx:id="statisticView" maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Statitics.Controller.RevenueControl">
    <top>
        <VBox prefHeight="55.0" prefWidth="600.0" spacing="5" styleClass="hau-container-color" stylesheets="@../../View/css/Hau_Style.css" BorderPane.alignment="CENTER">
@@ -56,14 +57,14 @@
          <content>
                 <VBox minHeight="900.0" prefHeight="1400.0" prefWidth="240.0">
                    <children>
-                      <BarChart fx:id="revenueDayChart" alternativeColumnFillVisible="true" minHeight="200.0" title="Revenue By Day">
+                      <AreaChart fx:id="revenueDayChart" alternativeColumnFillVisible="true" minHeight="200.0" title="Revenue By Day">
                         <xAxis>
                           <CategoryAxis fx:id="revDCate" label="Day" side="BOTTOM" />
                         </xAxis>
                         <yAxis>
                           <NumberAxis fx:id="revDAxis" label="Revenue" side="LEFT" />
                         </yAxis>
-                      </BarChart>
+                      </AreaChart>
                       <BarChart fx:id="revenueProductChart" alternativeColumnFillVisible="true" layoutX="10.0" layoutY="-35.0" minHeight="200.0" title="Revenue By Product" GridPane.rowIndex="1">
                          <xAxis>
                             <CategoryAxis fx:id="revPCate" label="Day" side="BOTTOM" />
