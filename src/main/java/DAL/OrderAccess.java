@@ -14,18 +14,14 @@ import java.util.HashMap;
 
 public class OrderAccess extends DataAccess {
 
-    public OrderAccess(){
-        createConnection();
-    }
-    public static  ArrayList<Order> retrieve(){
+
+    public   ArrayList<Order> retrieve(){
         ArrayList<Order> orders = new ArrayList<>();
-        OrderAccess orderAccess = new OrderAccess();
         MemberAccess memberAccess = new MemberAccess();
         ProductAccess productAccess = new ProductAccess();
         SizeAccess sizeAccess = new SizeAccess();
-        orderAccess.createConnection();
         try {
-            PreparedStatement prSt = orderAccess.getConn().prepareStatement("call select_orders()");
+            PreparedStatement prSt = getConn().prepareStatement("call select_orders()");
             ResultSet rs = prSt.executeQuery();
             Order newOrder=null;
             while (rs!=null && rs.next()){
@@ -38,7 +34,7 @@ public class OrderAccess extends DataAccess {
             throw new RuntimeException(e);
         }
         try {
-        PreparedStatement preparedStatement = orderAccess.getConn().prepareStatement("call select_orderdetail_with_orderid(?)");
+        PreparedStatement preparedStatement = getConn().prepareStatement("call select_orderdetail_with_orderid(?)");
         for(Order o : orders){
             preparedStatement.setInt(1,o.getOrderId());
             ResultSet rs= preparedStatement.executeQuery();
@@ -56,6 +52,7 @@ public class OrderAccess extends DataAccess {
             System.out.println("OrderAccess(ArrayList)");
             System.out.println(e.getMessage());
         }
+
         return orders;
     }
 
@@ -74,9 +71,11 @@ public class OrderAccess extends DataAccess {
             System.out.println(e.getMessage());
 
         }
+
         return false;
     }
     public int insertOrderWithPhone(Order order){
+
         PreparedStatement prSt = null;
         try {
             prSt = getConn().prepareStatement("call insert_orders(?, ?)");
@@ -94,9 +93,12 @@ public class OrderAccess extends DataAccess {
             System.out.println("OrderAccess");
             System.out.println(e.getMessage());
         }
+
         return  0;
+
     }
     public int insertOrderNoPhone(Order order){
+
         PreparedStatement prSt = null;
         try {
             prSt = getConn().prepareStatement("call insert_orders_without_phone(?)");
@@ -116,8 +118,5 @@ public class OrderAccess extends DataAccess {
         return  0;
     }
 
-    public static void main(String[] args) {
-        retrieve();
-    }
 
 }

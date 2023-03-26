@@ -9,15 +9,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ProductAccess extends DataAccess {
-    public ProductAccess(){}
-
-    public static ArrayList<Product> retrieve(){
-        ProductAccess productAccess = new ProductAccess();
-        //ProductManagement productManagement = new ProductManagement();
+    public  ArrayList<Product> retrieve(){
         ArrayList<Product> products = new ArrayList<>();
+
         try {
-            productAccess.createConnection();
-            PreparedStatement prSt = productAccess.getConn().prepareStatement("call select_product_delete_is_null()");
+
+            PreparedStatement prSt = getConn().prepareStatement("call select_product_delete_is_null()");
             ResultSet resultSet = prSt.executeQuery();
             while (resultSet!=null &&resultSet.next()){
                 products.add(new Product(resultSet.getInt(1),
@@ -31,7 +28,7 @@ public class ProductAccess extends DataAccess {
             throw new RuntimeException();
         }
         try {
-            PreparedStatement preparedStatement = productAccess.getConn().prepareStatement("call select_productsize_with_id(?)");
+            PreparedStatement preparedStatement = getConn().prepareStatement("call select_productsize_with_id(?)");
             for(Product  p: products){
                 preparedStatement.setInt(1,p.getProductId());
                 HashMap<String, Integer> sizePrice= new HashMap<>();
@@ -47,6 +44,7 @@ public class ProductAccess extends DataAccess {
 //        Get recipe for each product
         RecipeAccess recipeAccess = new RecipeAccess();
         recipeAccess.retrieve(products);
+
         return products;
     }
     public int create(Product product){
@@ -60,10 +58,8 @@ public class ProductAccess extends DataAccess {
     }
     public Product findByName(String productName){
         Product product = new Product();
-        ProductAccess productAccess = new ProductAccess();
-        productAccess.createConnection();
         try {
-            PreparedStatement preparedStatement =productAccess.getConn().prepareStatement("call select_product_with_name(?)");
+            PreparedStatement preparedStatement =getConn().prepareStatement("call select_product_with_name(?)");
             preparedStatement.setString(1,productName);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs!=null && rs.next()){
@@ -78,7 +74,7 @@ public class ProductAccess extends DataAccess {
             throw new RuntimeException(e);
         }
         try {
-            PreparedStatement preparedStatement = productAccess.getConn().prepareStatement("call select_productsize_with_id(?)");
+            PreparedStatement preparedStatement =getConn().prepareStatement("call select_productsize_with_id(?)");
                 preparedStatement.setInt(1,product.getProductId());
                 HashMap<String, Integer> sizePrice= new HashMap<>();
                 ResultSet resultSet= preparedStatement.executeQuery();
@@ -89,7 +85,6 @@ public class ProductAccess extends DataAccess {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
         return product;
     }
 

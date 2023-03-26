@@ -9,13 +9,14 @@ import java.util.ArrayList;
 
 public class ProductManagement {
     private ArrayList<Product> products;
+    ProductAccess productAccess = new ProductAccess();
 
 
     public ProductManagement(){
         init();
     }
     private void init(){
-        products = ProductAccess.retrieve();
+        products = productAccess.retrieve();
     }
     public ArrayList<Product> getProducts(){
         return products;
