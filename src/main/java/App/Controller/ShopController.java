@@ -641,7 +641,10 @@ public class ShopController implements Initializable {
         }
         Optional<ButtonType> clickedButton = dialog.showAndWait();
         if (clickedButton.get() == ButtonType.OK) {
+            OrderGUIController orderGUIController =new OrderGUIController();
+            orderGUIController.reload(order(orderList));
             printOrder( order(orderList));
+            orderList.clear();
         }else if(clickedButton.get()==ButtonType.CANCEL){
             dialog.close();
         }
@@ -677,7 +680,6 @@ public class ShopController implements Initializable {
                 }
             }
         });
-
     }
 
     @Override

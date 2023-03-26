@@ -4,6 +4,7 @@ import App.Model.OrderReceipt;
 import App.Model.OrderTable;
 import Entity.Order;
 import Entity.OrderDetail;
+import Logic.OrderManagement;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -62,6 +63,9 @@ public class OrderController implements Initializable{
     private Label dateLabel;
     @FXML
     private Label hhmmssLabel;
+
+
+
     ObservableList<OrderReceipt> orderTableObservableList;
 
     public void initTable(ArrayList<OrderDetail> orderDetails) {

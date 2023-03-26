@@ -34,6 +34,7 @@ public class AppControl {
         put("purchase","src/main/java/App/Depot/View/POManagementView.fxml");
         put("staff","src/main/java/App/View/EmployeeCRUD.fxml");
         put("statistic","src/main/java/App/Statitics/View/RevenueChart.fxml");
+        put("order","src/main/java/App/View/OrderGUI.fxml");
     }};
     HashMap<String,String> iconPath = new HashMap<>(){{
         put("sale","src/main/java/Assets/Icons/cashier.png");
@@ -47,6 +48,7 @@ public class AppControl {
         put("purchase","src/main/java/Assets/Icons/checklist.png");
         put("staff","src/main/java/Assets/Icons/latte.png");
         put("statistic","src/main/java/Assets/Icons/analytics.png");
+        put("order","src/main/java/Assets/Icons/orders.png");
     }};
 
 
@@ -65,14 +67,22 @@ public class AppControl {
     public void setPermissons(ArrayList<String> permissons){
         this.permissons = permissons;
         permissons.add("statistic");
+        permissons.add("order");
         for(String func : this.permissons){
-            try {
-                views.put(func,FXMLLoader.load(
-                        new File(modulePath.get(func)).toURI().toURL()));
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        views.put(func,FXMLLoader.load(
+                                new File(modulePath.get(func)).toURI().toURL()));
+                    } catch (IOException e) {
+                        views.put(func,null);
+                    }
+                }
+            });
+            thread.start();
 
-            } catch (IOException e) {
-                views.put(func,null);
-            }
+
         }
         getFunction();
 
