@@ -289,7 +289,7 @@
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <Label layoutX="237.0" layoutY="768.0" prefHeight="53.0" prefWidth="212.0" text="100.000đ">
+                  <Label layoutX="237.0" layoutY="768.0" prefHeight="53.0" prefWidth="212.0" text="0đ">
                      <font>
                         <Font size="22.0" />
                      </font>
@@ -317,12 +317,12 @@
                         <String fx:value="blue" />
                      </styleClass>
                   </Button>
-                  <Label layoutX="237.0" layoutY="850.0" prefHeight="53.0" prefWidth="219.0" text="Nguyễn Văn A">
+                  <Label fx:id="labelCustomer" layoutX="237.0" layoutY="850.0" prefHeight="53.0" prefWidth="219.0">
                      <font>
-                        <Font size="28.0" />
+                        <Font size="21.0" />
                      </font>
                   </Label>
-                  <TextField layoutX="237.0" layoutY="705.0" prefHeight="44.0" prefWidth="219.0" text="55.000đ">
+                  <TextField layoutX="237.0" layoutY="705.0" prefHeight="44.0" prefWidth="219.0" text="0đ">
                      <font>
                         <Font name="System Bold" size="22.0" />
                      </font>

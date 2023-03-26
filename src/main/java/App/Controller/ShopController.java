@@ -2,6 +2,7 @@ package App.Controller;
 import App.Model.OrderTable;
 import Entity.*;
 import Logic.CategoryManagement;
+import Logic.OrderManagement;
 import Logic.ProductManagement;
 import Logic.SizeManagement;
 import javafx.beans.property.SimpleStringProperty;
@@ -86,6 +87,8 @@ public class ShopController implements Initializable {
 
     @FXML
     private ScrollPane scroll;
+    @FXML
+    private Label labelCustomer;
 
     @FXML
     private TextField textSearch;
@@ -108,6 +111,7 @@ public class ShopController implements Initializable {
     private CategoryManagement categoryManagement = new CategoryManagement();
     private SizeManagement sizeManagement = new SizeManagement();
     private ProductManagement productManagement = new ProductManagement();
+    private OrderManagement orderManagement = new OrderManagement();
     private List<Category> categoryList = new ArrayList<>();
     public static ArrayList<Product> productList = new ArrayList<>();
     public ArrayList<OrderDetail> orderList = new ArrayList<>();
@@ -143,81 +147,6 @@ public class ShopController implements Initializable {
         totalColumn.setCellValueFactory(new PropertyValueFactory<OrderTable, String>("total"));
         orderDetailsTables.setItems(orderTableObservableList);
     }
-
-    /**
-     * Fake dữ liệu
-     */
-//    private List<Category> getDataCategories() throws IOException {
-//        List<Category> categories = new ArrayList<>();
-////        Category category;
-////        category = new Category();
-////        category.setCategoryId(0);
-////        category.setCategoryName("All");
-////        categories.add(category);
-////        category = new Category();
-////        category.setCategoryId(1);
-////        category.setCategoryName("Coffee");
-////
-////        category = new Category();
-////        category.setCategoryId(2);
-////        category.setCategoryName("milkTea");
-////        categories.add(category);
-////        category = new Category();
-////        category.setCategoryId(3);
-////        category.setCategoryName("milkTea1");
-////        categories.add(category);
-//        categories = categoryManagement.getCategoriesList();
-//        return categories;
-//    }
-
-//    private ArrayList<Size> getDataSize() {
-//        ArrayList<Size> sizes = new ArrayList<>();
-//        Size sizeS = new Size("S", "Size sieu nho");
-//        Size sizeM = new Size("M", "Size sieu vua");
-//        Size sizeL = new Size("L", "Size sieu lon");
-//        sizes.add(sizeS);
-//        sizes.add(sizeM);
-//        sizes.add(sizeL);
-//        return sizes;
-//    }
-
-//    private ArrayList<Product> getDataProducts() {
-//        Size sizeS = new Size("S", "Size sieu nho");
-//        Size sizeM = new Size("M", "Size sieu vua");
-//        Size sizeL = new Size("L", "Size sieu lon");
-//        HashMap<Size, Integer> priceList = new HashMap<>();
-//        priceList.put(sizeS, 40000);
-//        priceList.put(sizeM, 45000);
-//        priceList.put(sizeL, 50000);
-//        ArrayList<Product> products = new ArrayList<>();
-//        Product product;
-//        product = new Product();
-//        product.setProductId(1);
-//        product.setProductName("White Coffee");
-//        product.setImagePath("src/main/java/Assets/Images/3.jpeg");
-//        product.setPriceList(priceList);
-//        products.add(product);
-//        product = new Product();
-//        product.setProductId(2);
-//        product.setProductName("White Coffee1");
-//        product.setImagePath("src/main/java/Assets/Images/1.png");
-//        product.setPriceList(priceList);
-//        products.add(product);
-//        product = new Product();
-//        product.setProductId(3);
-//        product.setProductName("White Coffee3");
-//        product.setImagePath("src/main/java/Assets/Images/WhiteCoffee.png");
-//        product.setPriceList(priceList);
-//        products.add(product);
-//        product = new Product();
-//        product.setProductId(4);
-//        product.setProductName("White Coffee4");
-//        product.setImagePath("src/main/java/Assets/Images/6.png");
-//        product.setPriceList(priceList);
-//        products.add(product);
-//        return products;
-//    }
-
 
     //plusBtn
     public void Plus(ActionEvent e) {
@@ -312,7 +241,7 @@ public class ShopController implements Initializable {
         });
     }
 
-    public void printOrder() {
+    public void printOrder(Order newOrder) {
         FXMLLoader loader = new FXMLLoader();
         String orderFIle = "src/main/java/App/View/Order.fxml";
         try {
@@ -329,15 +258,13 @@ public class ShopController implements Initializable {
         Dialog<ButtonType> dialog = new Dialog<>();
         OrderController orderController = loader.getController();
         dialog.setDialogPane((DialogPane) order);
-        btnOrder.setOnAction(actionEvent -> {
-            orderController.RenderOrder(orderList, "", "");
+            orderController.RenderOrder(newOrder);
             Optional<ButtonType> clickedButton = dialog.showAndWait();
             if (clickedButton.get() == ButtonType.NO) {
                 dialog.close();
             } else if (clickedButton.get() == ButtonType.YES) {
-
+                //code
             }
-        });
 
     }
 
@@ -610,7 +537,8 @@ public class ShopController implements Initializable {
             Optional<ButtonType> btn=dialog.showAndWait();
             if(btn.get()==ButtonType.YES){
                 shopHBox.setStyle("-fx-opacity:" + "1; \n");
-                //code
+                Member member = customerController.getMember();
+                labelCustomer.setText(member.getFullName());
             }else if(btn.get()==ButtonType.NO){
                 shopHBox.setStyle("-fx-opacity:" + "1; \n");
                 dialog.close();
@@ -678,6 +606,79 @@ public class ShopController implements Initializable {
 
         });
     }
+    private Order order(ArrayList<OrderDetail> orderList){
+        Order newOder = new Order();
+        customerController customerController = new customerController();
+        String memberName= labelCustomer.getText();
+        if(!memberName.isEmpty() || memberName.equalsIgnoreCase(" ")){
+            Member member =customerController.findByName(memberName);
+           newOder= orderManagement.insertOrder(orderList,member);
+        }else{
+            newOder= orderManagement.insertOrder(orderList);
+        }
+        return newOder;
+    }
+    private void orderDialog(){
+        FXMLLoader loader = new FXMLLoader();
+        try {
+            loader.setLocation(new File("src/main/java/App/View/Alert2.fxml").toURI().toURL());
+        } catch (MalformedURLException ex) {
+            throw new RuntimeException(ex);
+        }
+        Pane alert = null;
+        try {
+            alert = loader.load();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+        Dialog<ButtonType> dialog = new Dialog<>();
+        Alert2Controller controller = loader.getController();
+        dialog.setDialogPane((DialogPane) alert);
+        try {
+            controller.RenderAlert("Success", "Bạn chắc chắn muốn thanh toán!!!");
+        } catch (MalformedURLException ex) {
+            throw new RuntimeException(ex);
+        }
+        Optional<ButtonType> clickedButton = dialog.showAndWait();
+        if (clickedButton.get() == ButtonType.OK) {
+            printOrder( order(orderList));
+        }else if(clickedButton.get()==ButtonType.CANCEL){
+            dialog.close();
+        }
+    }
+    private void orderEvent(){
+        btnOrder.setOnAction(e->{
+            if(orderList.size()>0){
+                orderDialog();
+            }else {
+                FXMLLoader loader = new FXMLLoader();
+                try {
+                    loader.setLocation(new File("src/main/java/App/View/Alert.fxml").toURI().toURL());
+                } catch (MalformedURLException ex) {
+                    throw new RuntimeException(ex);
+                }
+                Pane alert = null;
+                try {
+                    alert = loader.load();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                Dialog<ButtonType> dialog = new Dialog<>();
+                AlertController alertController = loader.getController();
+                dialog.setDialogPane((DialogPane) alert);
+                try {
+                    alertController.RenderAlert("Warning", "Chưa chọn sản phẩm cần thanh toán!!!");
+                } catch (MalformedURLException ex) {
+                    throw new RuntimeException(ex);
+                }
+                Optional<ButtonType> clickedButton = dialog.showAndWait();
+                if (clickedButton.get() == ButtonType.OK) {
+                    dialog.close();
+                }
+            }
+        });
+
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -686,8 +687,8 @@ public class ShopController implements Initializable {
             render(productList);
             searchProduct();
             renderCategories();
-            printOrder();
             disLayCustomer();
+            orderEvent();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
