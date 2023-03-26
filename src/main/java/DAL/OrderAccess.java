@@ -1,9 +1,6 @@
 package DAL;
 
-import Entity.Member;
-import Entity.Order;
-import Entity.OrderDetail;
-import Entity.Product;
+import Entity.*;
 import Logic.MemberManagement;
 
 import java.sql.PreparedStatement;
@@ -20,6 +17,8 @@ public class OrderAccess extends DataAccess {
         MemberAccess memberAccess = new MemberAccess();
         ProductAccess productAccess = new ProductAccess();
         SizeAccess sizeAccess = new SizeAccess();
+        productAccess.createConnection();
+        sizeAccess.createConnection();
         try {
             PreparedStatement prSt = getConn().prepareStatement("call select_orders()");
             ResultSet rs = prSt.executeQuery();
@@ -40,11 +39,10 @@ public class OrderAccess extends DataAccess {
             ResultSet rs= preparedStatement.executeQuery();
             ArrayList<OrderDetail> orderDetails = new ArrayList<>();
             while (rs!=null && rs.next()){
-                orderDetails.add(new OrderDetail(
-                        productAccess.findByName(rs.getString(2)),
-                        sizeAccess.findByName(rs.getString(4)),
-                        rs.getInt(3)
-                ));
+                Product product= productAccess.findByName(rs.getString(2));
+                Integer qty=rs.getInt(3);
+                Size size=  sizeAccess.findByName(rs.getString(4));
+                orderDetails.add(new OrderDetail(product,size,qty));
             }
             o.setDetails(orderDetails);
         }
@@ -52,7 +50,6 @@ public class OrderAccess extends DataAccess {
             System.out.println("OrderAccess(ArrayList)");
             System.out.println(e.getMessage());
         }
-
         return orders;
     }
 
@@ -118,5 +115,9 @@ public class OrderAccess extends DataAccess {
         return  0;
     }
 
+    public static void main(String[] args) {
+        OrderAccess orderAccess = new OrderAccess();
+        orderAccess.retrieve();
+    }
 
 }
