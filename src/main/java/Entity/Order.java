@@ -8,8 +8,6 @@ public class Order {
     private int totalPrice;
     private Date orderDate;
     private Member customer;
-    private String customerName;
-    private String orderDateString;
 
     private ArrayList<OrderDetail> details;
 
@@ -23,12 +21,7 @@ public class Order {
         this.customer = customer;
         this.details = details;
     }
-    public Order(int orderId, int totalPrice, Date orderDate, Member customer) {
-        this.orderId = orderId;
-        this.totalPrice = totalPrice;
-        this.orderDateString = String.valueOf(orderDate);
-        this.customerName = customer.getFullName();
-    }
+
     public Order(int orderId, int totalPrice, Date orderDate, ArrayList<OrderDetail> details) {
         this.orderId = orderId;
         this.totalPrice = totalPrice;

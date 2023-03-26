@@ -1,5 +1,6 @@
 package App.Controller;
 
+import App.Model.OrderGUI;
 import App.Model.OrderTable;
 import Entity.Order;
 import Logic.OrderManagement;
@@ -22,33 +23,48 @@ public class OrderGUIController implements Initializable {
     OrderManagement orderManagement = new OrderManagement();
     ArrayList<Order> orders = new ArrayList<>();
     @FXML
-    private TableView<Order> OrderTable;
+    private TableView<OrderGUI> OrderTable;
 
     @FXML
     private Button btnSearch;
 
     @FXML
-    private TableColumn<Order, String> customerName;
+    private TableColumn<OrderGUI, String> customerName;
 
     @FXML
-    private TableColumn<Order, Date> orderDate;
+    private TableColumn<OrderGUI, Date> orderDate;
 
     @FXML
-    private TableColumn<Order, Integer> orderID;
+    private TableColumn<OrderGUI, Integer> orderID;
 
     @FXML
-    private TableColumn<Order, Integer> totalPrice;
+    private TableColumn<OrderGUI, Integer> totalPrice;
 
     @FXML
     private TextField txtSearchOrder;
-    ObservableList<Order> orderTableObservableList;
+    ObservableList<OrderGUI> orderTableObservableList;
+
+
+    public ArrayList<OrderGUI> changeToOrderGUI(ArrayList<Order> orders){
+        ArrayList<OrderGUI> orderGUIS = new ArrayList<>();
+        for(Order o :orders){
+             orderGUIS.add(new OrderGUI(o));
+         }
+        return orderGUIS;
+    }
     public void init(){
-        orderTableObservableList= FXCollections.observableArrayList(orders);
-        orderID.setCellValueFactory(new PropertyValueFactory<Order, Integer>(" "));
-        customerName.setCellValueFactory(new PropertyValueFactory<Order, String>("customerName"));
-        orderDate.setCellValueFactory(new PropertyValueFactory<Order,Date>("orderDate"));
-        totalPrice.setCellValueFactory(new PropertyValueFactory<Order, Integer>("totalPrice"));;
+        orders=orderManagement.getOrderList();;
+        orderTableObservableList= FXCollections.observableArrayList(changeToOrderGUI(orders));
+        orderID.setCellValueFactory(new PropertyValueFactory<OrderGUI, Integer>("orderID"));
+        customerName.setCellValueFactory(new PropertyValueFactory<OrderGUI, String>("customerName"));
+        orderDate.setCellValueFactory(new PropertyValueFactory<OrderGUI,Date>("date"));
+        totalPrice.setCellValueFactory(new PropertyValueFactory<OrderGUI, Integer>("totalPrice"));;
         OrderTable.setItems(orderTableObservableList);
+    }
+    public void reload(Order order){
+        orders.add(order);
+        orderTableObservableList= FXCollections.observableArrayList(changeToOrderGUI(orders));
+
     }
 
     @Override
