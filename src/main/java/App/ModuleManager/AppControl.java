@@ -26,13 +26,13 @@ public class AppControl {
         put("sale","src/main/java/App/View/ShopGUI.fxml");
         put("product","");
         put("size","");
-        put("system","");
-        put("category","");
+        put("system","src/main/java/App/View/AccountCRUD.fxml");
+        put("category","src/main/java/App/View/CategoryCRUD.fxml");
         put("customer","");
         put("ingredient","src/main/java/App/Depot/View/IngredientManagementView.fxml");
         put("recipe","src/main/java/App/Depot/View/RecipeManagementView.fxml");
         put("purchase","src/main/java/App/Depot/View/POManagementView.fxml");
-        put("staff","");
+        put("staff","src/main/java/App/View/EmployeeCRUD.fxml");
         put("statistic","src/main/java/App/Statitics/View/RevenueChart.fxml");
         put("order","src/main/java/App/View/OrderGUI.fxml");
     }};
