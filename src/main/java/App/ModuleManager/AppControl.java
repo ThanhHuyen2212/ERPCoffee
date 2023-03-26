@@ -69,20 +69,22 @@ public class AppControl {
         permissons.add("statistic");
         permissons.add("order");
         for(String func : this.permissons){
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        views.put(func,FXMLLoader.load(
-                                new File(modulePath.get(func)).toURI().toURL()));
-                    } catch (IOException e) {
-                        views.put(func,null);
-                    }
-                }
-            });
-            thread.start();
+//            Thread thread = new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//
+//                }
+//            });
+//            thread.start();
 
 
+            try {
+                views.put(func,FXMLLoader.load(
+                        new File(modulePath.get(func)).toURI().toURL()));
+                System.out.println("Read func success");
+            } catch (IOException e) {
+                views.put(func,null);
+            }
         }
         getFunction();
 
