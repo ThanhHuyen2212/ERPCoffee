@@ -27,6 +27,11 @@ public class Order {
         this.orderDate = orderDate;
         this.details = details;
     }
+    public Order(int orderId, int totalPrice, Date orderDate) {
+        this.orderId = orderId;
+        this.totalPrice = totalPrice;
+        this.orderDate = orderDate;
+    }
 
     public int getOrderId() {
         return orderId;

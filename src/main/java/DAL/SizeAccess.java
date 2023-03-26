@@ -27,5 +27,4 @@ public class SizeAccess extends DataAccess {
         return sizes;
     }
 
-
 }
