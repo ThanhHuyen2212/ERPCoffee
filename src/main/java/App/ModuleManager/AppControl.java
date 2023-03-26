@@ -31,12 +31,12 @@ public class AppControl {
         put("product","");
         put("size","");
         put("system","");
-        put("category","");
+        put("category","src/main/java/App/View/CategoryCRUD.fxml");
         put("customer","");
         put("ingredient","");
         put("recipe","");
         put("purchase","");
-        put("staff","");
+        put("staff","src/main/java/App/View/EmployeeCRUD.fxml");
         put("statistic","src/main/java/App/Statitics/View/RevenueChart.fxml");
     }};
     HashMap<String,String> iconPath = new HashMap<>(){{

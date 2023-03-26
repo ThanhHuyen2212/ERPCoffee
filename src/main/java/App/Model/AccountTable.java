@@ -1,6 +1,9 @@
 package App.Model;
 
 import DAL.AccountAccess;
+import DAL.DataAccess;
+import DAL.RolesAccess;
+import Entity.Role;
 
 import java.util.ArrayList;
 
@@ -63,5 +66,13 @@ public class AccountTable {
     public ArrayList<AccountTable> getDataAccount(){
         AccountAccess accountAccess = new AccountAccess();
         return accountAccess.getData();
+    }
+    public ArrayList<Role> getDataRole(){
+        RolesAccess rolesAccess = new RolesAccess();
+        return rolesAccess.getData();
+    }
+    public void AddAccount(){
+        AccountAccess accountAccess = new AccountAccess();
+        accountAccess.Insert(getUsername(),getPassword(),getEmpId(),getPositionName());
     }
 }

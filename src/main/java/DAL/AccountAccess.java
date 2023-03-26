@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 public class AccountAccess extends DataAccess {
     private ArrayList<AccountTable> accountlist = new ArrayList<>();
-
     public ArrayList<AccountTable> getData() {
         try {
             createConnection();
@@ -28,5 +27,17 @@ public class AccountAccess extends DataAccess {
             throw new RuntimeException(e);
         }
         return accountlist;
+    }
+    public void Insert(String username,String pass,int empId,String rolename){
+        try {
+            createConnection();
+            PreparedStatement prSt = getConn().prepareStatement("call insert_account(?,?,?,?)");
+            prSt.setString(1,username);
+            prSt.setString(2,pass);
+            prSt.setInt(3,empId);
+            prSt.setString(4,rolename);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

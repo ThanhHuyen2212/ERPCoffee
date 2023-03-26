@@ -35,14 +35,11 @@
             </Label>
             <TextField id="" fx:id="TFUsername" layoutX="140.0" layoutY="236.0" prefHeight="40.0" prefWidth="237.0" />
             <Label alignment="CENTER" font="$x3" layoutX="0.0" layoutY="307.0" prefHeight="40.0" prefWidth="125.0" text="Password" wrapText="false" />
-            <TextField id="" fx:id="TFPass" layoutX="140.0" layoutY="309.0" prefHeight="40.0" prefWidth="237.0" />
             <Label alignment="CENTER" font="$x3" layoutX="0.0" layoutY="381.0" prefHeight="40.0" prefWidth="125.0" text="Role" wrapText="false" />
             <ComboBox id="" fx:id="CBRole" layoutX="140.0" layoutY="386.0" prefWidth="237.0">
               <items>
                 <FXCollections fx:factory="observableArrayList">
-                  <String fx:value="Item 1" />
-                  <String fx:value="Item 2" />
-                  <String fx:value="Item 3" />
+
                 </FXCollections>
               </items>
             </ComboBox>
@@ -58,6 +55,7 @@
             <TextField id="" fx:id="TFEmpID" layoutX="140.0" layoutY="86.0" prefHeight="40.0" prefWidth="237.0" />
             <Label alignment="CENTER" font="$x3" layoutX="0.0" layoutY="166.0" prefHeight="40.0" prefWidth="140.0" text="EmployeeName" wrapText="false" />
             <TextField id="" fx:id="TFEmpName" layoutX="140.0" layoutY="168.0" prefHeight="40.0" prefWidth="237.0" />
+            <PasswordField fx:id="TFPass" layoutX="140.0" layoutY="307.0" prefHeight="39.94140625" prefWidth="237.0" />
           </children>
         </Pane>
       </children>
