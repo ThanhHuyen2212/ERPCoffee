@@ -39,5 +39,24 @@ public class MemberAccess extends DataAccess {
             System.out.println(e.getMessage());
         }
     }
+    public Member findByPhone(String phone){
+        Member newMember = new Member();
+        MemberAccess memberAccess =new MemberAccess();
+        memberAccess.createConnection();
+
+        try {
+            PreparedStatement prSt = memberAccess.getConn().prepareStatement("call select_members_with_phone(?)");
+            prSt.setString(1, phone);
+            ResultSet rs = prSt.executeQuery();
+            while (rs!=null && rs.next()){
+                newMember.setPhoneNumber(rs.getString(1));
+                newMember.setFullName(rs.getString(2));
+                newMember.setPoint(rs.getInt(3));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    return  newMember;
+    }
 
 }

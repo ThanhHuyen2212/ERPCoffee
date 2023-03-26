@@ -14,9 +14,46 @@ import java.util.HashMap;
 
 public class OrderAccess extends DataAccess {
 
-    MemberManagement memberManagement = new MemberManagement();
+
     public static  ArrayList<Order> retrieve(){
-        return null;
+        ArrayList<Order> orders = new ArrayList<>();
+        OrderAccess orderAccess = new OrderAccess();
+        MemberAccess memberAccess = new MemberAccess();
+        ProductAccess productAccess = new ProductAccess();
+        orderAccess.createConnection();
+        try {
+            PreparedStatement prSt = orderAccess.getConn().prepareStatement("call select_orders()");
+            ResultSet rs = prSt.executeQuery();
+            Order newOrder=null;
+            while (rs!=null && rs.next()){
+                newOrder=new Order(rs.getInt(1),rs.getInt(2),rs.getDate(3));
+                if(rs.getString(4)!=null || rs.getString(4).equalsIgnoreCase(" ")){
+                    newOrder.setCustomer(memberAccess.findByPhone(rs.getString(4)));
+                }
+                orders.add(newOrder);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+        PreparedStatement preparedStatement = orderAccess.getConn().prepareStatement("call select_orderdetail_with_orderid(?)");
+        for(Order o : orders){
+            preparedStatement.setInt(1,o.getOrderId());
+            ResultSet rs= preparedStatement.executeQuery();
+            ArrayList<OrderDetail> orderDetails = new ArrayList<>();
+            while (rs!=null && rs.next()){
+                orderDetails.add(new OrderDetail(
+                        productAccess.findByName(rs.getString(2)),
+                        "",
+                        rs.getInt(3)
+                ));
+            }
+        }
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+        return orders;
     }
 
     public boolean insertOrderDetails(OrderDetail orderDetail, Order order){

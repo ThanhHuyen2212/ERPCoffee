@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ProductAccess extends DataAccess {
+    public ProductAccess(){}
 
     public static ArrayList<Product> retrieve(){
         ProductAccess productAccess = new ProductAccess();
@@ -43,14 +44,9 @@ public class ProductAccess extends DataAccess {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        for(Product p : products){
-            System.out.println(p.getProductName()+p.getPrice("M"));
-        }
-
 //        Get recipe for each product
         RecipeAccess recipeAccess = new RecipeAccess();
         recipeAccess.retrieve(products);
-
         return products;
     }
     public int create(Product product){
@@ -61,6 +57,40 @@ public class ProductAccess extends DataAccess {
     }
     public void findById(int id){
 
+    }
+    public Product findByName(String productName){
+        Product product = new Product();
+        ProductAccess productAccess = new ProductAccess();
+        productAccess.createConnection();
+        try {
+            PreparedStatement preparedStatement =productAccess.getConn().prepareStatement("call select_product_with_name(?)");
+            preparedStatement.setString(1,productName);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs!=null && rs.next()){
+                product.setProductId(rs.getInt(1));
+                product.setProductName(rs.getString(2));
+                product.setCreateAt(rs.getDate(3));
+                product.setDeleteAt(rs.getDate(4));
+                product.setImagePath(rs.getString(5));
+                product.setCategory(rs.getString(6));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            PreparedStatement preparedStatement = productAccess.getConn().prepareStatement("call select_productsize_with_id(?)");
+                preparedStatement.setInt(1,product.getProductId());
+                HashMap<String, Integer> sizePrice= new HashMap<>();
+                ResultSet resultSet= preparedStatement.executeQuery();
+                while (resultSet!=null && resultSet.next()){
+                    sizePrice.put(resultSet.getString(2), resultSet.getInt(3));
+            }
+            product.setPriceList(sizePrice);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return product;
     }
 
 }
