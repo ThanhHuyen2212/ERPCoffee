@@ -46,8 +46,6 @@ public class DetailRecipeController implements Initializable {
     @FXML
     private Button saveBtn;
     @FXML
-    private Button cancelBtn;
-    @FXML
     private ComboBox<String> componentCb;
     private DetailRecipeModel model;
 
@@ -58,18 +56,26 @@ public class DetailRecipeController implements Initializable {
         idCol.setCellValueFactory(new PropertyValueFactory<>("ingredientId"));
         componentCol.setCellValueFactory(new PropertyValueFactory<>("ingredientName"));
         qtyCol.setCellValueFactory(data -> new SimpleStringProperty(
-                model.getDetails().get(data.getValue()).toString()
+                model.getSelected().getRecipe().getIngredientCosts().get(data.getValue()).toString()
         ));
 //        unitCol.setCellValueFactory(new PropertyValueFactory<>("ingredientStorage"));
+
+        qtyProductTxf.setFocusTraversable(false);
     }
 
     public void init(Product selected) {
         model.setSelected(selected);
         detailTable.setItems(FXCollections.observableArrayList(
-                model.getDetails().keySet()
+                model.getSelected().getRecipe().getIngredientCosts().keySet()
         ));
 
         productLbl.setText(selected.getProductName());
+        qtyProductTxf.setText(String.valueOf(model.getSelected().getRecipe().getProductQty()));
+
+        ObservableList<String> list = FXCollections.observableArrayList(
+                new IngredientManagement().getNameList()
+        );
+        componentCb.setItems(list);
 
         handleActionOnRow();
         handleActionBtn();
@@ -79,13 +85,8 @@ public class DetailRecipeController implements Initializable {
     public void handleActionOnRow() {
         detailTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
-                qtyProductTxf.setText(String.valueOf(model.getSelected().getRecipe().getProductQty()));
-                ObservableList<String> list = FXCollections.observableArrayList(
-                        new IngredientManagement().getNameList()
-                );
-                componentCb.setItems(list);
                 componentCb.getSelectionModel().select(newSelection.getIngredientName());
-                qtyComponentTxf.setText(model.getDetails().get(newSelection).toString());
+                qtyComponentTxf.setText(model.getSelected().getRecipe().getIngredientCosts().get(newSelection).toString());
             }
         });
     }
@@ -110,10 +111,10 @@ public class DetailRecipeController implements Initializable {
                                 Integer.parseInt(qtyComponentTxf.getText())
                         );
                     } catch(Exception e) {
-
+                        throw new RuntimeException(e);
                     }
                     detailTable.refresh();
-                    detailTable.setItems(FXCollections.observableArrayList(model.getDetails().keySet()));
+                    detailTable.setItems(FXCollections.observableArrayList(model.getSelected().getRecipe().getIngredientCosts().keySet()));
                 }
             }
         };
@@ -121,7 +122,6 @@ public class DetailRecipeController implements Initializable {
         EventHandler<ActionEvent> buttonUpdateHandler = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-//                LocalDate deleteDate = null;
                 try{
                     Ingredient selectedIg = detailTable.getSelectionModel().getSelectedItem();
                     MessageDialog messageDialog = new MessageDialog(
@@ -139,16 +139,15 @@ public class DetailRecipeController implements Initializable {
                                     Integer.parseInt(qtyComponentTxf.getText())
                             );
                         } catch(Exception e) {
-
+                            throw new RuntimeException(e);
                         }
-//                        model.handleUpdate(selected, index, name, type, limit, Date.valueOf(deleteDate));
-//                        ingredientTable.refresh();
                     }
                 } catch (Exception e) {
                     System.out.println("Khong bat duoc selected");
                 }
                 detailTable.refresh();
-                detailTable.setItems(FXCollections.observableArrayList(model.getDetails().keySet()));
+                detailTable.setItems(FXCollections.observableArrayList(
+                        model.getSelected().getRecipe().getIngredientCosts().keySet()));
             }
         };
 
@@ -170,7 +169,8 @@ public class DetailRecipeController implements Initializable {
                 } catch(Exception e) {
                     System.out.println("Khong bat duoc selected");
                 }
-                detailTable.setItems(FXCollections.observableArrayList(model.getDetails().keySet()));
+                detailTable.setItems(FXCollections.observableArrayList(
+                        model.getSelected().getRecipe().getIngredientCosts().keySet()));
             }
         };
 
@@ -183,29 +183,19 @@ public class DetailRecipeController implements Initializable {
         EventHandler<ActionEvent> buttonSaveHandler = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(Integer.parseInt(qtyProductTxf.getText()) ==
-                        model.getSelected().getRecipe().getProductQty()) {
-                }
-            }
-        };
-        EventHandler<ActionEvent> buttonCancelHandler = new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                MessageDialog messageDialog = new MessageDialog(
-                        "Quit",
-                        "Do you want to quit ?",
-                        "Your changes will be lost if you don’t save them.",
-                        MessageDialog.TYPES.get("Confirmation")
-                );
-                int rs = messageDialog.showMessage();
-                if(rs == 1) {
+                try{
+                    int newQty = Integer.parseInt(qtyProductTxf.getText());
+                    if( newQty != model.getSelected().getRecipe().getProductQty()) {
+                            model.handleUpdatePrdQty(newQty);
+                    }
                     ((Stage) ((Node)event.getSource()).getScene().getWindow()).close();
+                } catch(Exception e) {
+                    System.out.println("Loi parse int");
                 }
             }
         };
 
         saveBtn.setOnAction(buttonSaveHandler);
-        cancelBtn.setOnAction(buttonCancelHandler);
     }
 
 }

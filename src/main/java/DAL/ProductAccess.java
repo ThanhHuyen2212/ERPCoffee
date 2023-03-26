@@ -47,6 +47,10 @@ public class ProductAccess extends DataAccess {
         for(Product p : products){
             System.out.println(p.getProductName()+p.getPrice("M"));
         }
+
+//        Get recipe for each product
+        RecipeAccess recipeAccess = new RecipeAccess();
+        recipeAccess.retrieve(products);
         return products;
     }
     public int create(Product product){

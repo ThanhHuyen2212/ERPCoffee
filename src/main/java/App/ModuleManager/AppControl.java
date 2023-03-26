@@ -32,9 +32,9 @@ public class AppControl {
         put("system","");
         put("category","");
         put("customer","");
-        put("ingredient","");
-        put("recipe","");
-        put("purchase","");
+        put("ingredient","src/main/java/App/Depot/View/IngredientManagementView.fxml");
+        put("recipe","src/main/java/App/Depot/View/RecipeManagementView.fxml");
+        put("purchase","src/main/java/App/Depot/View/POManagementView.fxml");
         put("staff","");
         put("statistic","src/main/java/App/Statitics/View/RevenueChart.fxml");
     }};
