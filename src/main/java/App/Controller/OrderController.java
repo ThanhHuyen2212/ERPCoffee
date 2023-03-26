@@ -1,43 +1,53 @@
 package App.Controller;
 
+import App.Model.OrderReceipt;
+import App.Model.OrderTable;
+import Entity.Order;
 import Entity.OrderDetail;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
-public class OrderController {
+public class OrderController implements Initializable{
     @FXML
     private Label CustomerLabel;
     @FXML
-    private TableView<?> OrderDetailsTable;
+    private TableView<OrderReceipt> OrderDetailsTable;
 
 
     @FXML
-    private TableColumn<?, ?> NoTableColunm;
+    private TableColumn<OrderReceipt, String> NoTableColunm;
 
     @FXML
     private Label PhoneLabel;
 
     @FXML
-    private TableColumn<?, ?> PriceColumn;
+    private TableColumn<OrderReceipt, String> PriceColumn;
 
     @FXML
-    private TableColumn<?, ?> ProductColunm;
+    private TableColumn<OrderReceipt, String> ProductColunm;
 
     @FXML
-    private TableColumn<?, ?> QuantityColmn;
+    private TableColumn<OrderReceipt, Integer> QuantityColmn;
 
     @FXML
     private Label ReceiveLabel;
 
     @FXML
-    private TableColumn<?, ?> SizeColum;
+    private TableColumn<OrderReceipt, String> SizeColum;
 
     @FXML
-    private TableColumn<?, ?> TotalColumn;
+    private TableColumn<OrderReceipt, String> TotalColumn;
 
     @FXML
     private Label TotalPriceLabel;
@@ -50,10 +60,46 @@ public class OrderController {
 
     @FXML
     private Label dateLabel;
-
     @FXML
     private Label hhmmssLabel;
-    public boolean RenderOrder(ArrayList<OrderDetail> orderDetails, String phone, String customerName){
-    return  true;
+    ObservableList<OrderReceipt> orderTableObservableList;
+
+    public void initTable(ArrayList<OrderDetail> orderDetails) {
+        ArrayList<OrderReceipt> orderReceipts = changeToOrderDetails(orderDetails);
+        orderTableObservableList = FXCollections.observableArrayList(orderReceipts);
+        NoTableColunm.setCellValueFactory(data->new SimpleStringProperty(String.valueOf(orderReceipts.indexOf(data.getValue())+1)));
+        ProductColunm.setCellValueFactory(new PropertyValueFactory<OrderReceipt, String>("productName"));
+        PriceColumn.setCellValueFactory(new PropertyValueFactory<OrderReceipt, String>("priceUnit"));
+        QuantityColmn.setCellValueFactory(new PropertyValueFactory<OrderReceipt, Integer>("quantity"));
+        SizeColum.setCellValueFactory(new PropertyValueFactory<OrderReceipt, String>("size"));
+        TotalColumn.setCellValueFactory(new PropertyValueFactory<OrderReceipt,String>("total"));
+        OrderDetailsTable.setItems(orderTableObservableList);
     }
+    public ArrayList<OrderReceipt> changeToOrderDetails(ArrayList<OrderDetail> orderDetails){
+        ArrayList<OrderReceipt> orderReceipts = new ArrayList<>();
+        for (OrderDetail o : orderDetails) {
+            OrderReceipt newOrderReceipt= new OrderReceipt(o);
+            orderReceipts.add(newOrderReceipt);
+        }
+        return orderReceipts;
+    }
+
+    public void RenderOrder(Order order){
+        initTable(order.getDetails());
+        if(order.getCustomer()==null){
+            CustomerLabel.setText("Alias");
+            PhoneLabel.setText("Alias");
+        }else{
+            CustomerLabel.setText(order.getCustomer().getFullName());
+            PhoneLabel.setText(order.getCustomer().getPhoneNumber());
+        }
+        TotalPriceLabel.setText(String.valueOf(order.getTotalPrice()));
+        dateLabel.setText(String.valueOf(order.getOrderDate()));
+    }
+
+        @Override
+        public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        }
+
 }

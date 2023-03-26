@@ -56,18 +56,19 @@ public class customerController implements Initializable {
 
     @FXML
     private TextField txtSearchCustomer;
-    ArrayList<Member> memberList = new ArrayList<>();
+    public static ArrayList<Member> memberList;
 
     private MemberManagement memberManagement = new MemberManagement();
     ObservableList<Member> MemberObservableList;
+
+    public customerController() {
+        memberList = memberManagement.getMembers();
+    }
 
     /**
      * Fake dữ liệu
      */
 
-    private void getDataMemberList(){
-        memberList=memberManagement.getMembers();
-    }
     private void initTable(ArrayList<Member> memberList){
         MemberObservableList = FXCollections.observableArrayList(memberList);
         customerID.setCellValueFactory(new PropertyValueFactory<Member, Integer>(""));
@@ -77,6 +78,7 @@ public class customerController implements Initializable {
         customerTable.setItems(MemberObservableList);
 
     }
+
     public void changeSceneAddEvent(ActionEvent e) throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(new File("src/main/java/App/View/CustomerAdd.fxml").toURI().toURL());
@@ -87,6 +89,8 @@ public class customerController implements Initializable {
         Optional<ButtonType> ClickedButton = dialog.showAndWait();
         CustomerAdd AddController = loader.getController();
         if (ClickedButton.get() == ButtonType.APPLY) {
+            AddController.createMember();
+            customerTable.setItems(FXCollections.observableArrayList(memberList));
             customerTable.refresh();
         } else if (ClickedButton.get() == ButtonType.CLOSE) {
             dialog.close();
@@ -120,10 +124,20 @@ public class customerController implements Initializable {
         }
 
     }
+    public Member getMember(){
+        return customerTable.getSelectionModel().getSelectedItem();
+    }
+    public Member findByName(String name){
+        for (Member member: memberList){
+            if(member.getFullName().equalsIgnoreCase(name)){
+                return member;
+            }
+        }
+        return null;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        getDataMemberList();
         System.out.println(memberList.size());
         initTable(memberList);
     }
