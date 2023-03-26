@@ -2,16 +2,12 @@ package App.ModuleManager;
 
 
 import App.Controller.AlertController;
-import App.Model.Alert;
-import Entity.Function;
 import Main.MainApp;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 
 import java.io.File;
@@ -21,8 +17,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
-import java.util.Optional;
 
 public class AppControl {
     HashMap<String,String> modulePath = new HashMap<>(){{
@@ -52,7 +46,7 @@ public class AppControl {
         put("statistic","src/main/java/Assets/Icons/analytics.png");
     }};
 
-    private HashMap<String,Node> views;
+    private HashMap<String, Node> views;
 
     public AppControl() {
     }
@@ -71,7 +65,7 @@ public class AppControl {
 
     public ToggleButton getPOSButton(String functionName){
         ToggleButton btn = new ToggleButton(functionName.toUpperCase());
-        btn.getStyleClass().add("button-admin");
+        btn.getStyleClass().add("hau-menu-button");
         btn.setContentDisplay(ContentDisplay.TOP);
         if(!iconPath.get(functionName).equals("")){
             try {

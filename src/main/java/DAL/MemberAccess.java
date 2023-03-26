@@ -26,11 +26,18 @@ public class MemberAccess extends DataAccess {
         }
         return members;
     }
-    public int createMember(Member member){
-        int id=0;
+    public void createMember(Member member){
         MemberAccess memberAccess =new MemberAccess();
         memberAccess.createConnection();
-        return id;
+        try {
+            PreparedStatement prSt=memberAccess.getConn().prepareStatement("call insert_members(?,?);");
+            prSt.setString(1,member.getPhoneNumber());
+            prSt.setString(2,member.getFullName());
+            prSt.executeQuery();
+        } catch (SQLException e) {
+            System.out.println("MemberAccess");
+            System.out.println(e.getMessage());
+        }
     }
 
 }

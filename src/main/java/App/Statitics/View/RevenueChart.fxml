@@ -9,50 +9,53 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Statitics.Controller.RevenueControl">
+<BorderPane fx:id="statisticView" maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Statitics.Controller.RevenueControl">
    <top>
-      <VBox prefHeight="55.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-         <children>
-            <FlowPane prefHeight="200.0" prefWidth="200.0">
-               <children>
-                  <Label text="Năm" />
-                  <TextField fx:id="txfYear" editable="false" text="2023" />
-                  <Button fx:id="btnUp" mnemonicParsing="false" />
-                  <Button fx:id="btnDown" layoutX="196.0" layoutY="10.0" mnemonicParsing="false" />
-               </children>
-            </FlowPane>
-            <FlowPane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0">
-               <children>
-                  <Label text="Tháng" />
-                  <ChoiceBox fx:id="cbMonth" prefWidth="150.0" />
-                  <Button fx:id="btnApply" mnemonicParsing="false" text="Apply" />
-               </children>
-            </FlowPane>
-         </children>
-      </VBox>
+       <VBox spacing="5" prefHeight="55.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+           <FlowPane hgap="8" vgap="8" prefHeight="200.0" prefWidth="200.0">
+               <Label styleClass="hau-menu-label" text="Năm"/>
+               <TextField fx:id="txfYear" editable="false" text="2023"/>
+               <Button fx:id="btnDown" layoutX="196.0" layoutY="10.0" mnemonicParsing="false"
+                       styleClass="hau-control-button">
+                   <graphic>
+                       <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                           <Image url="@../../../Assets/Icons/minus.png"/>
+                       </ImageView>
+                   </graphic>
+               </Button>
+               <Button fx:id="btnUp" mnemonicParsing="false" styleClass="hau-control-button">
+                   <graphic>
+                       <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                           <Image url="@../../../Assets/Icons/plus.png"/>
+                       </ImageView>
+                   </graphic>
+               </Button>
+           </FlowPane>
+           <FlowPane hgap="8" vgap="8" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0">
+
+               <Label styleClass="hau-menu-label" text="Tháng"/>
+               <ChoiceBox fx:id="cbMonth" prefWidth="150.0"/>
+               <Button fx:id="btnApply" mnemonicParsing="false" styleClass="hau-control-button" text="Apply"/>
+
+           </FlowPane>
+           <FlowPane hgap="8" vgap="8" >
+               <Button fx:id="btnShowChart" mnemonicParsing="false" styleClass="hau-control-button" text="Show Chart"/>
+               <Button fx:id="btnShowTable" mnemonicParsing="false" styleClass="hau-control-button" text="Show Table"/>
+           </FlowPane>
+       </VBox>
    </top>
-   <right>
-      <ScrollPane fx:id="btmScrollpane" fitToHeight="true" fitToWidth="true" hbarPolicy="ALWAYS" prefHeight="745.0" prefWidth="245.0" BorderPane.alignment="CENTER" />
-   </right>
+
    <center>
-      <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="ALWAYS" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minViewportHeight="400.0" prefHeight="712.0" prefWidth="755.0" vbarPolicy="ALWAYS" BorderPane.alignment="CENTER">
+      <ScrollPane fx:id="chartScrollpane" fitToWidth="true" hbarPolicy="ALWAYS" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minViewportHeight="400.0" prefHeight="712.0" prefWidth="755.0" vbarPolicy="ALWAYS" BorderPane.alignment="CENTER">
          <content>
-                <GridPane minHeight="900.0" prefHeight="900.0" prefWidth="240.0">
-                  <columnConstraints>
-                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
-                  </columnConstraints>
-                  <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="350.0" vgrow="NEVER" />
-                  <RowConstraints minHeight="10.0" prefHeight="350.0" vgrow="NEVER" />
-                    <RowConstraints minHeight="10.0" prefHeight="350.0" vgrow="NEVER" />
-                  </rowConstraints>
+                <VBox minHeight="900.0" prefHeight="1400.0" prefWidth="240.0">
                    <children>
                       <BarChart fx:id="revenueDayChart" alternativeColumnFillVisible="true" minHeight="200.0" title="Revenue By Day">
                         <xAxis>
@@ -71,8 +74,16 @@
                          </yAxis>
                       </BarChart>
                       <PieChart fx:id="revenueCateChart" legendSide="RIGHT" title="Revenue By Category" GridPane.rowIndex="2" />
+                  <BarChart fx:id="ingChart" legendSide="RIGHT" title="Ingredient" GridPane.rowIndex="3">
+                    <xAxis>
+                      <CategoryAxis side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis side="LEFT" />
+                    </yAxis>
+                  </BarChart>
                    </children>
-                </GridPane>
+                </VBox>
          </content>
       </ScrollPane>
    </center>

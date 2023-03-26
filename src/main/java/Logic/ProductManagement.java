@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class ProductManagement {
     private ArrayList<Product> products;
 
+
     public ProductManagement(){
         init();
     }
@@ -19,4 +20,5 @@ public class ProductManagement {
     public ArrayList<Product> getProducts(){
         return products;
     }
+
 }

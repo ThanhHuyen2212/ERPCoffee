@@ -4,6 +4,7 @@ import Entity.*;
 import Logic.CategoryManagement;
 import Logic.ProductManagement;
 import Logic.SizeManagement;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -40,7 +41,7 @@ public class ShopController implements Initializable {
     private ImageView imgProduct;
 
     @FXML
-    private TableColumn<OrderTable, Integer> NoColumn;
+    private TableColumn<OrderTable, String> NoColumn;
 
     @FXML
     private TableColumn<OrderTable, String> ProductColumn;
@@ -136,7 +137,7 @@ public class ShopController implements Initializable {
     public void initTable(ArrayList<OrderTable> orderTables) {
         editOrderDetails();
         orderTableObservableList = FXCollections.observableArrayList(orderTables);
-        NoColumn.setCellValueFactory(new PropertyValueFactory<OrderTable, Integer>("No"));
+        NoColumn.setCellValueFactory(data->new SimpleStringProperty(String.valueOf(orderTables.indexOf(data.getValue())+1)));
         ProductColumn.setCellValueFactory(new PropertyValueFactory<OrderTable, String>("product"));
         quantityColumn.setCellValueFactory(new PropertyValueFactory<OrderTable, Integer>("quantity"));
         totalColumn.setCellValueFactory(new PropertyValueFactory<OrderTable, String>("total"));
@@ -376,7 +377,8 @@ public class ShopController implements Initializable {
     }
 
     public void render(ArrayList<Product> products) {
-        orderList.clear();
+        //orderList.clear();
+        Quality.setDisable(true);
         btnEdit.setDisable(true);
         btnCacncel.setDisable(true);
         int column = 0;
@@ -407,7 +409,6 @@ public class ShopController implements Initializable {
                 System.out.println("Khong co san pham nao!");
             } else {
                 for (int i = 0; i < products.size(); i++) {
-                    System.out.println(products.get(i).getProductName());
                     FXMLLoader fxmlLoader = new FXMLLoader();
                     fxmlLoader.setLocation(new File("src/main/java/App/View/item.fxml").toURI().toURL());
                     AnchorPane anchorPane = fxmlLoader.load();
@@ -467,6 +468,7 @@ public class ShopController implements Initializable {
         vbox.getChildren().add(label);
         anchorPane.getChildren().add(vbox);
         anchorPane.setOnMouseClicked(e -> {
+            Quality.setText("1");
             grid.getChildren().clear();
             render(productFilter);
         });

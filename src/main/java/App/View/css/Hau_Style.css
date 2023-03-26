@@ -1,0 +1,44 @@
+.hau-menu-button{
+    -fx-background-color: transparent;
+
+}
+.hau-menu-button:hover{
+    -fx-effect: dropshadow(three-pass-box, #5F50F1,10,0,0,0);
+}
+.hau-control-button{
+    -fx-background-color: transparent;
+    -fx-border-color:  #5F50F1;
+    -fx-border-weight: 2px;
+    -fx-border-radius: 5px;
+    -fx-margin: 3px;
+    -fx-font-weight: 700;
+}
+
+.hau-control-button:hover{
+    -fx-effect: dropshadow(three-pass-box, #5F50F1,10,0,0,0);
+}
+
+#btnUp, #btnDown{
+    -fx-border-color: transparent;
+}
+
+.hau-table-label{
+    -fx-background-color: #5F50F1;
+    -fx-text-fill: #fff;
+    -fx-font-size: 20;
+    -fx-font-weight: 800;
+    -fx-max-width: 3000px;
+    -fx-pref-height: 50px;
+    -fx-alignment: center;
+}
+
+.hau-menu-label{
+    -fx-background-color: transparent;
+    -fx-text-fill: #5F50F1;
+    -fx-font-size: 15;
+    -fx-font-weight: 800;
+    -fx-pref-height: 25px;
+    -fx-pref-width: 100px;
+    -fx-padding: 5px;
+    -fx-effect: dropshadow(three-pass-box, #5F50F1,10,0,0,0);
+}

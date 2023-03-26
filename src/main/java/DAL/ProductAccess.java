@@ -1,7 +1,6 @@
 package DAL;
 
 import Entity.Product;
-import Logic.ProductManagement;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -51,6 +50,7 @@ public class ProductAccess extends DataAccess {
 //        Get recipe for each product
         RecipeAccess recipeAccess = new RecipeAccess();
         recipeAccess.retrieve(products);
+
         return products;
     }
     public int create(Product product){
