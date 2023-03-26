@@ -84,8 +84,6 @@ public class AppControl {
                 System.out.println("Read func success");
             } catch (IOException e) {
                 views.put(func,null);
-                System.out.println(func+"Read func fail");
-                e.printStackTrace();
             }
         }
         getFunction();
