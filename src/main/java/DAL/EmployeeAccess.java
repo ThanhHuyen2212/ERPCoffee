@@ -50,8 +50,13 @@ public class EmployeeAccess extends DataAccess{
     public void edit(EmployeeTable employeeTable){
         try {
             createConnection();
-            PreparedStatement prSt = getConn().prepareStatement("call update_employee("+employeeTable.getName()+","+employeeTable.getPhone()+","+employeeTable.getAddress()+", "+employeeTable.getPosition()+");");
-            ResultSet rs = prSt.executeQuery();
+            PreparedStatement prSt = getConn().prepareStatement("call update_employee(?,?,?,?,?)");
+            prSt.setInt(1,employeeTable.getId());
+            prSt.setString(2,employeeTable.getName());
+            prSt.setString(3,employeeTable.getPhone());
+            prSt.setString(4,employeeTable.getAddress());
+            prSt.setString(5,employeeTable.getPosition());
+            prSt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

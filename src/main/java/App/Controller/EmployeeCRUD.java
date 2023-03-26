@@ -118,10 +118,10 @@ public class EmployeeCRUD implements Initializable {
                     EmployeeTableViewList = tb.getData();
                     employeeTable = FXCollections.observableArrayList(EmployeeTableViewList);
                     empTable.setItems(employeeTable);
-                    showAlert("Success","Thành công!");
+                    showAlert("Success","Success!");
                 }catch (Exception e){
                     System.out.println("fail");
-                    showAlert("error","Thất bại!");
+                    showAlert("error","Fail!");
                 }
             }
         });

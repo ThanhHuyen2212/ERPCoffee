@@ -26,7 +26,7 @@ public class AppControl {
         put("sale","src/main/java/App/View/ShopGUI.fxml");
         put("product","");
         put("size","");
-        put("system","");
+        put("system","src/main/java/App/View/AccountCRUD.fxml");
         put("category","src/main/java/App/View/CategoryCRUD.fxml");
         put("customer","");
         put("ingredient","src/main/java/App/Depot/View/IngredientManagementView.fxml");
