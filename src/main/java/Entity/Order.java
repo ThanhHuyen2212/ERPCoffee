@@ -21,6 +21,12 @@ public class Order {
         this.customer = customer;
         this.details = details;
     }
+    public Order(int orderId, int totalPrice, Date orderDate, ArrayList<OrderDetail> details) {
+        this.orderId = orderId;
+        this.totalPrice = totalPrice;
+        this.orderDate = orderDate;
+        this.details = details;
+    }
 
     public int getOrderId() {
         return orderId;

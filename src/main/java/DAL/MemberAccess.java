@@ -33,7 +33,7 @@ public class MemberAccess extends DataAccess {
             PreparedStatement prSt=memberAccess.getConn().prepareStatement("call insert_members(?,?);");
             prSt.setString(1,member.getPhoneNumber());
             prSt.setString(2,member.getFullName());
-            prSt.executeQuery();
+
         } catch (SQLException e) {
             System.out.println("MemberAccess");
             System.out.println(e.getMessage());

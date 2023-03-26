@@ -56,7 +56,7 @@ public class customerController implements Initializable {
 
     @FXML
     private TextField txtSearchCustomer;
-    ArrayList<Member> memberList;
+    public static ArrayList<Member> memberList;
 
     private MemberManagement memberManagement = new MemberManagement();
     ObservableList<Member> MemberObservableList;
@@ -78,6 +78,7 @@ public class customerController implements Initializable {
         customerTable.setItems(MemberObservableList);
 
     }
+
     public void changeSceneAddEvent(ActionEvent e) throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(new File("src/main/java/App/View/CustomerAdd.fxml").toURI().toURL());
@@ -122,6 +123,17 @@ public class customerController implements Initializable {
             }
         }
 
+    }
+    public Member getMember(){
+        return customerTable.getSelectionModel().getSelectedItem();
+    }
+    public Member findByName(String name){
+        for (Member member: memberList){
+            if(member.getFullName().equalsIgnoreCase(name)){
+                return member;
+            }
+        }
+        return null;
     }
 
     @Override
