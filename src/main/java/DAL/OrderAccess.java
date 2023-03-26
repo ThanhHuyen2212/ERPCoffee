@@ -28,6 +28,7 @@ public class OrderAccess extends DataAccess {
             prSt.setString(2,orderDetail.getProduct().getProductName());
             prSt.setInt(3,orderDetail.getQty());
             prSt.setString(4,orderDetail.getSize().getSign());
+            prSt.executeQuery();
             return true;
         } catch (SQLException e) {
             System.out.println("OrderAccess(Details)");
