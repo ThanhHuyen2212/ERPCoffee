@@ -14,7 +14,9 @@ import java.util.HashMap;
 
 public class OrderAccess extends DataAccess {
 
-
+    public OrderAccess(){
+        createConnection();
+    }
     public static  ArrayList<Order> retrieve(){
         ArrayList<Order> orders = new ArrayList<>();
         OrderAccess orderAccess = new OrderAccess();
@@ -28,9 +30,7 @@ public class OrderAccess extends DataAccess {
             Order newOrder=null;
             while (rs!=null && rs.next()){
                 newOrder=new Order(rs.getInt(1),rs.getInt(2),rs.getDate(3));
-                if(rs.getString(4)!=null || rs.getString(4).equalsIgnoreCase(" ")){
-                    newOrder.setCustomer(memberAccess.findByPhone(rs.getString(4)));
-                }
+                newOrder.setCustomer(memberAccess.findByPhone(rs.getString(4)));
                 orders.add(newOrder);
             }
 
@@ -50,18 +50,19 @@ public class OrderAccess extends DataAccess {
                         rs.getInt(3)
                 ));
             }
+            o.setDetails(orderDetails);
         }
         }catch (SQLException e){
-            throw new RuntimeException(e);
+            System.out.println("OrderAccess(ArrayList)");
+            System.out.println(e.getMessage());
         }
         return orders;
     }
 
     public boolean insertOrderDetails(OrderDetail orderDetail, Order order){
-        OrderAccess orderAccess = new OrderAccess();
-        orderAccess.createConnection();
+
         try {
-            PreparedStatement prSt= orderAccess.getConn().prepareStatement("call insert_orderdetail(?,?,?,?)");
+            PreparedStatement prSt= getConn().prepareStatement("call insert_orderdetail(?,?,?,?)");
             prSt.setInt(1,order.getOrderId());
             prSt.setString(2,orderDetail.getProduct().getProductName());
             prSt.setInt(3,orderDetail.getQty());
@@ -76,11 +77,9 @@ public class OrderAccess extends DataAccess {
         return false;
     }
     public int insertOrderWithPhone(Order order){
-        OrderAccess orderAccess = new OrderAccess();
-        orderAccess.createConnection();
         PreparedStatement prSt = null;
         try {
-            prSt = orderAccess.getConn().prepareStatement("call insert_orders(?, ?)");
+            prSt = getConn().prepareStatement("call insert_orders(?, ?)");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -98,11 +97,9 @@ public class OrderAccess extends DataAccess {
         return  0;
     }
     public int insertOrderNoPhone(Order order){
-        OrderAccess orderAccess = new OrderAccess();
-        orderAccess.createConnection();
         PreparedStatement prSt = null;
         try {
-            prSt = orderAccess.getConn().prepareStatement("call insert_orders_without_phone(?)");
+            prSt = getConn().prepareStatement("call insert_orders_without_phone(?)");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -117,6 +114,10 @@ public class OrderAccess extends DataAccess {
             System.out.println(e.getMessage());
         }
         return  0;
+    }
+
+    public static void main(String[] args) {
+        retrieve();
     }
 
 }
