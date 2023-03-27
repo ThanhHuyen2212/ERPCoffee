@@ -75,12 +75,18 @@ public class AppControl {
         permissons.add("statistic");
         permissons.add("order");
         for(String func : this.permissons){
-            try {
-                views.put(func,FXMLLoader.load(
-                        new File(modulePath.get(func)).toURI().toURL()));
-            } catch (IOException e) {
-                views.put(func,null);
-            }
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        views.put(func,FXMLLoader.load(
+                                new File(modulePath.get(func)).toURI().toURL()));
+                    } catch (IOException e) {
+                        views.put(func,null);
+                    }
+                }
+            }).start();
+
         }
         getFunction();
     }
