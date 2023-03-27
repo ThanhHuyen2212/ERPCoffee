@@ -13,14 +13,19 @@
   <children>
     <GridPane layoutX="0.0" layoutY="0.0" prefHeight="800.0" prefWidth="1200.0">
       <children>
-        <Label alignment="CENTER" prefHeight="50.0" prefWidth="809.0" text="Account" GridPane.columnIndex="0" GridPane.rowIndex="0">
-          <font>
-            <Font name="System Bold" size="25.0" fx:id="x1" />
-          </font>
-          <textFill>
-            <Color blue="0.831" green="0.204" red="0.282" fx:id="x4" />
-          </textFill>
-        </Label>
+        <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
+          <children>
+            <Label alignment="CENTER" prefHeight="65.0" prefWidth="568.0" text="Account">
+              <font>
+                <Font name="System Bold" size="25.0" fx:id="x1" />
+              </font>
+              <textFill>
+                <Color blue="0.831" green="0.204" red="0.282" fx:id="x4" />
+              </textFill>
+            </Label>
+            <TextField fx:id="TFSearch" prefWidth="237.0" promptText="Search" text="" />
+          </children>
+        </FlowPane>
         <Label alignment="CENTER" font="$x1" prefHeight="50.0" prefWidth="391.0" text="Detail" textFill="$x4" GridPane.columnIndex="1" GridPane.rowIndex="0" />
         <TableView fx:id="TBAccount" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
           <columns>

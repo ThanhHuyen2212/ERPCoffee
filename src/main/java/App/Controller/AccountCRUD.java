@@ -5,8 +5,11 @@ import App.Model.EmployeeTable;
 import DAL.EmployeeAccess;
 import Entity.Role;
 import Entity.WorkPosition;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -65,6 +68,8 @@ public class AccountCRUD implements Initializable {
 
     @FXML
     private Button btnEditAccount;
+    @FXML
+    private TextField TFSearch;
     public static ArrayList<AccountTable> AccountTableViewList;
     private ObservableList<AccountTable> accountTable;
     public void fillDataDetail(TableView tableView){
@@ -156,6 +161,28 @@ public class AccountCRUD implements Initializable {
             throw new RuntimeException(exc);
         }
     }
+    public void searchAccount(){
+        ObservableList data =  TBAccount.getItems();
+        TFSearch.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (oldValue != null && (newValue.length() < oldValue.length())) {
+                TBAccount.setItems(data);
+            }
+            String value = newValue.toLowerCase();
+            ObservableList<AccountTable> subentries = FXCollections.observableArrayList();
+
+            long count = TBAccount.getColumns().stream().count();
+            for (int i = 0; i < TBAccount.getItems().size(); i++) {
+                for (int j = 0; j < count; j++) {
+                    String entry = "" + TBAccount.getColumns().get(j).getCellData(i);
+                    if (entry.toLowerCase().contains(value)) {
+                        subentries.add(TBAccount.getItems().get(i));
+                        break;
+                    }
+                }
+            }
+            TBAccount.setItems(subentries);
+        });
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         AccountTable accTb = new AccountTable();
@@ -169,5 +196,6 @@ public class AccountCRUD implements Initializable {
         fillDataDetail(TBAccount);
         setDataCBRole();
         actionButton();
+        searchAccount();
     }
 }
