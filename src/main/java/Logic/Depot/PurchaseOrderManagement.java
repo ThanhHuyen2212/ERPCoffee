@@ -27,6 +27,7 @@ public class PurchaseOrderManagement {
     }
 
     public void handleUpdateRevQty(PurchaseOrder curr) {
+//        Not handling employee
         for(PurchaseOrder po : purchaseOrders) {
             if (po.equals(curr)) {
                 curr.setEmployeeConfirm(
@@ -50,14 +51,13 @@ public class PurchaseOrderManagement {
         current.getDetails().remove(selected);
     }
 
-    public void handleAdd(PurchaseOrder current, String vendor, Integer staffId, Date date, int total) {
+    public void handleAdd(PurchaseOrder current, String vendor, Integer staffId, Date date) {
         current.setSupplier(vendor);
 //        Xu ly findById employee
         current.setEmployeeCreate(new Employee());
         current.setPurchaseOrderDate(date);
-        current.setTotalPrice(total);
         purchaseOrders.add(current);
-        int id = purchaseOrderDAO.add(current);
+        int id = purchaseOrderDAO.create(current);
         current.setPurchaseOrderId(id);
     }
 }

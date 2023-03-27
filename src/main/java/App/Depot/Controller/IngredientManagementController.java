@@ -1,8 +1,11 @@
 package App.Depot.Controller;
 
+import App.Controller.Alert2Controller;
 import App.Depot.Model.IngredientManagementModel;
 import App.Depot.View.MessageDialog;
+import App.ModuleManager.AppControl;
 import Entity.Ingredient;
+import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -11,9 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
-import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class IngredientManagementController implements Initializable {
@@ -73,6 +74,7 @@ public class IngredientManagementController implements Initializable {
         ingredientTable.setItems(model.getList());
         handleActionOnRow();
         handleActionBtn();
+        setup();
     }
 
     public void handleActionOnRow() {
@@ -82,15 +84,15 @@ public class IngredientManagementController implements Initializable {
                 typeTxf.setText(newSelection.getIngredientType());
                 priceTxf.setText(String.valueOf(newSelection.getPrice()));
                 limitTxf.setText(String.valueOf(newSelection.getIngredientLimit()));
-                try{
+                try {
                     createDateLbl.setText(sdf.format(newSelection.getCreateDate()));
-                    if(newSelection.getDeleteDate() != null) {
+                    if (newSelection.getDeleteDate() != null) {
                         deleteDateLbl.setText(sdf.format(newSelection.getDeleteDate()));
                     }
                 } catch (Exception ignored) {
                     System.out.println("error");
                 }
-                if(newSelection.isDeleted()) {
+                if (newSelection.isDeleted()) {
                     handleDeletedIngredient();
                 } else {
                     addBtn.setVisible(true);
@@ -106,15 +108,11 @@ public class IngredientManagementController implements Initializable {
         EventHandler<ActionEvent> buttonAddHandler = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                MessageDialog messageDialog = new MessageDialog(
-                        "Confirm Addition",
-                        "Do you want to add the new ingredient?",
-                        "Your changes will be lost if you don’t save them.",
-                        MessageDialog.TYPES.get("Confirmation")
-                );
-                int rs = messageDialog.showMessage();
-                if(rs == 1) {
-                    try{
+                int rs = MessageDialog.showAlert(
+                        "Warning", "Bạn muốn thêm mới thông tin nguyên liệu?" +
+                                "\n\nCác thay đổi sẽ mất nếu bạn không lưu.");
+                if (rs == 1) {
+                    try {
                         model.handleCreate(new Ingredient(
                                 nameTxf.getText(),
                                 typeTxf.getText(),
@@ -122,8 +120,8 @@ public class IngredientManagementController implements Initializable {
                                 Integer.parseInt(limitTxf.getText())
                         ));
                         ingredientTable.setItems(model.getList());
-                    } catch (Exception exception){
-                        System.out.println("Khong parse duoc so luong nhap vao");
+                    } catch (Exception exception) {
+                        AppControl.showAlert("error", "Giá trị số lượng không hợp lệ!");
                     }
                 }
             }
@@ -134,24 +132,20 @@ public class IngredientManagementController implements Initializable {
             public void handle(ActionEvent event) {
                 Ingredient selected = ingredientTable.getSelectionModel().getSelectedItem();
                 int index = ingredientTable.getSelectionModel().getSelectedIndex();
-                try{
+                try {
                     String name = nameTxf.getText();
                     String type = typeTxf.getText();
                     int limit = Integer.parseInt(limitTxf.getText());
                     int price = Integer.parseInt(priceTxf.getText());
-                    MessageDialog messageDialog = new MessageDialog(
-                            "Confirm Edition",
-                            "Do you want to edit the information?",
-                            "Your changes will be lost if you don’t save them.",
-                            MessageDialog.TYPES.get("Confirmation")
-                    );
-                    int rs = messageDialog.showMessage();
+                    int rs = MessageDialog.showAlert(
+                            "Warning", "Bạn muốn lưu thay đổi thông tin nguyên liệu?" +
+                                    "\n\nCác thay đổi sẽ mất nếu bạn không lưu.");
                     if (rs == 1) {
                         model.handleUpdate(selected, index, name, type, price, limit);
                         ingredientTable.refresh();
                     }
                 } catch (Exception e) {
-                    System.out.println("Khong bat duoc selected");
+                    AppControl.showAlert("error", "Giá trị số lượng không hợp lệ!");
                 }
             }
         };
@@ -160,19 +154,15 @@ public class IngredientManagementController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 Ingredient selected = ingredientTable.getSelectionModel().getSelectedItem();
-                try{
-                    MessageDialog messageDialog = new MessageDialog(
-                            "Confirm Delete",
-                            "Do you want to delete the information?",
-                            "Your changes will be lost if you don’t save them.",
-                            MessageDialog.TYPES.get("Confirmation")
-                    );
-                    int rs = messageDialog.showMessage();
+                try {
+                    int rs = MessageDialog.showAlert(
+                            "Warning", "Bạn muốn xóa thông tin nguyên liệu?" +
+                                    "\n\nCác thay đổi sẽ mất nếu bạn không lưu.");
                     if (rs == 1) {
                         model.handleDelete(selected);
                         ingredientTable.refresh();
                     }
-                } catch(Exception e) {
+                } catch (Exception e) {
                     System.out.println("Khong bat duoc selected - xoa ingredient");
                 }
             }
@@ -189,5 +179,23 @@ public class IngredientManagementController implements Initializable {
         deleteBtn.setVisible(false);
     }
 
+    public void setup() {
+        //The pseudo classes 'up' and 'down' that were defined in the css file.
+        PseudoClass up = PseudoClass.getPseudoClass("up");
 
+        //Set a rowFactory for the table view.
+        ingredientTable.setRowFactory(tableView -> {
+            TableRow<Ingredient> row = new TableRow<>();
+            row.itemProperty().addListener((obs, previous, current) -> {
+                if (current != null) {
+                    if(current.getIngredientLimit() > current.getIngredientStorage()) {
+                        row.pseudoClassStateChanged(up, true);
+                    } else {
+                        row.pseudoClassStateChanged(up, false);
+                    }
+                }
+            });
+            return row;
+        });
+    }
 }

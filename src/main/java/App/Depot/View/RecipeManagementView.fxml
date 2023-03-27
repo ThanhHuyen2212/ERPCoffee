@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="577.0" prefWidth="1048.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Depot.Controller.RecipeManagementController">
+<VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="577.0" prefWidth="1048.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Depot.Controller.RecipeManagementController">
     <children>
         <Label alignment="CENTER" minHeight="50.0" prefHeight="50.0" prefWidth="1048.0" styleClass="filler" text="Recipes Management" VBox.vgrow="ALWAYS">
             <font>

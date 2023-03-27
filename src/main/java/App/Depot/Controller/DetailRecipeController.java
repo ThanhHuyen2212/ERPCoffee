@@ -1,5 +1,6 @@
 package App.Depot.Controller;
 
+import App.Controller.Alert2Controller;
 import App.Depot.Model.DetailRecipeModel;
 import App.Depot.View.MessageDialog;
 import Entity.Ingredient;
@@ -95,14 +96,9 @@ public class DetailRecipeController implements Initializable {
         EventHandler<ActionEvent> buttonAddHandler = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                MessageDialog messageDialog = new MessageDialog(
-                        "Confirm Addition",
-                        "Do you want to add the new component?",
-                        "Your changes will be lost if you don’t save them.",
-                        MessageDialog.TYPES.get("Confirmation")
-                );
-                int rs = messageDialog.showMessage();
-
+                int rs = MessageDialog.showAlert(
+                        "Warning", "Bạn muốn thêm thành phần mới?" +
+                                "\n\nCác thay đổi sẽ mất nếu bạn không lưu.");
                 if(rs == 1) {
 //                    model.handleCreate("Ca phe hat", 12);
                     try{
@@ -124,13 +120,9 @@ public class DetailRecipeController implements Initializable {
             public void handle(ActionEvent event) {
                 try{
                     Ingredient selectedIg = detailTable.getSelectionModel().getSelectedItem();
-                    MessageDialog messageDialog = new MessageDialog(
-                            "Confirm Edition",
-                            "Do you want to edit the information?",
-                            "Your changes will be lost if you don’t save them.",
-                            MessageDialog.TYPES.get("Confirmation")
-                    );
-                    int rs = messageDialog.showMessage();
+                    int rs = MessageDialog.showAlert(
+                            "Warning", "Bạn muốn thay đổi thông tin thành phần?" +
+                                    "\n\nCác thay đổi sẽ mất nếu bạn không lưu.");
                     if (rs == 1) {
                         try{
                             model.handleUpdate(
@@ -156,13 +148,9 @@ public class DetailRecipeController implements Initializable {
             public void handle(ActionEvent event) {
                 try{
                     Ingredient selectedIg = detailTable.getSelectionModel().getSelectedItem();
-                    MessageDialog messageDialog = new MessageDialog(
-                            "Confirm Delete",
-                            "Do you want to delete the information?",
-                            "Your changes will be lost if you don’t save them.",
-                            MessageDialog.TYPES.get("Confirmation")
-                    );
-                    int rs = messageDialog.showMessage();
+                    int rs = MessageDialog.showAlert(
+                            "Warning", "Bạn xóa thành phần?" +
+                                    "\n\nCác thay đổi sẽ mất nếu bạn không lưu.");
                     if (rs == 1) {
                         model.handleDelete(selectedIg);
                     }

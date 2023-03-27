@@ -3,11 +3,8 @@ package App.Depot.Controller;
 import App.Depot.View.MessageDialog;
 import Entity.Product;
 import Logic.ProductManagement;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableMap;
 import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -67,27 +64,8 @@ public class RecipeManagementController implements Initializable {
         model = new ProductManagement();
         productTable.setItems(FXCollections.observableArrayList(model.getProducts()));
 
-        handleTableUI();
         handleActionOnRow();
-    }
-
-    public void handleTableUI() {
-        ObservableMap<Product, Boolean> removed = FXCollections.observableHashMap();
-        for(Product p : model.getProducts()) {
-            if(p.getRecipe() == null) {
-                removed.put(p, true);
-            }
-        }
-        PseudoClass removedPseudoClass = PseudoClass.getPseudoClass("removed");
-        productTable.setRowFactory(tv -> {
-            TableRow<Product> result = new TableRow<>();
-            ObjectBinding<Boolean> binding = Bindings.valueAt(removed, result.itemProperty());
-            binding.addListener((observable, oldValue, newValue) -> result.pseudoClassStateChanged(
-                    removedPseudoClass,
-                    newValue != null && newValue
-            ));
-            return result;
-        });
+        setup();
     }
 
 
@@ -148,6 +126,27 @@ public class RecipeManagementController implements Initializable {
 
         addBtn.setOnAction(buttonAddHandler);
         deleteBtn.setOnAction(buttonDeleteHandler);
+    }
+
+    public void setup() {
+        //The pseudo classes 'up' and 'down' that were defined in the css file.
+        PseudoClass up = PseudoClass.getPseudoClass("up");
+
+        //Set a rowFactory for the table view.
+        productTable.setRowFactory(tableView -> {
+            TableRow<Product> row = new TableRow<>();
+
+            row.itemProperty().addListener((obs, previous, current) -> {
+                if (current != null) {
+                    if(current.getRecipe() == null) {
+                        row.pseudoClassStateChanged(up, true);
+                    } else {
+                        row.pseudoClassStateChanged(up, false);
+                    }
+                }
+            });
+            return row;
+        });
     }
 
 
