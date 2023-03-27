@@ -2,6 +2,8 @@ package App.LogIn.Controller;
 
 import App.LogIn.Model.LoginModel;
 import App.ModuleManager.AppControl;
+import DAL.DataAccess;
+import Entity.Employee;
 import Main.MainApp;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
@@ -16,6 +18,9 @@ import javafx.stage.Screen;
 import javafx.util.Duration;
 
 import java.net.URL;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -59,8 +64,10 @@ public class LogInControl implements Initializable {
 
     private void checkLogIn() {
         if(model.checkLogIn(txtUsername.getText(),txtPassword.getText())){
+            AppControl.currentUser = model.getEmployee();
             APP.setPermissons(model.getPermission());
             logInHolder.getChildren().remove(logInBox);
+
         }else{
             AppControl.showAlert("error","Log In Fail !!!");
         }

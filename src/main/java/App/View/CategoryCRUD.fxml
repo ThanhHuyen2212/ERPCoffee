@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="App.Controller.CategoryCRUD">
+  <children>
+    <GridPane layoutX="0.0" layoutY="0.0" prefHeight="800.0" prefWidth="1200.0">
+      <children>
+        <Label alignment="CENTER" prefHeight="50.0" prefWidth="809.0" text="Category" GridPane.columnIndex="0" GridPane.rowIndex="0">
+          <font>
+            <Font name="System Bold" size="25.0" fx:id="x1" />
+          </font>
+          <textFill>
+            <Color blue="0.831" green="0.204" red="0.282" fx:id="x3" />
+          </textFill>
+        </Label>
+        <Label alignment="CENTER" font="$x1" prefHeight="50.0" prefWidth="391.0" text="Detail" textFill="$x3" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+        <TableView fx:id="TBCategory" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
+          <columns>
+            <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="288.0" text="ID" fx:id="ColCategoryId" />
+            <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="521.0" text="Name" fx:id="ColCategoryName" />
+          </columns>
+        </TableView>
+        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+          <children>
+            <Label alignment="CENTER" layoutX="0.0" layoutY="160.0" prefHeight="40.0" prefWidth="140.0" text="Name" wrapText="false">
+              <font>
+                <Font name="System Bold" size="18.0" fx:id="x2" />
+              </font>
+            </Label>
+            <TextField id="" fx:id="TFCategoryName" layoutX="154.0" layoutY="162.0" prefHeight="40.0" prefWidth="223.0" />
+            <Button id="" fx:id="btnAddCate" blendMode="SRC_OVER" cache="false" font="$x2" layoutX="9.0" layoutY="526.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="85.0" style="-fx-background-color:linear-gradient(to bottom right,#2193b0,#6dd5ed);&#10;" text="Add" textFill="BLACK" wrapText="false" />
+            <Button fx:id="btnEditCate" blendMode="SRC_OVER" cache="true" font="$x2" layoutX="104.0" layoutY="526.0" mnemonicParsing="false" mouseTransparent="false" pickOnBounds="false" prefHeight="50.0" prefWidth="85.0" style="-fx-background-color:linear-gradient(to bottom right,#2193b0,#6dd5ed);&#10;" text="Edit" />
+            <Button fx:id="btnCancelCate" blendMode="SRC_OVER" font="$x2" layoutX="294.0" layoutY="526.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" style="-fx-background-color:linear-gradient(to bottom right,#02aab0,#00cdac);&#10;" text="Clear" textFill="BLACK" />
+            <Button fx:id="btnDeleteCate" disable="true" font="$x2" layoutX="199.0" layoutY="526.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="85.0" text="Delete" />
+            <Label alignment="CENTER" font="$x2" layoutX="0.0" layoutY="86.0" prefHeight="40.0" prefWidth="125.0" text="ID" wrapText="false" />
+            <TextField id="" fx:id="TFCatagoryId" disable="true" layoutX="154.0" layoutY="86.0" opacity="0.6" prefHeight="40.0" prefWidth="223.0" />
+          </children>
+        </Pane>
+      </children>
+      <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="955.0" minWidth="10.0" prefWidth="809.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="597.0" minWidth="10.0" prefWidth="391.0" />
+      </columnConstraints>
+      <rowConstraints>
+        <RowConstraints maxHeight="394.0" minHeight="10.0" prefHeight="65.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="755.0" minHeight="10.0" prefHeight="735.0" vgrow="SOMETIMES" />
+      </rowConstraints>
+    </GridPane>
+  </children>
+</AnchorPane>

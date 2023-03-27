@@ -10,12 +10,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class MemberAccess extends DataAccess {
-    public static ArrayList<Member> retrieve(){
-        MemberAccess memberAccess =new MemberAccess();
+
+    public  ArrayList<Member> retrieve(){
         ArrayList<Member> members = new ArrayList<>();
         try {
-            memberAccess.createConnection();
-            PreparedStatement prSt = memberAccess.getConn().prepareStatement("call select_members()");
+            PreparedStatement prSt = getConn().prepareStatement("call select_members()");
             ResultSet rs = prSt.executeQuery();
             while (rs!=null && rs.next()){
                 members.add(new Member(rs.getString(1),rs.getString(2),rs.getInt(3)));
@@ -27,12 +26,11 @@ public class MemberAccess extends DataAccess {
         return members;
     }
     public void createMember(Member member){
-        MemberAccess memberAccess =new MemberAccess();
-        memberAccess.createConnection();
         try {
-            PreparedStatement prSt=memberAccess.getConn().prepareStatement("call insert_members(?,?);");
+            PreparedStatement prSt=getConn().prepareStatement("call insert_members(?,?);");
             prSt.setString(1,member.getPhoneNumber());
             prSt.setString(2,member.getFullName());
+            prSt.executeQuery();
 
         } catch (SQLException e) {
             System.out.println("MemberAccess");
@@ -41,11 +39,8 @@ public class MemberAccess extends DataAccess {
     }
     public Member findByPhone(String phone){
         Member newMember = new Member();
-        MemberAccess memberAccess =new MemberAccess();
-        memberAccess.createConnection();
-
         try {
-            PreparedStatement prSt = memberAccess.getConn().prepareStatement("call select_members_with_phone(?)");
+            PreparedStatement prSt =getConn().prepareStatement("call select_members_with_phone(?)");
             prSt.setString(1, phone);
             ResultSet rs = prSt.executeQuery();
             while (rs!=null && rs.next()){
@@ -58,5 +53,4 @@ public class MemberAccess extends DataAccess {
         }
     return  newMember;
     }
-
 }

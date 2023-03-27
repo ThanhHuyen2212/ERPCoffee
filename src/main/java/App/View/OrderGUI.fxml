@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Controller.OrderGUIController">
    <children>
       <AnchorPane layoutX="1.0" layoutY="2.0" prefHeight="663.0" prefWidth="1141.0">
          <children>
@@ -22,6 +22,8 @@
                   <TableColumn fx:id="customerName" prefWidth="203.0" text="CustomerName" />
                   <TableColumn fx:id="orderDate" prefWidth="177.0" text="Date" />
                   <TableColumn fx:id="totalPrice" prefWidth="125.0" text="TotalPrice" />
+                  <TableColumn fx:id="receipt" prefWidth="82.0" />
+                  <TableColumn fx:id="totalPrice11" prefWidth="105.0" text="TotalPrice" />
                </columns>
             </TableView>
             <TextField fx:id="txtSearchOrder" layoutX="37.0" layoutY="49.0" prefHeight="34.0" prefWidth="235.0" promptText="Search  here">

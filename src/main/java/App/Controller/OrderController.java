@@ -4,6 +4,7 @@ import App.Model.OrderReceipt;
 import App.Model.OrderTable;
 import Entity.Order;
 import Entity.OrderDetail;
+import Logic.OrderManagement;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -57,11 +58,16 @@ public class OrderController implements Initializable{
 
     @FXML
     private Label changeLabel;
+    @FXML
+    private Label orderIdLabel;
 
     @FXML
     private Label dateLabel;
     @FXML
     private Label hhmmssLabel;
+
+
+
     ObservableList<OrderReceipt> orderTableObservableList;
 
     public void initTable(ArrayList<OrderDetail> orderDetails) {
@@ -95,6 +101,7 @@ public class OrderController implements Initializable{
         }
         TotalPriceLabel.setText(String.valueOf(order.getTotalPrice()));
         dateLabel.setText(String.valueOf(order.getOrderDate()));
+        orderIdLabel.setText(String.valueOf(order.getOrderId()));
     }
 
         @Override

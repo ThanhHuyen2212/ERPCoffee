@@ -16,7 +16,7 @@ public class MemberManagement {
     }
 
     private void init() {
-        members = MemberAccess.retrieve();
+        members = memberAccess.retrieve();
     }
 
     public ArrayList<Member> getMembers() {
