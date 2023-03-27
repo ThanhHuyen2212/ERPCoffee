@@ -61,7 +61,7 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        String defaultpath = "src/main/java/App/View/OrderGUI.fxml";
+        String defaultpath = "src/main/java/App/LogIn/View/LogIn.fxml";
         initGUI();
         APP = new AppControl();
         stage.getIcons().add(new Image(new FileInputStream("src/main/java/Assets/Icons/coffee-shop.png")));
