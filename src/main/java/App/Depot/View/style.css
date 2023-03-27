@@ -169,6 +169,6 @@
     -fx-opacity: .4;
 }
 
-.table-row-cell:filled:removed {
-    -fx-background-color: orange;
+.table-row-cell:filled:up {
+    -fx-background-color: -fx-red-color;
 }

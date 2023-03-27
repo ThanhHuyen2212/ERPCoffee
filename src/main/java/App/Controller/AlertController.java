@@ -23,9 +23,9 @@ public class AlertController {
 
     private ArrayList<Alert> getDataAlert() {
         ArrayList<Alert> alertList = new ArrayList<Alert>();
-        alertList.add(new Alert("Error","#c0392b","src/main/java/Assets/Icons/warning (1).png"));
-        alertList.add(new Alert("Warning","#f1c40f","src/main/java/Assets/Icons/warning.png"));
-        alertList.add(new Alert("Success","#27ae60","src/main/java/Assets/Icons/check.png"));
+        alertList.add(new Alert("Error", "#c0392b", "src/main/java/Assets/Icons/warning (1).png"));
+        alertList.add(new Alert("Warning", "#f1c40f", "src/main/java/Assets/Icons/warning.png"));
+        alertList.add(new Alert("Success", "#27ae60", "src/main/java/Assets/Icons/check.png"));
         return alertList;
     }
     public boolean RenderAlert(String status, String infomation) throws MalformedURLException {
@@ -43,4 +43,4 @@ public class AlertController {
         }
         return false;
     }
-    }
+}

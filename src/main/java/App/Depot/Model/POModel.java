@@ -83,8 +83,8 @@ public class POModel {
         currentDetails = FXCollections.observableArrayList(current.getDetails());
     }
 
-    public void handleAdd(PurchaseOrder current, String vendor, Integer staffId, Date date, int total) {
-        logic.handleAdd(current, vendor, staffId, date, total);
+    public void handleAdd(PurchaseOrder current, String vendor, Integer staffId, Date date) {
+        logic.handleAdd(current, vendor, staffId, date);
         purchaseOrderObservableList = FXCollections.observableArrayList(logic.getPurchaseOrders());
     }
 
@@ -94,5 +94,9 @@ public class POModel {
             sum += pd.getOrderQty() * pd.getIngredient().getPrice();
         }
         return sum;
+    }
+
+    public void handleConfirm(PurchaseOrder current, String vendor, Integer staffId, Date date) {
+        purchaseOrderObservableList = FXCollections.observableArrayList(logic.getPurchaseOrders());
     }
 }

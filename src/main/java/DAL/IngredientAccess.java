@@ -13,7 +13,7 @@ public class IngredientAccess extends DataAccess {
         IngredientAccess ingredientAccess = new IngredientAccess();
         ArrayList<Ingredient> ingredients = new ArrayList<>();
         try {
-            ingredientAccess.createConnection();
+//            ingredientAccess.createConnection();
             PreparedStatement prSt = ingredientAccess.getConn().prepareStatement("call select_ingredient();");
             ResultSet rs = prSt.executeQuery();
             while(rs.next()){
@@ -38,7 +38,7 @@ public class IngredientAccess extends DataAccess {
     public void create(Ingredient i) {
         IngredientAccess ingredientAccess = new IngredientAccess();
         try {
-            ingredientAccess.createConnection();
+//            ingredientAccess.createConnection();
             PreparedStatement prSt = ingredientAccess.getConn().prepareStatement(
                     "call insert_ingredient(?, ?, ?, ?);");
 //            call insert_ingredient(name_ingredient, type_ingredient, price_ingredient, limit_inventory);
@@ -55,7 +55,7 @@ public class IngredientAccess extends DataAccess {
     public void update(Ingredient i) {
         IngredientAccess ingredientAccess = new IngredientAccess();
         try {
-            ingredientAccess.createConnection();
+//            ingredientAccess.createConnection();
             PreparedStatement prSt = ingredientAccess.getConn().prepareStatement(
                     "call update_ingredient(?, ?, ?, ?, ?);");
 //            call update_ingredient(id_ingredient, name_ingredient, type_ingredient,
@@ -75,7 +75,7 @@ public class IngredientAccess extends DataAccess {
     public void delete(Ingredient i, Date now) {
         IngredientAccess ingredientAccess = new IngredientAccess();
         try {
-            ingredientAccess.createConnection();
+//            ingredientAccess.createConnection();
             PreparedStatement prSt = ingredientAccess.getConn().prepareStatement(
                     "call update_ingredient_where_name(?, ?, ?)");
 //            call update_ingredient_where_name(name_column, value_update, name_ingredient)

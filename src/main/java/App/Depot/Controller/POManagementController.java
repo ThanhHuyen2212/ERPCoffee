@@ -84,7 +84,7 @@ public class POManagementController implements Initializable {
                     DetailPOController controller = fxmlLoader.getController();
                     controller.init(model, newSelection);
                     childStage.setScene(new Scene(root));
-                    childStage.show();
+                    childStage.showAndWait();
                 } catch (IOException e) {
                     System.out.println("Khong load duoc child stage");
                     throw new RuntimeException(e);

@@ -15,7 +15,7 @@ public class POAccess extends DataAccess {
         ArrayList<PurchaseOrder> list = new ArrayList<>();
 
         try {
-            poAccess.createConnection();
+//            poAccess.createConnection();
             PreparedStatement prSt = poAccess.getConn().prepareStatement("call select_purchaseorder()");
             ResultSet rs = prSt.executeQuery();
             while (rs.next()) {
@@ -40,7 +40,7 @@ public class POAccess extends DataAccess {
     public ArrayList<PurchaseDetail> PODetailsRetrieve(PurchaseOrder po) {
         POAccess poAccess = new POAccess();
         try {
-            poAccess.createConnection();
+//            poAccess.createConnection();
             PreparedStatement prSt = poAccess.getConn().prepareStatement("call select_purchaseorderdetailwithid()");
             ResultSet rs = prSt.executeQuery();
             IngredientManagement ingredientManagement = new IngredientManagement();
@@ -57,49 +57,66 @@ public class POAccess extends DataAccess {
         return null;
     }
 
-    public void create(PurchaseOrder selected) {
-    }
-
     public void update(PurchaseOrder curr) {
 //        Update quantity and update employee confirm
+        POAccess poAccess = new POAccess();
+        try {
+//            poAccess.createConnection();
+            PreparedStatement prSt1 = poAccess.getConn().prepareStatement(
+                    "call update_employeeconfirm_purchaseorder(?, ?);");
+//            call update_employeeconfirm_purchaseorder(id_purchaseorder, id_employeeconfirm)
+            prSt1.setInt(1, curr.getPurchaseOrderId());
+            prSt1.setInt(2, curr.getEmployeeConfirm().getEmployeeId());
+            prSt1.executeQuery();
+
+            PreparedStatement prSt = poAccess.getConn().prepareStatement(
+                    "call update_receiveqty_purchaseorderdetail(?, ?, ?);");
+//            call update_receiveqty_purchaseorderdetail(id_purchaseorder, id_ingredient, receiveqty)
+            for(PurchaseDetail pd : curr.getDetails()) {
+                prSt.setInt(1, curr.getPurchaseOrderId());
+                prSt.setInt(2, pd.getIngredient().getIngredientId());
+                prSt.setInt(3, pd.getReceiveQty());
+                prSt.executeQuery();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public int add(PurchaseOrder current) {
+    public int create(PurchaseOrder current) {
         POAccess poAccess = new POAccess();
         int id = 0;
         try {
-            poAccess.createConnection();
+//            poAccess.createConnection();
             PreparedStatement prSt = poAccess.getConn().prepareStatement(
-                    "call insert_purchaseorder(?, ?, ?)");
-//            "call insert_purchaseorder(name_supplier, totalprice_purchase, phone_emp_create)");
+                    "call insert_purchaseorder(?, ?)");
+//            "call insert_purchaseorder(name_supplier, phone_emp_create)");
             prSt.setString(1, current.getSupplier());
-            prSt.setInt(2, current.getTotalPrice());
-            prSt.setString(3, current.getEmployeeCreate().getPhone());
+            prSt.setInt(2, current.getEmployeeCreate().getEmployeeId());
             ResultSet rs = prSt.executeQuery();
             while (rs.next()) {
                 id = rs.getInt(1);
             }
-            addDetails(current);
+            addDetails(current, id);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return id;
     }
 
-    public void addDetails(PurchaseOrder current) {
+    public void addDetails(PurchaseOrder current, int poId) {
         POAccess poAccess = new POAccess();
         try {
-            poAccess.createConnection();
+//            poAccess.createConnection();
             for(PurchaseDetail pd : current.getDetails()) {
                 PreparedStatement prSt = poAccess.getConn().prepareStatement(
-                        "call insert_purchaseorderdetail(phone_emp_create, name_ingredient, qty_order)");
-//            call insert_purchaseorderdetail(phone_emp_create, name_ingredient, qty_order)
-                prSt.setInt(1, current.getEmployeeCreate().getEmployeeId());
-                prSt.setString(2, pd.getIngredient().getIngredientName());
+                        "call insert_purchaseorderdetail(?, ?, ?);");
+//                call insert_purchaseorderdetail(id_purchaseorder, id_ingredient, qty_order)
+                prSt.setInt(1, poId);
+                prSt.setInt(2, pd.getIngredient().getIngredientId());
                 prSt.setInt(3, pd.getOrderQty());
                 ResultSet rs = prSt.executeQuery();
             }
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

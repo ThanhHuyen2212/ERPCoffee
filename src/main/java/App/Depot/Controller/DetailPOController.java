@@ -1,7 +1,9 @@
 package App.Depot.Controller;
 
+import App.Controller.Alert2Controller;
 import App.Depot.Model.POModel;
 import App.Depot.View.MessageDialog;
+import App.ModuleManager.AppControl;
 import Entity.PurchaseDetail;
 import Entity.PurchaseOrder;
 import javafx.beans.property.SimpleStringProperty;
@@ -104,9 +106,7 @@ public class DetailPOController implements Initializable {
                 try {
                     value = Integer.parseInt(s);
                 } catch (NumberFormatException e) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setContentText("Enter number please");
-                    alert.show();
+                    AppControl.showAlert("error", "Giá trị số lượng không hợp lệ!");
                 }
                 return value;
             }
@@ -114,8 +114,6 @@ public class DetailPOController implements Initializable {
 
         receiveCol.setOnEditCommit(e -> {
             e.getTableView().getItems().get(e.getTablePosition().getRow()).setReceiveQty(e.getNewValue());
-//            System.out.println(model.getCurrent().getDetails().get(
-//                    detailTable.getSelectionModel().getSelectedIndex()).getReceiveQty());
         });
 
         detailTable.setEditable(true);
@@ -125,20 +123,14 @@ public class DetailPOController implements Initializable {
         EventHandler<ActionEvent> buttonConfirmHandler = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                MessageDialog messageDialog = new MessageDialog(
-                        "Confirm",
-                        "Do you want to confirm the purchase order?",
-                        "Your changes will be lost if you don’t save them.",
-                        MessageDialog.TYPES.get("Confirmation")
-                );
-                int rs = messageDialog.showMessage();
+                int rs = MessageDialog.showAlert(
+                        "Warning", "Bạn muốn lưu thông tin đơn đặt hàng?" +
+                                "\n\nCác thay đổi sẽ mất nếu bạn không lưu.");
                 if(rs == 1) {
                     boolean legal = true;
                     for(PurchaseDetail pd : model.getCurrent().getDetails()) {
                         if(pd.getReceiveQty() < 0 && legal) {
-                            Alert alert = new Alert(Alert.AlertType.ERROR);
-                            alert.setTitle("Error");
-                            alert.setHeaderText("Invalid receive quantity");
+                            AppControl.showAlert("error", "Giá trị số lượng không hợp lệ!");
                             legal = false;
                         }
                     }
@@ -153,13 +145,9 @@ public class DetailPOController implements Initializable {
         EventHandler<ActionEvent> buttonCancelHandler = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                MessageDialog messageDialog = new MessageDialog(
-                        "Quit",
-                        "Do you want to quit ?",
-                        "Your changes will be lost if you don’t save them.",
-                        MessageDialog.TYPES.get("Confirmation")
-                );
-                int rs = messageDialog.showMessage();
+                int rs = MessageDialog.showAlert(
+                        "Warning", "Bạn muốn thoát trạng thái hiện tại?" +
+                                "\n\nCác thay đổi sẽ mất nếu bạn không lưu.");
                 if(rs == 1) {
                     ((Stage) ((Node)event.getSource()).getScene().getWindow()).close();
                 }

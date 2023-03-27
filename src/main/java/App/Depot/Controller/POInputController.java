@@ -1,7 +1,9 @@
 package App.Depot.Controller;
 
+import App.Controller.Alert2Controller;
 import App.Depot.Model.POModel;
 import App.Depot.View.MessageDialog;
+import App.ModuleManager.AppControl;
 import Entity.PurchaseDetail;
 import Logic.Depot.IngredientManagement;
 import Main.MainApp;
@@ -87,7 +89,7 @@ public class POInputController implements Initializable {
                 String.valueOf(data.getValue().getIngredient().getPrice())
         ));
         subtotalCol.setCellValueFactory(data -> new SimpleStringProperty(String.valueOf(
-                (float) (data.getValue().getOrderQty()* data.getValue().getIngredient().getPrice())
+                (float) (data.getValue().getOrderQty() * data.getValue().getIngredient().getPrice())
         )));
 
         dateLbl.setText(IngredientManagementController.sdf.format(new Date(new java.util.Date().getTime())));
@@ -117,26 +119,17 @@ public class POInputController implements Initializable {
         EventHandler<ActionEvent> buttonAddHandler = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                MessageDialog messageDialog = new MessageDialog(
-                        "Confirm Addition",
-                        "Do you want to add the new ingredient?",
-                        "Your changes will be lost if you don’t save them.",
-                        MessageDialog.TYPES.get("Confirmation")
-                );
-                int rs = messageDialog.showMessage();
-                if(rs == 1) {
-                    try {
-                        model.handleAddDetail(
-                                ingredientCb.getValue(),
-                                Integer.parseInt(qtyTxf.getText())
-                        );
-                    } catch(Exception e) {
-                        System.out.println("Loi khong parse duoc so luong");
-                    }
-                    ingredientTable.refresh();
-                    ingredientTable.setItems(model.getCurrentDetails());
-                    totalLbl.setText(String.valueOf(model.calTotal()));
+                try {
+                    model.handleAddDetail(
+                            ingredientCb.getValue(),
+                            Integer.parseInt(qtyTxf.getText())
+                    );
+                } catch (Exception e) {
+                    AppControl.showAlert("error", "Giá trị số lượng không hợp lệ!");
                 }
+                ingredientTable.refresh();
+                ingredientTable.setItems(model.getCurrentDetails());
+                totalLbl.setText(String.valueOf(model.calTotal()));
             }
         };
 
@@ -145,24 +138,18 @@ public class POInputController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 PurchaseDetail selected = ingredientTable.getSelectionModel().getSelectedItem();
-                int index = ingredientTable.getSelectionModel().getSelectedIndex();
-
-                MessageDialog messageDialog = new MessageDialog(
-                        "Confirm Update",
-                        "Do you want to add the new ingredient?",
-                        "Your changes will be lost if you don’t save them.",
-                        MessageDialog.TYPES.get("Confirmation")
-                );
-                int rs = messageDialog.showMessage();
-                if(rs == 1) {
+                int rs = MessageDialog.showAlert(
+                        "Warning", "Bạn muốn thay đổi thông tin nguyên liệu đặt?" +
+                                "\n\nCác thay đổi sẽ mất nếu bạn không lưu.");
+                if (rs == 1) {
                     try {
                         model.handleUpdateDetail(
                                 selected,
                                 ingredientCb.getValue(),
                                 Integer.parseInt(qtyTxf.getText())
                         );
-                    } catch(Exception e) {
-                        System.out.println("Loi khong parse duoc so luong");
+                    } catch (Exception e) {
+                        AppControl.showAlert("error", "Giá trị số lượng không hợp lệ!");
                     }
                     ingredientTable.refresh();
                     totalLbl.setText(String.valueOf(model.calTotal()));
@@ -174,19 +161,14 @@ public class POInputController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 PurchaseDetail selected = ingredientTable.getSelectionModel().getSelectedItem();
-
-                MessageDialog messageDialog = new MessageDialog(
-                        "Confirm Delete",
-                        "Do you want to add the new ingredient?",
-                        "Your changes will be lost if you don’t save them.",
-                        MessageDialog.TYPES.get("Confirmation")
-                );
-                int rs = messageDialog.showMessage();
-                if(rs == 1) {
+                int rs = MessageDialog.showAlert(
+                        "Warning", "Bạn muốn xóa nguyên liệu đặt?" +
+                                "\n\nCác thay đổi sẽ mất nếu bạn không lưu.");
+                if (rs == 1) {
                     try {
                         model.handleDeleteDetail(selected);
-                    } catch(Exception e) {
-                        System.out.println("Loi khong parse duoc so luong");
+                    } catch (Exception e) {
+                        System.out.println("Loi dong 172 file POInputController");
                     }
                     ingredientTable.setItems(model.getCurrentDetails());
                     totalLbl.setText(String.valueOf(model.calTotal()));
@@ -203,28 +185,23 @@ public class POInputController implements Initializable {
         EventHandler<ActionEvent> buttonConfirmHandler = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                MessageDialog messageDialog = new MessageDialog(
-                        "Confirm",
-                        "Do you want to add the new ingredient?",
-                        "Your changes will be lost if you don’t save them.",
-                        MessageDialog.TYPES.get("Confirmation")
-                );
-                int rs = messageDialog.showMessage();
-                if(rs == 1) {
+                int rs = MessageDialog.showAlert(
+                        "Warning", "Bạn muốn tạo mới đơn đặt hàng?" +
+                                "\n\nCác thay đổi sẽ mất nếu bạn không lưu.");
+                if (rs == 1) {
                     try {
                         String vendor = vendorTxf.getText();
                         Integer staffId = Integer.parseInt(staffCreateTxf.getText());
                         Date date = Date.valueOf(dateLbl.getText());
-                        int total = Integer.parseInt(totalLbl.getText());
+//                        int total = Integer.parseInt(totalLbl.getText());
                         model.handleAdd(
                                 model.getCurrent(),
                                 vendor,
                                 staffId,
-                                date,
-                                total
+                                date
                         );
-                    } catch(Exception e) {
-                        System.out.println("Loi khong parse duoc so luong");
+                    } catch (Exception e) {
+                        AppControl.showAlert("error", "Giá trị số lượng không hợp lệ!");
                     }
                     ingredientTable.setItems(model.getCurrentDetails());
                 }
@@ -235,14 +212,10 @@ public class POInputController implements Initializable {
         EventHandler<ActionEvent> buttonCancelHandler = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                MessageDialog messageDialog = new MessageDialog(
-                        "Quit",
-                        "Do you want to quit ?",
-                        "Your changes will be lost if you don’t save them.",
-                        MessageDialog.TYPES.get("Confirmation")
-                );
-                int rs = messageDialog.showMessage();
-                if(rs == 1) {
+                int rs = MessageDialog.showAlert(
+                        "Warning", "Bạn muốn thoát trạng thái hiện tại?" +
+                                "\n\nCác thay đổi sẽ mất nếu bạn không lưu.");
+                if (rs == 1) {
                     String filepath = "src/main/java/App/Depot/View/POManagementView.fxml";
                     try {
                         FXMLLoader fxmlLoader = new FXMLLoader(new File(filepath).toURI().toURL());
