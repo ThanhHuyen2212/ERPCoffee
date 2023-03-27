@@ -1,5 +1,6 @@
 package App.LogIn.Model;
 
+import Entity.Employee;
 import Logic.LLogIn;
 
 import java.util.ArrayList;
@@ -17,5 +18,9 @@ public class LoginModel {
 
     public ArrayList<String> getPermission(){
         return loginLogic.getPermission();
+    }
+
+    public Employee getEmployee(){
+        return loginLogic.getEmployee();
     }
 }

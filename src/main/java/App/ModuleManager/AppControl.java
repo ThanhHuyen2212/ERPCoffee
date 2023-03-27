@@ -2,6 +2,7 @@ package App.ModuleManager;
 
 
 import App.Controller.AlertController;
+import Entity.Employee;
 import Main.MainApp;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -15,6 +16,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -22,6 +24,10 @@ import static Main.MainApp.addButton;
 import static Main.MainApp.getFunction;
 
 public class AppControl {
+    public static Employee currentUser;
+    public static Connection conn;
+
+
     HashMap<String,String> modulePath = new HashMap<>(){{
         put("sale","src/main/java/App/View/ShopGUI.fxml");
         put("product","");
@@ -69,25 +75,14 @@ public class AppControl {
         permissons.add("statistic");
         permissons.add("order");
         for(String func : this.permissons){
-//            Thread thread = new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//
-//                }
-//            });
-//            thread.start();
-
-
             try {
                 views.put(func,FXMLLoader.load(
                         new File(modulePath.get(func)).toURI().toURL()));
-                System.out.println("Read func success");
             } catch (IOException e) {
                 views.put(func,null);
             }
         }
         getFunction();
-
     }
 
     public ToggleButton getPOSButton(String functionName){
