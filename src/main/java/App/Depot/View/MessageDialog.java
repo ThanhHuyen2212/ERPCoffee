@@ -1,12 +1,15 @@
 package App.Depot.View;
 
+import App.Controller.Alert2Controller;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.util.Pair;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.DialogPane;
+import javafx.scene.layout.Pane;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -87,4 +90,27 @@ public class MessageDialog {
         }
         return 0;
     }
+
+
+    public static int showAlert(String status, String information) {
+        FXMLLoader loader = new FXMLLoader();
+        Pane alert = null;
+        try {
+            loader.setLocation(new File("src/main/java/App/View/Alert2.fxml").toURI().toURL());
+            alert = loader.load();
+            Alert2Controller controller = loader.getController();
+            controller.RenderAlert(status, information);
+        } catch (IOException e) {
+            System.out.println("Loi ham showAlert roi ne!!!!");
+        }
+
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setDialogPane((DialogPane) alert);
+        Optional<ButtonType> clickedButton = dialog.showAndWait();
+        if (clickedButton.get() == ButtonType.OK) {
+            return 1;
+        }else
+            return 0;
+    }
+
 }

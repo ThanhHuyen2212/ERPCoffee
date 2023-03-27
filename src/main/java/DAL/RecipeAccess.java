@@ -13,7 +13,7 @@ public class RecipeAccess extends DataAccess {
         RecipeAccess recipeAccess = new RecipeAccess();
         IngredientManagement logic = new IngredientManagement();
         try {
-            recipeAccess.createConnection();
+//            recipeAccess.createConnection();
             PreparedStatement prSt = recipeAccess.getConn().prepareStatement("call select_productrecipe_with_id_product(?);");
             for (Product p : products) {
                 prSt.setInt(1, p.getProductId());
@@ -35,7 +35,7 @@ public class RecipeAccess extends DataAccess {
     public void addRecipe(Product selected, Ingredient i) {
         RecipeAccess recipeAccess = new RecipeAccess();
         try {
-            recipeAccess.createConnection();
+//            recipeAccess.createConnection();
             PreparedStatement prSt = recipeAccess.getConn().prepareStatement(
                     "call insert_productrecipe(?, ?, ?, ?);");
 //            call insert_productrecipe(name_product, name_ingredient, qty_ingredient, qty_product)
@@ -55,7 +55,7 @@ public class RecipeAccess extends DataAccess {
     public void deleteRecipe(Product selected, Ingredient i) {
         RecipeAccess recipeAccess = new RecipeAccess();
         try {
-            recipeAccess.createConnection();
+//            recipeAccess.createConnection();
             PreparedStatement prSt = recipeAccess.getConn().prepareStatement(
                     "call delete_productrecipe_with_id(?, ?);");
             prSt.setInt(1, selected.getProductId());
@@ -69,7 +69,7 @@ public class RecipeAccess extends DataAccess {
     public void updatePrdQty(Product selected) {
         RecipeAccess recipeAccess = new RecipeAccess();
         try {
-            recipeAccess.createConnection();
+//            recipeAccess.createConnection();
             PreparedStatement prSt = recipeAccess.getConn().prepareStatement(
                     "call update_productrecipe(?, ?, ?, ?);");
 //            call update_productrecipe(name_column, value_update, id_product, id_ingredient)

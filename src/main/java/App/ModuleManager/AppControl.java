@@ -2,7 +2,9 @@ package App.ModuleManager;
 
 
 import App.Controller.AlertController;
+import Entity.Employee;
 import Main.MainApp;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -15,6 +17,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -22,6 +25,10 @@ import static Main.MainApp.addButton;
 import static Main.MainApp.getFunction;
 
 public class AppControl {
+    public static Employee currentUser;
+    public static Connection conn;
+
+
     HashMap<String,String> modulePath = new HashMap<>(){{
         put("sale","src/main/java/App/View/ShopGUI.fxml");
         put("product","");
@@ -69,7 +76,7 @@ public class AppControl {
         permissons.add("statistic");
         permissons.add("order");
         for(String func : this.permissons){
-            Thread thread = new Thread(new Runnable() {
+            new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
@@ -78,19 +85,17 @@ public class AppControl {
                     } catch (IOException e) {
                         views.put(func,null);
                     }
+
                 }
-            });
-            thread.start();
-
-
+            }).start();
         }
         getFunction();
-
     }
 
     public ToggleButton getPOSButton(String functionName){
         ToggleButton btn = new ToggleButton(functionName.toUpperCase());
         btn.getStyleClass().add("hau-menu-button");
+        btn.getStyleClass().add("hau-toggle-button");
         btn.setContentDisplay(ContentDisplay.TOP);
         if(!iconPath.get(functionName).equals("")){
             try {

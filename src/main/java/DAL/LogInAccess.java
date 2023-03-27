@@ -1,5 +1,8 @@
 package DAL;
 
+import Entity.Employee;
+import Entity.WorkPosition;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -37,7 +40,6 @@ public class LogInAccess extends DataAccess{
             prst.setInt(1,roleId);
             ResultSet rs = prst.executeQuery();
             while (rs.next()){
-                System.out.println(rs.getString(1));
                 tmp.add(rs.getString(1));
             }
         } catch (SQLException e) {
@@ -49,5 +51,29 @@ public class LogInAccess extends DataAccess{
 
     public int getRoleId() {
         return roleId;
+    }
+
+    public Employee getEmployee(String username) {
+        Employee tmp = null;
+        try {
+            PreparedStatement prst = getConn().prepareStatement("call select_employee_with_username(?)");
+            prst.setString(1,username);
+            ResultSet rs = prst.executeQuery();
+            while (rs.next()){
+                tmp = new Employee(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        new WorkPosition(rs.getInt(5),
+                                rs.getString(6),
+                                rs.getInt(7))
+                );
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println(roleId);
+        return tmp;
     }
 }

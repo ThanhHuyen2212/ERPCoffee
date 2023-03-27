@@ -13,84 +13,79 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="577.0"
-      prefWidth="1048.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/18"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Depot.Controller.POManagementController">
+<VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="577.0" prefWidth="1048.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Depot.Controller.POManagementController">
     <children>
-        <Label alignment="CENTER" minHeight="50.0" prefHeight="50.0" prefWidth="1048.0" styleClass="filler"
-               text="Purchase Orders" VBox.vgrow="ALWAYS">
+        <Label alignment="CENTER" minHeight="50.0" prefHeight="50.0" prefWidth="1048.0" styleClass="filler" text="Purchase Orders" VBox.vgrow="ALWAYS">
             <font>
-                <Font name="System Bold" size="24.0"/>
+                <Font name="System Bold" size="24.0" />
             </font>
         </Label>
         <HBox alignment="CENTER_LEFT" prefHeight="71.0" prefWidth="1032.0" VBox.vgrow="ALWAYS">
             <children>
                 <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                     <children>
-                        <TextField fx:id="searchTxf" maxWidth="300.0" minWidth="250.0" prefHeight="37.0"
-                                   prefWidth="216.0" promptText="Search..." styleClass="search" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="searchTxf" maxWidth="300.0" minWidth="250.0" prefHeight="37.0" prefWidth="216.0" promptText="Search..." styleClass="search" HBox.hgrow="ALWAYS">
                             <HBox.margin>
-                                <Insets right="12.0"/>
+                                <Insets right="12.0" />
                             </HBox.margin>
                             <padding>
-                                <Insets bottom="8.0" left="12.0" right="30.0" top="8.0"/>
+                                <Insets bottom="8.0" left="12.0" right="30.0" top="8.0" />
                             </padding>
                         </TextField>
                         <Label fx:id="searchBtn" alignment="CENTER_RIGHT" prefWidth="24.0" styleClass="search-btn">
                             <HBox.margin>
-                                <Insets left="-50.0"/>
+                                <Insets left="-50.0" />
                             </HBox.margin>
                             <graphic>
                                 <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@../../../Assets/Icons/magnifying-glass.png"/>
+                                        <Image url="@../../../Assets/Icons/magnifying-glass.png" />
                                     </image>
                                 </ImageView>
                             </graphic>
                             <padding>
-                                <Insets bottom="16.0" top="16.0"/>
+                                <Insets bottom="16.0" top="16.0" />
                             </padding>
                         </Label>
                     </children>
                 </HBox>
-                <Pane prefHeight="60.0" prefWidth="572.0"/>
+                <Pane prefHeight="60.0" prefWidth="572.0" />
                 <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                     <children>
-                        <Button fx:id="addBtn" maxWidth="100.0" minWidth="60.0" mnemonicParsing="false"
-                                styleClass="primary-btn" text="NEW">
+                        <Button fx:id="addBtn" maxWidth="100.0" minWidth="60.0" mnemonicParsing="false" styleClass="primary-btn" text="NEW">
                             <padding>
-                                <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
+                                <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                             </padding>
                         </Button>
                     </children>
                     <HBox.margin>
-                        <Insets/>
+                        <Insets />
                     </HBox.margin>
                     <padding>
-                        <Insets right="8.0"/>
+                        <Insets right="8.0" />
                     </padding>
                 </HBox>
             </children>
             <VBox.margin>
-                <Insets bottom="16.0"/>
+                <Insets bottom="16.0" />
             </VBox.margin>
         </HBox>
         <HBox prefHeight="501.0" prefWidth="838.0" VBox.vgrow="ALWAYS">
             <children>
                 <TableView fx:id="poTable" prefHeight="538.0" prefWidth="575.0" HBox.hgrow="ALWAYS">
                     <columns>
-                        <TableColumn fx:id="idCol" prefWidth="130.03749752044678" text="ID"/>
-                        <TableColumn fx:id="vendorCol" prefWidth="295.36863708496094" text="Vendor"/>
-                        <TableColumn fx:id="buyerCol" prefWidth="196.63137817382812" text="Buyer"/>
-                        <TableColumn fx:id="orderDateCol" prefWidth="143.40618896484375" text="Order Date"/>
-                        <TableColumn fx:id="totalCol" prefWidth="136.09381103515625" text="Total"/>
-                        <TableColumn fx:id="statusCol" prefWidth="124.0374755859375" text="Status"/>
+                        <TableColumn fx:id="idCol" prefWidth="130.03749752044678" text="ID" />
+                        <TableColumn fx:id="vendorCol" prefWidth="295.36863708496094" text="Vendor" />
+                        <TableColumn fx:id="buyerCol" prefWidth="196.63137817382812" text="Buyer" />
+                        <TableColumn fx:id="orderDateCol" prefWidth="143.40618896484375" text="Order Date" />
+                        <TableColumn fx:id="totalCol" prefWidth="136.09381103515625" text="Total" />
+                        <TableColumn fx:id="statusCol" prefWidth="124.0374755859375" text="Status" />
                     </columns>
                 </TableView>
             </children>
         </HBox>
     </children>
     <padding>
-        <Insets bottom="12.0" left="12.0" right="12.0"/>
+        <Insets bottom="12.0" left="12.0" right="12.0" />
     </padding>
 </VBox>

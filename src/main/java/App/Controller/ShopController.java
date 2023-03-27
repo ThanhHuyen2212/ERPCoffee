@@ -515,6 +515,7 @@ public class ShopController implements Initializable {
         });
     }
     private void disLayCustomer(){
+        customerBtn.setOnAction(actionEvent -> {
         FXMLLoader loader = new FXMLLoader();
         String orderFIle = "src/main/java/App/View/CustomerGUI.fxml";
         try {
@@ -532,7 +533,7 @@ public class ShopController implements Initializable {
         customerController customerController = loader.getController();
         dialog.setDialogPane((DialogPane) customerPane);
         dialog.initStyle(StageStyle.TRANSPARENT);
-        customerBtn.setOnAction(actionEvent -> {
+
             shopHBox.setStyle("-fx-opacity:" + "0.5; \n");
             Optional<ButtonType> btn=dialog.showAndWait();
             if(btn.get()==ButtonType.YES){
@@ -549,6 +550,7 @@ public class ShopController implements Initializable {
     }
 
     public void searchProduct() {
+        BtnSearch.setOnAction(e -> {
         FXMLLoader loader = new FXMLLoader();
         try {
             loader.setLocation(new File("src/main/java/App/View/Alert.fxml").toURI().toURL());
@@ -566,7 +568,7 @@ public class ShopController implements Initializable {
         dialog.setDialogPane((DialogPane) alert);
         ArrayList<Product> products = productList;
         ArrayList<Product> ProductsForSearch = new ArrayList<>();
-        BtnSearch.setOnAction(e -> {
+
             ProductsForSearch.clear();
             if (!textSearch.getText().equals("")) {
                 String pattern = ".*" + textSearch.getText() + ".*";
@@ -642,8 +644,9 @@ public class ShopController implements Initializable {
         Optional<ButtonType> clickedButton = dialog.showAndWait();
         if (clickedButton.get() == ButtonType.OK) {
             OrderGUIController orderGUIController =new OrderGUIController();
-            orderGUIController.reload(order(orderList));
-            printOrder( order(orderList));
+            Order order = order(orderList);
+            orderGUIController.reload(order);
+            printOrder( order);
             orderList.clear();
         }else if(clickedButton.get()==ButtonType.CANCEL){
             dialog.close();

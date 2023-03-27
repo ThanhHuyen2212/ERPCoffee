@@ -14,7 +14,7 @@ public class OrderManagement {
         init();
     }
     public void init(){
-        orders= OrderAccess.retrieve();
+        orders= orderAccess.retrieve();
     }
     public ArrayList<Order> getOrderList() {
         return orders;
