@@ -1,5 +1,6 @@
 package App.Depot.Model;
 
+import Entity.Employee;
 import Entity.PurchaseDetail;
 import Entity.PurchaseOrder;
 import Logic.Depot.IngredientManagement;
@@ -64,7 +65,8 @@ public class POModel {
         return false;
     }
 
-    public void handleUpdateRevQty() {
+    public void handleUpdateRevQty(Employee currentUser) {
+        current.setEmployeeConfirm(currentUser);
         logic.handleUpdateRevQty(current);
     }
 
@@ -83,15 +85,15 @@ public class POModel {
         currentDetails = FXCollections.observableArrayList(current.getDetails());
     }
 
-    public void handleAdd(PurchaseOrder current, String vendor, Integer staffId, Date date) {
-        logic.handleAdd(current, vendor, staffId, date);
+    public void handleAdd(PurchaseOrder current, String vendor, Employee staff, Date date) {
+        logic.handleAdd(current, vendor, staff, date);
         purchaseOrderObservableList = FXCollections.observableArrayList(logic.getPurchaseOrders());
     }
 
-    public float calTotal() {
-        float sum = 0;
+    public int calTotal() {
+        int sum = 0;
         for(PurchaseDetail pd : current.getDetails()) {
-            sum += pd.getOrderQty() * pd.getIngredient().getPrice();
+            sum += pd.getOrderQty() / 1000 * pd.getIngredient().getPrice();
         }
         return sum;
     }

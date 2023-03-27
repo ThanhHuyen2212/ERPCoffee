@@ -15,7 +15,7 @@
 
 <VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="577.0" prefWidth="1048.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Depot.Controller.POManagementController">
     <children>
-        <Label alignment="CENTER" minHeight="50.0" prefHeight="50.0" prefWidth="1048.0" styleClass="filler" text="Purchase Orders" VBox.vgrow="ALWAYS">
+        <Label alignment="CENTER" maxWidth="1.7976931348623157E308" minHeight="50.0" prefHeight="50.0" prefWidth="1048.0" styleClass="filler" text="Purchase Orders" VBox.vgrow="ALWAYS">
             <font>
                 <Font name="System Bold" size="24.0" />
             </font>
@@ -49,7 +49,7 @@
                         </Label>
                     </children>
                 </HBox>
-                <Pane prefHeight="60.0" prefWidth="572.0" />
+                <Pane prefHeight="60.0" prefWidth="572.0" HBox.hgrow="ALWAYS" />
                 <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                     <children>
                         <Button fx:id="addBtn" maxWidth="100.0" minWidth="60.0" mnemonicParsing="false" styleClass="primary-btn" text="NEW">

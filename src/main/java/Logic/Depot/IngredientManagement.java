@@ -1,11 +1,9 @@
 package Logic.Depot;
 
-import App.Depot.Controller.IngredientManagementController;
 import DAL.IngredientAccess;
 import Entity.Ingredient;
 
 import java.sql.Date;
-import java.text.ParseException;
 import java.util.ArrayList;
 
 public class IngredientManagement {
