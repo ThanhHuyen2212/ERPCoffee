@@ -5,6 +5,7 @@ import Entity.Employee;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
@@ -55,8 +56,12 @@ public class MainApp extends Application {
         mainView = new BorderPane();
         mainMenu = new VBox();
         group = new ToggleGroup();
+        mainMenu.setPrefWidth(110);
+        mainMenu.setSpacing(5);
+        mainMenu.setAlignment(Pos.CENTER);
         ScrollPane scrollPane = new ScrollPane(mainMenu);
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         scrollPane.setFitToHeight(true);
         mainView.setLeft(scrollPane);
     }

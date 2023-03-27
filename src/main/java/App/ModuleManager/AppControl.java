@@ -4,6 +4,7 @@ package App.ModuleManager;
 import App.Controller.AlertController;
 import Entity.Employee;
 import Main.MainApp;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -84,9 +85,9 @@ public class AppControl {
                     } catch (IOException e) {
                         views.put(func,null);
                     }
+
                 }
             }).start();
-
         }
         getFunction();
     }
@@ -94,6 +95,7 @@ public class AppControl {
     public ToggleButton getPOSButton(String functionName){
         ToggleButton btn = new ToggleButton(functionName.toUpperCase());
         btn.getStyleClass().add("hau-menu-button");
+        btn.getStyleClass().add("hau-toggle-button");
         btn.setContentDisplay(ContentDisplay.TOP);
         if(!iconPath.get(functionName).equals("")){
             try {
