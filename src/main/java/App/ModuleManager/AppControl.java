@@ -61,10 +61,12 @@ public class AppControl {
 
     private HashMap<String, Node> views;
     private ArrayList<String> permissons;
+    private HashMap<String,ToggleButton> buttons;
 
 
     public AppControl() {
         views = new HashMap<>();
+        buttons = new HashMap<>();
     }
 
     public AppControl(ArrayList<String> permissons) {
@@ -85,6 +87,7 @@ public class AppControl {
                     } catch (IOException e) {
                         views.put(func,null);
                     }
+                    getPOSButton(func).setDisable(false);
 
                 }
             }).start();
@@ -93,25 +96,30 @@ public class AppControl {
     }
 
     public ToggleButton getPOSButton(String functionName){
-        ToggleButton btn = new ToggleButton(functionName.toUpperCase());
-        btn.getStyleClass().add("hau-menu-button");
-        btn.getStyleClass().add("hau-toggle-button");
-        btn.setContentDisplay(ContentDisplay.TOP);
-        if(!iconPath.get(functionName).equals("")){
-            try {
-                ImageView img = new ImageView(new Image(new FileInputStream(iconPath.get(functionName))));
-                img.setFitHeight(50);
-                img.setFitWidth(50);
-                btn.setGraphic(img);
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
+        if(buttons.get(functionName)==null){
+            ToggleButton btn = new ToggleButton(functionName.toUpperCase());
+            btn.getStyleClass().add("hau-menu-button");
+            btn.getStyleClass().add("hau-toggle-button");
+            btn.setContentDisplay(ContentDisplay.TOP);
+            if(!iconPath.get(functionName).equals("")){
+                try {
+                    ImageView img = new ImageView(new Image(new FileInputStream(iconPath.get(functionName))));
+                    img.setFitHeight(50);
+                    img.setFitWidth(50);
+                    btn.setGraphic(img);
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
             }
+            btn.setOnMouseClicked(e->{
+                if(views.get(functionName) != null) MainApp.show(views.get(functionName));
+                else showAlert("error","This function not ready yet !!!");
+            });
+            btn.setDisable(true);
+            buttons.put(functionName,btn);
         }
-        btn.setOnMouseClicked(e->{
-            if(views.get(functionName) != null) MainApp.show(views.get(functionName));
-            else showAlert("error","This function not ready yet !!!");
-        });
-        return btn;
+
+        return buttons.get(functionName);
     }
 
     public static void showAlert(String type,String message){
