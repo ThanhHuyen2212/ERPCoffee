@@ -97,3 +97,17 @@
 .default-color4.chart-series-area-line { -fx-stroke: white; }
 .default-color5.chart-series-area-line { -fx-stroke: white; }
 
+.hau-toggle-button{
+    -fx-background-color: #71C9CE;
+    -fx-pref-width: 100px;
+    -fx-pref-height: 50px;
+    -fx-text-fill: white;
+}
+
+.hau-toggle-button:hover{
+    -fx-effect: dropshadow(three-pass-box, #203A43, 10,0,0,0);
+}
+
+.hau-toggle-button:selected{
+    -fx-background-color: #203A43;
+}
