@@ -49,7 +49,7 @@
                         </Label>
                     </children>
                 </HBox>
-                <Pane prefHeight="60.0" prefWidth="572.0" />
+                <Pane prefHeight="60.0" prefWidth="572.0" HBox.hgrow="ALWAYS" />
                 <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                     <children>
                         <Button fx:id="addBtn" maxWidth="100.0" minWidth="60.0" mnemonicParsing="false" styleClass="primary-btn" text="NEW">

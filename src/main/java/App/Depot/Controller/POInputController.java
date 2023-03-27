@@ -1,6 +1,5 @@
 package App.Depot.Controller;
 
-import App.Controller.Alert2Controller;
 import App.Depot.Model.POModel;
 import App.Depot.View.MessageDialog;
 import App.ModuleManager.AppControl;
@@ -24,7 +23,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Date;
 import java.util.ResourceBundle;
@@ -149,7 +147,8 @@ public class POInputController implements Initializable {
                                 Integer.parseInt(qtyTxf.getText())
                         );
                     } catch (Exception e) {
-                        AppControl.showAlert("error", "Giá trị số lượng không hợp lệ!");
+                        AppControl.showAlert("error", "Giá trị số lượng không hợp lệ!" +
+                                "\n\nHoặc bạn chưa chọn thành phần cần thay đổi");
                     }
                     ingredientTable.refresh();
                     totalLbl.setText(String.valueOf(model.calTotal()));
