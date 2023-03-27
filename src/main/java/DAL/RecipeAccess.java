@@ -7,9 +7,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class RecipeAccess extends DataAccess {
-    public ArrayList<Product> retrieve(ArrayList<Product> products) {
+    public void retrieve(ArrayList<Product> products) {
         RecipeAccess recipeAccess = new RecipeAccess();
         IngredientManagement logic = new IngredientManagement();
         try {
@@ -29,7 +30,6 @@ public class RecipeAccess extends DataAccess {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return null;
     }
 
     public void addRecipe(Product selected, Ingredient i) {
@@ -81,6 +81,51 @@ public class RecipeAccess extends DataAccess {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void reduceInventory(Product p, int batch) {
+        RecipeAccess recipeAccess = new RecipeAccess();
+        try {
+            PreparedStatement prSt = recipeAccess.getConn().prepareStatement(
+                    "call update_ingredient_where_name(?, ?, ?);");
+//            call update_ingredient_where_name(name_column, value_update, name_ingredient)
+
+//            System.out.println(p.getRecipe().getIngredientCosts().entrySet().size());
+            for(Map.Entry<Ingredient, Integer> recipe : p.getRecipe().getIngredientCosts().entrySet()) {
+                prSt.setString(1,"IngredientStorage");
+                prSt.setInt(2, (recipe.getKey().getIngredientStorage() - batch * recipe.getValue()));
+                prSt.setString(3, recipe.getKey().getIngredientName());
+                prSt.executeQuery();
+            }
+
+        } catch (SQLException e) {
+            System.out.println("So luong nguyen lieu khong du");
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static ArrayList<Product> retrieveSimpleProduct() {
+        ProductAccess productAccess = new ProductAccess();
+        ArrayList<Product> products = new ArrayList<>();
+        try {
+
+            PreparedStatement prSt = productAccess.getConn().prepareStatement("call select_product_delete_is_null()");
+            ResultSet resultSet = prSt.executeQuery();
+            while (resultSet!=null &&resultSet.next()){
+                products.add(new Product(resultSet.getInt(1),
+                        resultSet.getString(2),
+                        resultSet.getDate(3),
+                        resultSet.getDate(4),
+                        resultSet.getString(5),
+                        resultSet.getString(6)));
+            }
+
+            RecipeAccess recipeAccess = new RecipeAccess();
+            recipeAccess.retrieve(products);
+        }catch (SQLException e){
+            throw new RuntimeException();
+        }
+        return products;
     }
 }
 

@@ -6,6 +6,7 @@ import App.Depot.View.MessageDialog;
 import App.ModuleManager.AppControl;
 import Entity.PurchaseDetail;
 import Entity.PurchaseOrder;
+import Main.MainApp;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -76,19 +77,19 @@ public class DetailPOController implements Initializable {
 
     public void handleInitGUI() {
         float sum = 0;
-        for(PurchaseDetail pd : model.getCurrent().getDetails()) {
+        for (PurchaseDetail pd : model.getCurrent().getDetails()) {
             sum += pd.getIngredient().getPrice() * pd.getOrderQty();
         }
         totalOrderLbl.setText(String.valueOf(sum));
 
         sum = 0;
-        for(PurchaseDetail pd : model.getCurrent().getDetails()) {
+        for (PurchaseDetail pd : model.getCurrent().getDetails()) {
             sum += pd.getIngredient().getPrice() * pd.getReceiveQty();
         }
         totalRevLbl.setText(String.valueOf(sum));
 
 //        If PO has been not confirmed, the confirmation button is visible
-        if(!model.isConfirm()) {
+        if (!model.isConfirm()) {
             confirmBtn.setVisible(true);
             editableCols();
         }
@@ -100,6 +101,7 @@ public class DetailPOController implements Initializable {
             public String toString(Integer integer) {
                 return String.valueOf(integer);
             }
+
             @Override
             public Integer fromString(String s) {
                 int value = model.getCurrent().getDetails().get(detailTable.getSelectionModel().getSelectedIndex()).getReceiveQty();
@@ -126,17 +128,17 @@ public class DetailPOController implements Initializable {
                 int rs = MessageDialog.showAlert(
                         "Warning", "Bạn muốn lưu thông tin đơn đặt hàng?" +
                                 "\n\nCác thay đổi sẽ mất nếu bạn không lưu.");
-                if(rs == 1) {
+                if (rs == 1) {
                     boolean legal = true;
-                    for(PurchaseDetail pd : model.getCurrent().getDetails()) {
-                        if(pd.getReceiveQty() < 0 && legal) {
+                    for (PurchaseDetail pd : model.getCurrent().getDetails()) {
+                        if (pd.getReceiveQty() < 0 && legal) {
                             AppControl.showAlert("error", "Giá trị số lượng không hợp lệ!");
                             legal = false;
                         }
                     }
-                    if(legal) {
-                        model.handleUpdateRevQty();
-                        ((Stage) ((Node)event.getSource()).getScene().getWindow()).close();
+                    if (legal) {
+                        model.handleUpdateRevQty(MainApp.currentUser);
+                        ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
                     }
                 }
             }
@@ -148,8 +150,8 @@ public class DetailPOController implements Initializable {
                 int rs = MessageDialog.showAlert(
                         "Warning", "Bạn muốn thoát trạng thái hiện tại?" +
                                 "\n\nCác thay đổi sẽ mất nếu bạn không lưu.");
-                if(rs == 1) {
-                    ((Stage) ((Node)event.getSource()).getScene().getWindow()).close();
+                if (rs == 1) {
+                    ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
                 }
             }
         };

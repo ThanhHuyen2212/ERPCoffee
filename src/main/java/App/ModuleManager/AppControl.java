@@ -36,7 +36,8 @@ public class AppControl {
         put("system","src/main/java/App/View/AccountCRUD.fxml");
         put("category","src/main/java/App/View/CategoryCRUD.fxml");
         put("customer","");
-        put("ingredient","src/main/java/App/Depot/View/IngredientManagementView.fxml");
+        put("ingredient","src/main/java/App/Depot/View/ProductPreparationView.fxml");
+//        src/main/java/App/Depot/View/IngredientManagementView.fxml
         put("recipe","src/main/java/App/Depot/View/RecipeManagementView.fxml");
         put("purchase","src/main/java/App/Depot/View/POManagementView.fxml");
         put("staff","src/main/java/App/View/EmployeeCRUD.fxml");

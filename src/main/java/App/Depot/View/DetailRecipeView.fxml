@@ -18,7 +18,7 @@
 
 <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="577.0" prefWidth="1048.0" spacing="16.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Depot.Controller.DetailRecipeController">
     <children>
-        <Label alignment="CENTER" minHeight="50.0" prefHeight="50.0" prefWidth="1048.0" styleClass="filler" stylesheets="@style.css" text="Recipes Details" VBox.vgrow="ALWAYS">
+        <Label alignment="CENTER" maxWidth="1.7976931348623157E308" minHeight="50.0" prefHeight="50.0" prefWidth="1048.0" styleClass="filler" stylesheets="@style.css" text="Recipes Details" VBox.vgrow="ALWAYS">
             <font>
                 <Font name="System Bold" size="24.0" />
             </font>
