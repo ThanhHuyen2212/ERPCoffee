@@ -476,7 +476,6 @@ public class ShopController implements Initializable {
         Quality.setText(String.valueOf(orderDetail.getQty()));
         btnEditEvent(orderDetail);
         btnDelete(orderDetail);
-
     }
     public void btnDelete(OrderDetail orderDetail){
         btnCacncel.setOnAction(new EventHandler<ActionEvent>() {

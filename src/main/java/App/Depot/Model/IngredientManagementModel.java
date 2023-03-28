@@ -2,6 +2,7 @@ package App.Depot.Model;
 
 import Entity.Ingredient;
 import Logic.Depot.IngredientManagement;
+import Logic.Management;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -10,7 +11,7 @@ public class IngredientManagementModel {
     private ObservableList<Ingredient> list;
 
     public IngredientManagementModel() {
-        ingredientManagementLogic = new IngredientManagement();
+        ingredientManagementLogic = Management.ingredientManagement;
         list = FXCollections.observableArrayList(ingredientManagementLogic.getIngredients());
     }
 

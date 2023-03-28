@@ -1,10 +1,10 @@
 package App.Depot.Controller;
 
-import App.Controller.Alert2Controller;
 import App.Depot.Model.IngredientManagementModel;
 import App.Depot.View.MessageDialog;
 import App.ModuleManager.AppControl;
 import Entity.Ingredient;
+import javafx.collections.ListChangeListener;
 import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -16,6 +16,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ResourceBundle;
+
+import static Main.MainApp.APP;
 
 public class IngredientManagementController implements Initializable {
     public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -67,6 +69,10 @@ public class IngredientManagementController implements Initializable {
         priceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
 
         init();
+
+        APP.getPOSButton("ingredient").setOnAction(e -> {
+            ingredientTable.refresh();
+        });
     }
 
     public void init() {
@@ -88,6 +94,8 @@ public class IngredientManagementController implements Initializable {
                     createDateLbl.setText(sdf.format(newSelection.getCreateDate()));
                     if (newSelection.getDeleteDate() != null) {
                         deleteDateLbl.setText(sdf.format(newSelection.getDeleteDate()));
+                    } else {
+                        deleteDateLbl.setText("");
                     }
                 } catch (Exception ignored) {
                     System.out.println("error");
