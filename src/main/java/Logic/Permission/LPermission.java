@@ -25,4 +25,16 @@ public class LPermission {
         if (functions==null) functions = roleAccess.getAllFuction();
         return this.functions;
     }
+
+    public void saveRole(Role r) {
+        roleAccess.saveRole(r);
+    }
+
+    public void saveFunction(Role selectedItem, Function fn) {
+        roleAccess.saveFunction(selectedItem,fn);
+    }
+
+    public void removeFunction(Role selectedItem, Function fn){
+        roleAccess.removeFunction(selectedItem,fn);
+    }
 }
