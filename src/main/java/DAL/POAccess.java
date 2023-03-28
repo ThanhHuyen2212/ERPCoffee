@@ -61,7 +61,6 @@ public class POAccess extends DataAccess {
 //        Update quantity and update employee confirm
         POAccess poAccess = new POAccess();
         try {
-//            poAccess.createConnection();
             PreparedStatement prSt1 = poAccess.getConn().prepareStatement(
                     "call update_employeeconfirm_purchaseorder(?, ?);");
 //            call update_employeeconfirm_purchaseorder(id_purchaseorder, id_employeeconfirm)

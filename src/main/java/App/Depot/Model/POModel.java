@@ -60,7 +60,7 @@ public class POModel {
     }
 
     public boolean isConfirm() {
-        if(current.getEmployeeConfirm() != null) {
+        if (current.getEmployeeConfirm() != null) {
             return true;
         }
         return false;
@@ -93,10 +93,24 @@ public class POModel {
 
     public double calTotal() {
         double sum = 0;
-        for(PurchaseDetail pd : current.getDetails()) {
-            sum += (double) pd.getOrderQty() / 1000 * pd.getIngredient().getPrice();
+        for (PurchaseDetail pd : current.getDetails()) {
+            if (pd.getIngredient().getIngredientName().equalsIgnoreCase("trứng")
+                    || pd.getIngredient().getIngredientName().equalsIgnoreCase("bánh mì")) {
+                sum += (double) pd.getOrderQty() * pd.getIngredient().getPrice();
+            } else {
+                sum += (double) pd.getOrderQty() / 1000.0 * pd.getIngredient().getPrice();
+            }
         }
         return sum;
+    }
+
+    public double calSubtotal(PurchaseDetail pd) {
+        if (pd.getIngredient().getIngredientName().equalsIgnoreCase("trứng")
+                || pd.getIngredient().getIngredientName().equalsIgnoreCase("bánh mì")) {
+            return (double) pd.getOrderQty() * pd.getIngredient().getPrice();
+        } else {
+            return (double) pd.getOrderQty() / 1000.0 * pd.getIngredient().getPrice();
+        }
     }
 
     public void handleConfirm(PurchaseOrder current, String vendor, Integer staffId, Date date) {

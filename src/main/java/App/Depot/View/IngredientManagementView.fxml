@@ -32,7 +32,8 @@
                         <TableColumn fx:id="typeCol" minWidth="0.0" prefWidth="128.5" text="Type" />
                         <TableColumn fx:id="storageCol" prefWidth="89.5" text="Storage" />
                         <TableColumn fx:id="limitCol" prefWidth="65.0" text="Limit" />
-                        <TableColumn fx:id="priceCol" prefWidth="118.0" text="Price" />
+                  <TableColumn fx:id="unitCol" prefWidth="44.0" text="Unit" />
+                        <TableColumn fx:id="priceCol" prefWidth="94.0" text="Price" />
                     </columns>
                 </TableView>
                 <VBox prefHeight="499.0" prefWidth="309.0" HBox.hgrow="ALWAYS">
