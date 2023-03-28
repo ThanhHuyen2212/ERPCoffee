@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import static Main.MainApp.APP;
+import static Main.MainApp.currentUser;
 
 
 public class LogInControl implements Initializable {
@@ -67,7 +68,7 @@ public class LogInControl implements Initializable {
             AppControl.currentUser = model.getEmployee();
             APP.setPermissons(model.getPermission());
             logInHolder.getChildren().remove(logInBox);
-
+            System.out.println(AppControl.currentUser.getName());
         }else{
             AppControl.showAlert("error","Log In Fail !!!");
         }
