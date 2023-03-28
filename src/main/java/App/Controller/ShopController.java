@@ -206,10 +206,12 @@ public class ShopController implements Initializable {
                         System.out.println("San pham cu");
                     } else {
                         System.out.println("San pham moi");
+                        product.setQty(Integer.parseInt(Quality.getText()));
                     }
                 } else {
                     System.out.println("San pham moi 1");
                     orderList.add(product);
+                    product.setQty(Integer.parseInt(Quality.getText()));
                 }
                 initTable(getDataOrderTable(orderList));
                 orderDetailsTables.refresh();
@@ -353,7 +355,7 @@ public class ShopController implements Initializable {
                     grid.setMinHeight(Region.USE_COMPUTED_SIZE);
                     grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
                     grid.setMaxHeight(Region.USE_PREF_SIZE);
-                    GridPane.setMargin(anchorPane, new Insets(15));
+                    GridPane.setMargin(anchorPane, new Insets(10));
                     GridPane.setVgrow(anchorPane, Priority.ALWAYS);
                 }
             }
@@ -489,17 +491,41 @@ public class ShopController implements Initializable {
                             size = s;
                         }
                     }
-                    if (orderDetail.getSize() != size || orderDetail.getQty() != quantity) {
-                        for (OrderDetail od : orderList) {
-                            if (od.getProduct() == orderDetail.getProduct() && od.getSize() == size) {
-                                od.setQty(od.getQty() + quantity);
-                                od.setSize(size);
-                                orderList.remove(orderDetail);
-                            } else if (od.getProduct() == orderDetail.getProduct() && od.getSize() != size) {
-                                orderDetail.setSize(size);
-                                orderDetail.setQty(quantity);
+                    if(orderDetail.getSize()!=size){
+                        for(OrderDetail o : orderList){
+                            if(o.getProduct()==orderDetail.getProduct()){
+                                if(o.getSize()==size){
+                                        o.setQty(o.getQty()+quantity);
+                                        orderList.remove(orderDetail);
+                                        break;
+                                }else {
+                                       orderDetail.setSize(size);
+                                       orderDetail.setQty(quantity);
+                                    System.out.println(size.getSign());
+                                    break;
+                                }
                             }
                         }
+                    }else if(orderDetail.getSize()==size) {
+                        for (OrderDetail o : orderList) {
+                            if (orderDetail.getProduct() == o.getProduct()) {
+                                if (orderDetail.getQty() != quantity) {
+                                orderDetail.setQty(quantity);
+                                }
+                            }
+                        }
+                    }
+//                    if (orderDetail.getSize() != size || orderDetail.getQty() != quantity) {
+//                        for (OrderDetail od : orderList) {
+//                            if (od.getProduct() == orderDetail.getProduct() && od.getSize() == size) {
+//                                od.setQty(od.getQty() + quantity);
+//                                od.setSize(size);
+//                                orderList.remove(orderDetail);
+//                            } else if (od.getProduct() == orderDetail.getProduct() && od.getSize() != size) {
+//                                orderDetail.setSize(size);
+//                                orderDetail.setQty(quantity);
+//                            }
+//                        }
                         initTable(getDataOrderTable(orderList));
                         orderDetailsTables.refresh();
                         Integer sumTotal = 0;
@@ -511,7 +537,7 @@ public class ShopController implements Initializable {
                     }
 
                 }
-            }
+            //}
         });
     }
     private void disLayCustomer(){

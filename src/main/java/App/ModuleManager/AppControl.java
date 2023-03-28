@@ -33,10 +33,12 @@ public class AppControl {
         put("sale","src/main/java/App/View/ShopGUI.fxml");
         put("product","");
         put("size","");
-        put("system","src/main/java/App/View/AccountCRUD.fxml");
+        put("account","src/main/java/App/View/AccountCRUD.fxml");
+        put("system","src/main/java/App/Permission/View/Permission.fxml");
         put("category","src/main/java/App/View/CategoryCRUD.fxml");
         put("customer","");
-        put("ingredient","src/main/java/App/Depot/View/IngredientManagementView.fxml");
+        put("ingredient","src/main/java/App/Depot/View/ProductPreparationView.fxml");
+//        src/main/java/App/Depot/View/IngredientManagementView.fxml
         put("recipe","src/main/java/App/Depot/View/RecipeManagementView.fxml");
         put("purchase","src/main/java/App/Depot/View/POManagementView.fxml");
         put("staff","src/main/java/App/View/EmployeeCRUD.fxml");
@@ -47,6 +49,7 @@ public class AppControl {
         put("sale","src/main/java/Assets/Icons/cashier.png");
         put("product","src/main/java/Assets/Icons/latte.png");
         put("size","src/main/java/Assets/Icons/ruler.png");
+        put("account","src/main/java/Assets/Icons/data-complexity.png");
         put("system","src/main/java/Assets/Icons/data-complexity.png");
         put("category","src/main/java/Assets/Icons/category.png");
         put("customer","src/main/java/Assets/Icons/rating.png");
@@ -77,6 +80,7 @@ public class AppControl {
         this.permissons = permissons;
         permissons.add("statistic");
         permissons.add("order");
+        permissons.add("account");
         for(String func : this.permissons){
             new Thread(new Runnable() {
                 @Override

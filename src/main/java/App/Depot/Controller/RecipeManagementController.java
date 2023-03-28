@@ -44,7 +44,6 @@ public class RecipeManagementController implements Initializable {
 
     private ProductManagement model;
 
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         idCol.setCellValueFactory(new PropertyValueFactory<>("productId"));
