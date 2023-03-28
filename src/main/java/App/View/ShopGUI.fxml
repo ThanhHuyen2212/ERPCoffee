@@ -156,14 +156,14 @@
                   </Pane>
                   <HBox alignment="CENTER" prefHeight="73.0" prefWidth="387.0">
                      <children>
-                        <Pane prefHeight="87.0" prefWidth="27.0" />
+                        <Pane prefHeight="73.0" prefWidth="65.0" />
                         <Button fx:id="btnAdd" mnemonicParsing="false" prefHeight="61.0" prefWidth="109.0" text="Add">
                            <styleClass>
                               <String fx:value="btnAdd" />
                               <String fx:value="colorGreen" />
                            </styleClass>
                         </Button>
-                        <Pane prefHeight="73.0" prefWidth="20.0" />
+                        <Pane prefHeight="73.0" prefWidth="87.0" />
                         <Button fx:id="btnEdit" mnemonicParsing="false" prefHeight="62.0" prefWidth="113.0" text="Edit">
                            <styleClass>
                               <String fx:value="btnAdd" />
@@ -171,12 +171,6 @@
                            </styleClass>
                         </Button>
                         <Pane prefHeight="87.0" prefWidth="27.0" />
-                        <Button fx:id="btnCacncel" mnemonicParsing="false" prefHeight="62.0" prefWidth="112.0" text="Cancel">
-                           <styleClass>
-                              <String fx:value="colorRed" />
-                              <String fx:value="btnAdd" />
-                           </styleClass>
-                        </Button>
                         <Pane prefHeight="87.0" prefWidth="27.0" />
                      </children>
                   </HBox>
@@ -268,10 +262,11 @@
                   </Label>
                   <TableView fx:id="orderDetailsTables" layoutX="7.0" layoutY="66.0" prefHeight="539.0" prefWidth="482.0">
                      <columns>
-                        <TableColumn fx:id="NoColumn" prefWidth="75.0" text="No," />
-                        <TableColumn fx:id="ProductColumn" prefWidth="194.0" text="Product" />
-                        <TableColumn fx:id="quantityColumn" prefWidth="87.0" text="Quantity" />
-                        <TableColumn fx:id="totalColumn" prefWidth="125.0" text="Total" />
+                        <TableColumn fx:id="NoColumn" prefWidth="61.0" text="No," />
+                        <TableColumn fx:id="ProductColumn" prefWidth="183.0" text="Product" />
+                        <TableColumn fx:id="quantityColumn" prefWidth="61.0" text="Quantity" />
+                        <TableColumn fx:id="totalColumn" prefWidth="116.0" text="Total" />
+                        <TableColumn fx:id="DeleteColum" prefWidth="58.0" />
                      </columns>
                   </TableView>
                   <Label layoutX="22.0" layoutY="635.0" prefHeight="53.0" prefWidth="178.0" text="Total money:">

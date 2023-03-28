@@ -18,7 +18,11 @@ public class OrderGUI {
 
     public OrderGUI(Order order){
         this.orderID=order.getOrderId();
-        this.customerName=order.getCustomer().getFullName();
+        if(order.getCustomer()!=null){
+            this.customerName=order.getCustomer().getFullName();
+        }else{
+            this.customerName="Alias";
+        }
         this.date=order.getOrderDate();
         this.totalPrice= NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(order.getTotalPrice());
         this.orderDetails=order.getDetails();

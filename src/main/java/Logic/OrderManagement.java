@@ -9,11 +9,9 @@ import java.util.ArrayList;
 
 public class OrderManagement {
     private ArrayList<Order> orders;
-    OrderAccess orderAccess = new OrderAccess();
+    OrderAccess orderAccess;
     public OrderManagement(){
-        init();
-    }
-    public void init(){
+        orderAccess = new OrderAccess();
         orders= orderAccess.retrieve();
     }
     public ArrayList<Order> getOrderList() {

@@ -105,10 +105,12 @@ public class Product {
     }
 
     public int getPrice(String size){
-        Integer price = null;
-        for(ProductDetails pd : productDetails){
-            if(size.equalsIgnoreCase(pd.getSize())){
-                price=pd.getPrice();
+        int price = 0;
+        if(productDetails!=null && size!=null){
+            for(ProductDetails pd : productDetails){
+                if(size.equalsIgnoreCase(pd.getSize())){
+                    price=pd.getPrice();
+                }
             }
         }
         return price;
@@ -124,9 +126,12 @@ public class Product {
 //    }
     public ArrayList<String> getSizeList(){
         ArrayList<String> sizeList = new ArrayList<>();
-        for(ProductDetails pd :productDetails){
-            sizeList.add(pd.getSize());
+        if(productDetails!=null){
+            for(ProductDetails pd :productDetails){
+                sizeList.add(pd.getSize());
+            }
         }
+
         return sizeList;
     }
 
