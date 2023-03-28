@@ -69,11 +69,11 @@ public class LogInAccess extends DataAccess{
                                 rs.getString(6),
                                 rs.getInt(7))
                 );
+
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        System.out.println(roleId);
         return tmp;
     }
 }
