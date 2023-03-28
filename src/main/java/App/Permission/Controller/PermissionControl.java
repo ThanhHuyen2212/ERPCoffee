@@ -1,5 +1,6 @@
 package App.Permission.Controller;
 
+import App.ModuleManager.AppControl;
 import App.Permission.Model.PermissionModel;
 import Entity.Function;
 import Entity.Role;
@@ -73,27 +74,32 @@ public class PermissionControl implements Initializable {
         Label label = new Label("Role Control:");
         Button addBtn = new Button("Add");
         Button editBtn = new Button("Edit");
-        Button delBtn = new Button("Delete");
         label.getStyleClass().add("hau-menu-label");
         label.setPrefWidth(100);
         addBtn.getStyleClass().add("hau-control-button");
         editBtn.getStyleClass().add("hau-control-button");
-        delBtn.getStyleClass().add("hau-control-button");
-        roleControlHolder.getChildren().addAll(label,addBtn,editBtn,delBtn);
+        roleControlHolder.getChildren().addAll(label,addBtn,editBtn);
         roleControlHolder.setPrefHeight(100);
         roleControlHolder.setVgap(10);
         roleControlHolder.setHgap(10);
         roleControlHolder.setAlignment(Pos.CENTER);
         addBtn.setFocusTraversable(false);
         addBtn.setOnMouseClicked(e->{
-            if(roleTable.getSelectionModel().getSelectedItem()!=null){
-                try{
-                    roleTable.getSelectionModel().getSelectedItem().addFunction(FunctionBuilder());
-                    functionTable.refresh();
-                }catch (Exception exception){
-                    System.out.println(exception.getMessage());
+            try{
+                String text = RoleBuilder();
+                if(roleTable.getItems().stream().anyMatch(item->item.getRoleName().equalsIgnoreCase(text))){
+                    AppControl.showAlert("error","Role Name has already existed !!!");
                 }
-
+                else
+                {
+                    Role role = new Role();
+                    role.setRoleName(text);
+                    role.setFunctions(new ArrayList<>());
+                    model.insertNewRole(role);
+                    roleTable.refresh();
+                }
+            }catch (Exception exception){
+                exception.printStackTrace();
             }
         });
     }
@@ -116,12 +122,27 @@ public class PermissionControl implements Initializable {
         addBtn.setOnMouseClicked(e->{
             if(roleTable.getSelectionModel().getSelectedItem()!=null){
                 try{
-                    roleTable.getSelectionModel().getSelectedItem().addFunction(FunctionBuilder());
+                    Function fn = FunctionBuilder();
+                    model.saveFunction(roleTable.getSelectionModel().getSelectedItem(),fn);
+                    roleTable.getSelectionModel().getSelectedItem().addFunction(fn);
+                    functionTable.setItems(functionTable.getItems());
                     functionTable.refresh();
                 }catch (Exception exception){
                     System.out.println(exception.getMessage());
                 }
 
+            }
+        });
+        delBtn.setOnMouseClicked(e->{
+            if(roleTable.getSelectionModel().getSelectedItem()!=null && functionTable.getSelectionModel().getSelectedItem()!=null){
+                model.removeFunction(
+                        roleTable.getSelectionModel().getSelectedItem(),
+                        functionTable.getSelectionModel().getSelectedItem()
+                );
+                roleTable.getSelectionModel().getSelectedItem().getFunctions().remove(
+                        functionTable.getSelectionModel().getSelectedItem()
+                );
+                functionTable.refresh();
             }
         });
 
@@ -149,6 +170,20 @@ public class PermissionControl implements Initializable {
                 "-fx-background-color: linear-gradient(to right, #acb6e5, #86fde8);\n" +
                 "-fx-opacity: 0.95;" +
                 "-fx-color: #fff;");
+        return dialog.showAndWait().get();
+    }
+
+    private String RoleBuilder(){
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setContentText("Enter New Role's Name");
+
+        dialog.setTitle("Add Role");
+        dialog.setHeaderText("New Role Input");
+        dialog.setGraphic(null);
+        dialog.getDialogPane().setStyle(
+                "-fx-background-color: linear-gradient(to right, #acb6e5, #86fde8);\n" +
+                        "-fx-opacity: 0.95;" +
+                        "-fx-color: #fff;");
         return dialog.showAndWait().get();
     }
 }

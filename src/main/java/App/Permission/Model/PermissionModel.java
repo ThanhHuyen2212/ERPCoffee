@@ -32,4 +32,17 @@ public class PermissionModel {
         if (functions==null) functions = dataGetter.getFunctions();
         return functions;
     }
+
+    public void insertNewRole(Role r){
+        dataGetter.saveRole(r);
+        roles.add(r);
+    }
+
+    public void saveFunction(Role selectedItem, Function fn) {
+        dataGetter.saveFunction(selectedItem,fn);
+    }
+
+    public void removeFunction(Role selectedItem, Function fn) {
+        dataGetter.removeFunction(selectedItem,fn);
+    }
 }

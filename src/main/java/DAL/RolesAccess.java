@@ -57,4 +57,38 @@ public class RolesAccess extends DataAccess {
         return functions;
     }
 
+    public void saveRole(Role r) {
+        try {
+            PreparedStatement prst =  getConn().prepareStatement("call insert_roles(?);");
+            prst.setString(1,r.getRoleName());
+            ResultSet rs = prst.executeQuery();
+            if(rs.next()){
+                r.setRoleId(rs.getInt(1));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void saveFunction(Role r, Function fn) {
+        try {
+            PreparedStatement prst = getConn().prepareStatement("call insert_rolefunction(?, ?);");
+            prst.setString(1,r.getRoleName());
+            prst.setString(2, fn.getName());
+            prst.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void removeFunction(Role r, Function fn){
+        try {
+            PreparedStatement prst = getConn().prepareStatement("call delete_rolefunction_with_id(?, ?)");
+            prst.setInt(1,r.getRoleId());
+            prst.setInt(2, fn.getId());
+            prst.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
