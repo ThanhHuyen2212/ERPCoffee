@@ -1,4 +1,5 @@
 package App.Controller;
+import App.Model.OrderGUI;
 import App.Model.OrderTable;
 import Entity.*;
 import Logic.CategoryManagement;
@@ -27,6 +28,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.StageStyle;
+import javafx.util.Callback;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -46,6 +49,8 @@ public class ShopController implements Initializable {
 
     @FXML
     private TableColumn<OrderTable, String> ProductColumn;
+    @FXML
+    private TableColumn<OrderTable, Void> DeleteColum;
 
     @FXML
     private TextField Quality;
@@ -113,7 +118,7 @@ public class ShopController implements Initializable {
     private ProductManagement productManagement = new ProductManagement();
     private OrderManagement orderManagement = new OrderManagement();
     private List<Category> categoryList = new ArrayList<>();
-    public static ArrayList<Product> productList = new ArrayList<>();
+    public ArrayList<Product> productList = new ArrayList<>();
     public ArrayList<OrderDetail> orderList = new ArrayList<>();
     private List<Size> sizeList = new ArrayList<>();
     ObservableList<OrderTable> orderTableObservableList;
@@ -145,6 +150,43 @@ public class ShopController implements Initializable {
         ProductColumn.setCellValueFactory(new PropertyValueFactory<OrderTable, String>("product"));
         quantityColumn.setCellValueFactory(new PropertyValueFactory<OrderTable, Integer>("quantity"));
         totalColumn.setCellValueFactory(new PropertyValueFactory<OrderTable, String>("total"));
+        Callback<TableColumn<OrderTable, Void>, TableCell<OrderTable, Void>> cellFactory = new Callback<TableColumn<OrderTable, Void>, TableCell<OrderTable, Void>>() {
+            @Override
+            public TableCell<OrderTable, Void> call(final TableColumn<OrderTable, Void> param) {
+                final TableCell<OrderTable, Void> cell = new TableCell<OrderTable, Void>() {
+
+                    private final Button btn = new Button("Delete");
+                    {
+                        btn.setOnAction((ActionEvent event) -> {
+                            OrderTable data = getTableView().getItems().get(getIndex());
+                           orderList.remove(data.getOrderDetail());
+                           orderTables.remove(data);
+                           orderTableObservableList.remove(data);
+                           orderDetailsTables.refresh();
+                            Integer sumTotal = 0;
+                            for (OrderDetail o : orderList) {
+                                sumTotal += o.getProduct().getPrice(o.getSize().getSign()) * o.getQty();
+                            }
+
+                            totalmoneyLabel.setText(NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(sumTotal));
+                        });
+                    }
+
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(btn);
+                        }
+                    }
+                };
+                return cell;
+            }
+        };
+
+        DeleteColum.setCellFactory(cellFactory);
         orderDetailsTables.setItems(orderTableObservableList);
     }
 
@@ -265,7 +307,6 @@ public class ShopController implements Initializable {
             if (clickedButton.get() == ButtonType.NO) {
                 dialog.close();
             } else if (clickedButton.get() == ButtonType.YES) {
-                //code
             }
 
     }
@@ -290,6 +331,7 @@ public class ShopController implements Initializable {
         orderList.clear();
         orderTableObservableList.clear();
         orderDetailsTables.refresh();
+        totalmoneyLabel.setText("");
     }
 
     public void addOrderChangeSize(Product product) {
@@ -309,7 +351,6 @@ public class ShopController implements Initializable {
         //orderList.clear();
         Quality.setDisable(true);
         btnEdit.setDisable(true);
-        btnCacncel.setDisable(true);
         int column = 0;
         int row = 1;
         if (products.size() > 0) {
@@ -474,7 +515,6 @@ public class ShopController implements Initializable {
         }
         Quality.setText(String.valueOf(orderDetail.getQty()));
         btnEditEvent(orderDetail);
-
     }
 
     public void btnEditEvent(OrderDetail orderDetail) {
@@ -638,7 +678,7 @@ public class ShopController implements Initializable {
         Order newOder = new Order();
         customerController customerController = new customerController();
         String memberName= labelCustomer.getText();
-        if(!memberName.isEmpty() || memberName.equalsIgnoreCase(" ")){
+        if(memberName.equalsIgnoreCase(" ")){
             Member member =customerController.findByName(memberName);
            newOder= orderManagement.insertOrder(orderList,member);
         }else{
@@ -674,6 +714,9 @@ public class ShopController implements Initializable {
             orderGUIController.reload(order);
             printOrder( order);
             orderList.clear();
+            orderTableObservableList.clear();
+            orderDetailsTables.refresh();
+            totalmoneyLabel.setText("");
         }else if(clickedButton.get()==ButtonType.CANCEL){
             dialog.close();
         }

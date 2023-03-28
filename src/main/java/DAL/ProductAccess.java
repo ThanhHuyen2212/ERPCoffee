@@ -1,6 +1,7 @@
 package DAL;
 
 import Entity.Product;
+import Entity.ProductDetails;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,12 +32,13 @@ public class ProductAccess extends DataAccess {
             PreparedStatement preparedStatement = getConn().prepareStatement("call select_productsize_with_id(?)");
             for(Product  p: products){
                 preparedStatement.setInt(1,p.getProductId());
-                HashMap<String, Integer> sizePrice= new HashMap<>();
+                ArrayList<ProductDetails> productDetails = new ArrayList<>();
                 ResultSet resultSet= preparedStatement.executeQuery();
                 while (resultSet!=null && resultSet.next()){
-                    sizePrice.put(resultSet.getString(2), resultSet.getInt(3));
+                    productDetails.add(new ProductDetails(resultSet.getString(2), resultSet.getInt(3), resultSet.getInt(4)));
                 }
-                p.setPriceList(sizePrice);
+                p.setProductDetails(productDetails);
+
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -76,12 +78,13 @@ public class ProductAccess extends DataAccess {
         try {
             PreparedStatement preparedStatement =getConn().prepareStatement("call select_productsize_with_id(?)");
                 preparedStatement.setInt(1,product.getProductId());
-                HashMap<String, Integer> sizePrice= new HashMap<>();
+                ArrayList<ProductDetails> productDetails = new ArrayList<>();
                 ResultSet resultSet= preparedStatement.executeQuery();
                 while (resultSet!=null && resultSet.next()){
-                    sizePrice.put(resultSet.getString(2), resultSet.getInt(3));
+                    productDetails.add(new ProductDetails(resultSet.getString(2), resultSet.getInt(3), resultSet.getInt(4)));
             }
-            product.setPriceList(sizePrice);
+                product.setProductDetails(productDetails);
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
