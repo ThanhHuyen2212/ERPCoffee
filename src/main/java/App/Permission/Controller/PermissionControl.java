@@ -12,6 +12,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -35,6 +37,7 @@ public class PermissionControl implements Initializable {
 
     private FlowPane roleControlHolder;
     private FlowPane funcControlHolder;
+    private HBox controlBox;
     private PermissionModel model;
 
 
@@ -56,7 +59,13 @@ public class PermissionControl implements Initializable {
 
     private void initGUI(){
         createRoleControl();
-        funcControlHolder = new FlowPane();
+        createFunctionControl();
+        controlBox = new HBox();
+        controlBox.getChildren().add(roleControlHolder);
+        controlBox.getChildren().add(funcControlHolder);
+        controlBox.setAlignment(Pos.CENTER);
+        controlBox.getStyleClass().add("hau-container-color");
+        view.setBottom(controlBox);
     }
 
     public void createRoleControl(){
@@ -65,6 +74,11 @@ public class PermissionControl implements Initializable {
         Button addBtn = new Button("Add");
         Button editBtn = new Button("Edit");
         Button delBtn = new Button("Delete");
+        label.getStyleClass().add("hau-menu-label");
+        label.setPrefWidth(100);
+        addBtn.getStyleClass().add("hau-control-button");
+        editBtn.getStyleClass().add("hau-control-button");
+        delBtn.getStyleClass().add("hau-control-button");
         roleControlHolder.getChildren().addAll(label,addBtn,editBtn,delBtn);
         roleControlHolder.setPrefHeight(100);
         roleControlHolder.setVgap(10);
@@ -73,12 +87,44 @@ public class PermissionControl implements Initializable {
         addBtn.setFocusTraversable(false);
         addBtn.setOnMouseClicked(e->{
             if(roleTable.getSelectionModel().getSelectedItem()!=null){
-                roleTable.getSelectionModel().getSelectedItem().addFunction(FunctionBuilder());
-                functionTable.refresh();
+                try{
+                    roleTable.getSelectionModel().getSelectedItem().addFunction(FunctionBuilder());
+                    functionTable.refresh();
+                }catch (Exception exception){
+                    System.out.println(exception.getMessage());
+                }
+
+            }
+        });
+    }
+
+    public void createFunctionControl(){
+        funcControlHolder = new FlowPane();
+        Label label = new Label("Manage Role's Functions:");
+        Button addBtn = new Button("Add");
+        Button delBtn = new Button("Delete");
+        label.getStyleClass().add("hau-menu-label");
+        label.setMinWidth(200);
+        addBtn.getStyleClass().add("hau-control-button");
+        delBtn.getStyleClass().add("hau-control-button");
+        funcControlHolder.getChildren().addAll(label,addBtn,delBtn);
+        funcControlHolder.setPrefHeight(100);
+        funcControlHolder.setVgap(10);
+        funcControlHolder.setHgap(10);
+        funcControlHolder.setAlignment(Pos.CENTER);
+        addBtn.setFocusTraversable(false);
+        addBtn.setOnMouseClicked(e->{
+            if(roleTable.getSelectionModel().getSelectedItem()!=null){
+                try{
+                    roleTable.getSelectionModel().getSelectedItem().addFunction(FunctionBuilder());
+                    functionTable.refresh();
+                }catch (Exception exception){
+                    System.out.println(exception.getMessage());
+                }
+
             }
         });
 
-        view.setBottom(roleControlHolder);
     }
 
     private void handleEvent(){
@@ -91,7 +137,9 @@ public class PermissionControl implements Initializable {
 
     private Function FunctionBuilder(){
         ChoiceDialog<Function> dialog = new ChoiceDialog<>();
-        dialog.getItems().addAll(model.getFunctions());
+        dialog.getItems().addAll(
+                model.getFunctions().stream().filter(
+                    e->!roleTable.getSelectionModel().getSelectedItem().getFunctions().contains(e)).toList());
         dialog.setContentText("Choice a Function to Add");
 
         dialog.setTitle("Add Permission");
