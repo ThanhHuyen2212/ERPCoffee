@@ -2,24 +2,30 @@ package Main;
 
 import App.ModuleManager.AppControl;
 import Entity.Employee;
+import Logic.Management;
+import Logic.Depot.IngredientManagement;
+import Logic.Depot.PurchaseOrderManagement;
+import Logic.ProductManagement;
+import Util.FileTool;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 
 public class MainApp extends Application {
@@ -66,10 +72,18 @@ public class MainApp extends Application {
         mainView.setLeft(scrollPane);
     }
 
+    private void initData() {
+        Management.ingredientManagement = new IngredientManagement();
+        Management.purchaseOrderManagement = new PurchaseOrderManagement();
+        Management.productManagement = new ProductManagement();
+    }
+
     @Override
     public void start(Stage stage) throws Exception {
         String defaultpath = "src/main/java/App/LogIn/View/LogIn.fxml";
+        System.out.println("Tại sao code ko chạy");
         initGUI();
+        initData();
         APP = new AppControl();
         stage.getIcons().add(new Image(new FileInputStream("src/main/java/Assets/Icons/coffee-shop.png")));
         stage.setMaximized(true);
@@ -85,5 +99,6 @@ public class MainApp extends Application {
         MainApp.show(FXMLLoader.load(new File(defaultpath).toURI().toURL()));
         stage.setScene(scene);
         stage.show();
+        new FileTool().createPdf("src/main/resources/test.pdf",mainView,FXMLLoader.load(new File(defaultpath).toURI().toURL()));
     }
 }

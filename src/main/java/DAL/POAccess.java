@@ -78,6 +78,18 @@ public class POAccess extends DataAccess {
                 prSt.setInt(3, pd.getReceiveQty());
                 prSt.executeQuery();
             }
+
+            RecipeAccess recipeAccess = new RecipeAccess();
+            PreparedStatement prSt2 = recipeAccess.getConn().prepareStatement(
+                    "call update_ingredient_where_name(?, ?, ?);");
+//            call update_ingredient_where_name(name_column, value_update, name_ingredient)
+            for(PurchaseDetail pd : curr.getDetails()) {
+                prSt2.setString(1,"IngredientStorage");
+                prSt2.setInt(2, pd.getIngredient().getIngredientStorage() + pd.getReceiveQty());
+                prSt2.setString(3, pd.getIngredient().getIngredientName());
+                prSt2.executeQuery();
+            }
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -87,10 +99,9 @@ public class POAccess extends DataAccess {
         POAccess poAccess = new POAccess();
         int id = 0;
         try {
-//            poAccess.createConnection();
             PreparedStatement prSt = poAccess.getConn().prepareStatement(
                     "call insert_purchaseorder(?, ?)");
-//            "call insert_purchaseorder(name_supplier, phone_emp_create)");
+//            call insert_purchaseorder(name_supplier, id_emp_create)
             prSt.setString(1, current.getSupplier());
             prSt.setInt(2, current.getEmployeeCreate().getEmployeeId());
             ResultSet rs = prSt.executeQuery();

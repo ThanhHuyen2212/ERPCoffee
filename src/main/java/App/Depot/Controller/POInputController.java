@@ -1,9 +1,9 @@
 package App.Depot.Controller;
 
-import App.Controller.Alert2Controller;
 import App.Depot.Model.POModel;
 import App.Depot.View.MessageDialog;
 import App.ModuleManager.AppControl;
+import Entity.Employee;
 import Entity.PurchaseDetail;
 import Logic.Depot.IngredientManagement;
 import Main.MainApp;
@@ -24,7 +24,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Date;
 import java.util.ResourceBundle;
@@ -52,8 +51,6 @@ public class POInputController implements Initializable {
     private Label idLbl;
     @FXML
     private TextField qtyTxf;
-    @FXML
-    private TextField staffCreateTxf;
     @FXML
     private Label totalLbl;
     @FXML
@@ -89,7 +86,7 @@ public class POInputController implements Initializable {
                 String.valueOf(data.getValue().getIngredient().getPrice())
         ));
         subtotalCol.setCellValueFactory(data -> new SimpleStringProperty(String.valueOf(
-                (float) (data.getValue().getOrderQty() * data.getValue().getIngredient().getPrice())
+                (( (double)data.getValue().getOrderQty() / 1000) * data.getValue().getIngredient().getPrice())
         )));
 
         dateLbl.setText(IngredientManagementController.sdf.format(new Date(new java.util.Date().getTime())));
@@ -149,7 +146,8 @@ public class POInputController implements Initializable {
                                 Integer.parseInt(qtyTxf.getText())
                         );
                     } catch (Exception e) {
-                        AppControl.showAlert("error", "Giá trị số lượng không hợp lệ!");
+                        AppControl.showAlert("error", "Giá trị số lượng không hợp lệ!" +
+                                "\n\nHoặc bạn chưa chọn thành phần cần thay đổi");
                     }
                     ingredientTable.refresh();
                     totalLbl.setText(String.valueOf(model.calTotal()));
@@ -189,20 +187,19 @@ public class POInputController implements Initializable {
                         "Warning", "Bạn muốn tạo mới đơn đặt hàng?" +
                                 "\n\nCác thay đổi sẽ mất nếu bạn không lưu.");
                 if (rs == 1) {
-                    try {
+//                    try {
                         String vendor = vendorTxf.getText();
-                        Integer staffId = Integer.parseInt(staffCreateTxf.getText());
+                        Employee staff = AppControl.currentUser;
                         Date date = Date.valueOf(dateLbl.getText());
-//                        int total = Integer.parseInt(totalLbl.getText());
                         model.handleAdd(
                                 model.getCurrent(),
                                 vendor,
-                                staffId,
+                                staff,
                                 date
                         );
-                    } catch (Exception e) {
-                        AppControl.showAlert("error", "Giá trị số lượng không hợp lệ!");
-                    }
+//                    } catch (Exception e) {
+//                        AppControl.showAlert("error", "Giá trị số lượng không hợp lệ!");
+//                    }
                     ingredientTable.setItems(model.getCurrentDetails());
                 }
             }

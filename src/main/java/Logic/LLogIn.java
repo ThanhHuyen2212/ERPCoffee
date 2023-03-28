@@ -9,6 +9,7 @@ public class LLogIn {
     private LogInAccess dataGetter;
     private ArrayList<String> permissions;
     private Employee employee;
+    private String currentUser;
 
     public LLogIn() {
         dataGetter = new LogInAccess();
@@ -19,6 +20,7 @@ public class LLogIn {
     }
 
     public boolean getData(String username,String password){
+        this.currentUser = username;
         if(dataGetter.checkLogIn(username,password)){
             int roleId = dataGetter.getRoleId();
             this.permissions = dataGetter.getPermission(roleId);
@@ -33,6 +35,7 @@ public class LLogIn {
     }
 
     public Employee getEmployee() {
+        if(this.employee == null) this.employee = dataGetter.getEmployee(currentUser);
         return this.employee;
     }
 }

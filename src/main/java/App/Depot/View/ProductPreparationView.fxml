@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="577.0" prefWidth="1048.0" spacing="20.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Depot.Controller.ProductPreparationController">
+    <children>
+        <Label alignment="CENTER" maxWidth="1.7976931348623157E308" minWidth="30.0" prefHeight="50.0" prefWidth="1048.0" text="Product Preparation" VBox.vgrow="ALWAYS">
+            <font>
+                <Font name="System Bold" size="24.0" />
+            </font>
+        </Label>
+      <HBox alignment="CENTER_RIGHT" spacing="20.0">
+         <children>
+            <Button fx:id="autofillBtn" mnemonicParsing="false" text="Auto Fill">
+               <styleClass>
+                  <String fx:value="wrapper-btn" />
+                  <String fx:value="normal-btn" />
+               </styleClass>
+            </Button>
+            <Button fx:id="clearBtn" mnemonicParsing="false" text="Clear">
+               <styleClass>
+                  <String fx:value="wrapper-btn" />
+                  <String fx:value="cancel-btn" />
+               </styleClass>
+            </Button>
+         </children>
+      </HBox>
+        <HBox prefHeight="501.0" prefWidth="838.0" spacing="12.0" VBox.vgrow="ALWAYS">
+            <children>
+                <TableView fx:id="productTable" prefHeight="515.0" prefWidth="660.0" HBox.hgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="idCol" maxWidth="1.7976931348623157E308" prefWidth="109.12446022033691" text="ID" />
+                        <TableColumn fx:id="productCol" maxWidth="1.7976931348623157E308" prefWidth="278.87557220458984" text="Product" />
+                        <TableColumn fx:id="qtyCol" maxWidth="1.7976931348623157E308" prefWidth="178.53744506835938" text="Quantity Batch Preparation" />
+                  <TableColumn fx:id="productQtyCol" maxWidth="1.7976931348623157E308" prefWidth="245.49847412109375" text="Volume per Batch" />
+                  <TableColumn fx:id="availableCol" maxWidth="1.7976931348623157E308" prefWidth="210.0" text="Available" />
+                    </columns>
+                </TableView>
+            </children>
+        </HBox>
+        <HBox alignment="CENTER" spacing="20.0">
+            <children>
+                <Button fx:id="confirmBtn" mnemonicParsing="false" text="Confirm">
+                    <styleClass>
+                        <String fx:value="wrapper-btn" />
+                        <String fx:value="success-btn" />
+                    </styleClass>
+                </Button>
+            </children>
+        </HBox>
+    </children>
+    <padding>
+        <Insets bottom="12.0" left="12.0" right="12.0" />
+    </padding>
+</VBox>
