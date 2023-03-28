@@ -40,4 +40,15 @@ public class AccountAccess extends DataAccess {
             throw new RuntimeException(e);
         }
     }
+    public void Update(String username, String password, String rolename){
+        try {
+            createConnection();
+            PreparedStatement prSt = getConn().prepareStatement("call update_password_rolesid_account(?,?,?)");
+            prSt.setString(1,username);
+            prSt.setString(2,password);
+            prSt.setString(3,rolename);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

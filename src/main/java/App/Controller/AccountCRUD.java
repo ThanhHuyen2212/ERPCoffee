@@ -83,7 +83,9 @@ public class AccountCRUD implements Initializable {
                     TFUsername.setText(rowData.getUsername());
                     TFPass.setText(rowData.getPassword());
                     CBRole.getSelectionModel().select(rowData.getPositionName());
-//                    CBRole.getSelectionModel().select(rowData.getPosition());
+                    TFEmpID.setDisable(true);
+                    TFEmpName.setDisable(true);
+                    TFUsername.setDisable(true);
                 }
             });
             return row ;
@@ -133,6 +135,9 @@ public class AccountCRUD implements Initializable {
                 TFUsername.setText(null);
                 TFPass.setText(null);
                 CBRole.getSelectionModel().select(0);
+                TFEmpID.setDisable(false);
+                TFEmpName.setDisable(false);
+                TFUsername.setDisable(false);
             }
         });
         btnDeleteAccount.setOnAction(new EventHandler<ActionEvent>() {

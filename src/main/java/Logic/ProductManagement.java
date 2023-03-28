@@ -10,8 +10,6 @@ import java.util.ArrayList;
 public class ProductManagement {
     private ArrayList<Product> products;
     ProductAccess productAccess = new ProductAccess();
-
-
     public ProductManagement(){
         init();
     }
