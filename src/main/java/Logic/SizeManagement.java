@@ -7,14 +7,12 @@ import java.util.ArrayList;
 
 public class SizeManagement {
     private ArrayList<Size> sizes;
-    SizeAccess sizeAccess = new SizeAccess();
+    SizeAccess sizeAccess;
     public SizeManagement(){
-        init();
-    }
-
-    private void init(){
+        sizeAccess = new SizeAccess();
         sizes = sizeAccess.retrieve();
     }
+
     public ArrayList<Size> getSizes(){
         return sizes;
     }
