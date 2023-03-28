@@ -99,6 +99,6 @@ public class MainApp extends Application {
         MainApp.show(FXMLLoader.load(new File(defaultpath).toURI().toURL()));
         stage.setScene(scene);
         stage.show();
-        new FileTool().createPdf("src/main/resources/test.pdf",mainView,FXMLLoader.load(new File(defaultpath).toURI().toURL()));
+       // new FileTool().createPdf("src/main/resources/test.pdf",mainView,FXMLLoader.load(new File(defaultpath).toURI().toURL()));
     }
 }

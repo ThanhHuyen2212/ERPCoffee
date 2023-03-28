@@ -474,7 +474,6 @@ public class ShopController implements Initializable {
         }
         Quality.setText(String.valueOf(orderDetail.getQty()));
         btnEditEvent(orderDetail);
-
     }
 
     public void btnEditEvent(OrderDetail orderDetail) {
