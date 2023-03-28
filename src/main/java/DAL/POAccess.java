@@ -1,16 +1,13 @@
 package DAL;
 
-import Entity.Ingredient;
 import Entity.PurchaseDetail;
 import Entity.PurchaseOrder;
-import Logic.Depot.DepotManagement;
 import Logic.Depot.IngredientManagement;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Map;
 
 public class POAccess extends DataAccess {
     public ArrayList<PurchaseOrder> retrieve() {

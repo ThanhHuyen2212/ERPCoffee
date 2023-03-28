@@ -86,7 +86,7 @@ public class POInputController implements Initializable {
                 String.valueOf(data.getValue().getIngredient().getPrice())
         ));
         subtotalCol.setCellValueFactory(data -> new SimpleStringProperty(String.valueOf(
-                (int) ((data.getValue().getOrderQty() / 1000) * data.getValue().getIngredient().getPrice())
+                (( (double)data.getValue().getOrderQty() / 1000) * data.getValue().getIngredient().getPrice())
         )));
 
         dateLbl.setText(IngredientManagementController.sdf.format(new Date(new java.util.Date().getTime())));
@@ -189,7 +189,7 @@ public class POInputController implements Initializable {
                 if (rs == 1) {
 //                    try {
                         String vendor = vendorTxf.getText();
-                        Employee staff = MainApp.currentUser;
+                        Employee staff = AppControl.currentUser;
                         Date date = Date.valueOf(dateLbl.getText());
                         model.handleAdd(
                                 model.getCurrent(),

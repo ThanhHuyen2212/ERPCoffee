@@ -5,6 +5,7 @@ import Entity.PurchaseDetail;
 import Entity.PurchaseOrder;
 import Logic.Depot.IngredientManagement;
 import Logic.Depot.PurchaseOrderManagement;
+import Logic.Management;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -20,7 +21,7 @@ public class POModel {
     }
 
     public void init() {
-        logic = new PurchaseOrderManagement();
+        logic = Management.purchaseOrderManagement;
         current = new PurchaseOrder();
         currentDetails = FXCollections.observableArrayList(current.getDetails());
         purchaseOrderObservableList = FXCollections.observableArrayList(logic.getPurchaseOrders());
@@ -90,10 +91,10 @@ public class POModel {
         purchaseOrderObservableList = FXCollections.observableArrayList(logic.getPurchaseOrders());
     }
 
-    public int calTotal() {
-        int sum = 0;
+    public double calTotal() {
+        double sum = 0;
         for(PurchaseDetail pd : current.getDetails()) {
-            sum += pd.getOrderQty() / 1000 * pd.getIngredient().getPrice();
+            sum += (double) pd.getOrderQty() / 1000 * pd.getIngredient().getPrice();
         }
         return sum;
     }

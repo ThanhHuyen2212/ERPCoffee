@@ -4,6 +4,7 @@ import App.ModuleManager.AppControl;
 import DAL.RecipeAccess;
 import Entity.Ingredient;
 import Entity.Product;
+import Logic.Management;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +17,7 @@ public class ProductPreparationManagement {
     private RecipeAccess recipeAccess;
 
     public ProductPreparationManagement() {
-        products = RecipeAccess.retrieveSimpleProduct();
+        products = Management.productManagement.getProducts();
         preparations = new HashMap<>();
         recipeAccess = new RecipeAccess();
     }
@@ -48,7 +49,7 @@ public class ProductPreparationManagement {
 
     public boolean isEnoughInventory(Product p, int batch) {
         for (Map.Entry<Ingredient, Integer> recipe : p.getRecipe().getIngredientCosts().entrySet()) {
-            Ingredient i = new IngredientManagement().findById(recipe.getKey().getIngredientId());
+            Ingredient i = Management.ingredientManagement.findById(recipe.getKey().getIngredientId());
             if (batch * recipe.getValue() > i.getIngredientStorage()) {
                 AppControl.showAlert("error", "Số lượng nguyên liệu tồn kho không đủ để sản xuất " +
                         p.getProductName());
@@ -66,8 +67,18 @@ public class ProductPreparationManagement {
                         productEntryPrep.getKey(),
                         productEntryPrep.getValue() * productEntryPrep.getKey().getRecipe().getProductQty()
                 );
+                productEntryPrep.getKey().getRecipe().getIngredientCosts().forEach((k, v) -> {
+                    k.setIngredientStorage(
+                            k.getIngredientStorage() - productEntryPrep.getValue() * v
+                    );
+                    Management.ingredientManagement.getIngredients().remove(k);
+                    Management.ingredientManagement.getIngredients().add(k);
+                });
+
             }
 
         }
+
     }
+
 }
