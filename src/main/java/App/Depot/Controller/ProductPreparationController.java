@@ -3,6 +3,7 @@ package App.Depot.Controller;
 import App.Depot.Model.ProductPreparationModel;
 import App.Depot.View.MessageDialog;
 import App.ModuleManager.AppControl;
+import Entity.Ingredient;
 import Entity.Product;
 import Logic.Depot.ProductPreparationManagement;
 import javafx.beans.property.SimpleIntegerProperty;

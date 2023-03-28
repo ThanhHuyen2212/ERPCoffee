@@ -2,6 +2,7 @@ package App.Depot.Controller;
 
 import App.Depot.View.MessageDialog;
 import Entity.Product;
+import Logic.Management;
 import Logic.ProductManagement;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -60,7 +61,7 @@ public class RecipeManagementController implements Initializable {
     }
 
     public void init() {
-        model = new ProductManagement();
+        model = Management.productManagement;
         productTable.setItems(FXCollections.observableArrayList(model.getProducts()));
 
         handleActionOnRow();

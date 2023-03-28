@@ -137,7 +137,7 @@ public class DetailPOController implements Initializable {
                         }
                     }
                     if (legal) {
-                        model.handleUpdateRevQty(MainApp.currentUser);
+                        model.handleUpdateRevQty(AppControl.currentUser);
                         ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
                     }
                 }
