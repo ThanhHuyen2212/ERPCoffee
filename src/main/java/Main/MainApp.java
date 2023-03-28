@@ -2,12 +2,14 @@ package Main;
 
 import App.ModuleManager.AppControl;
 import Entity.Employee;
+import Util.FileTool;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
@@ -20,6 +22,7 @@ import javafx.util.Duration;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 
 public class MainApp extends Application {
@@ -86,5 +89,6 @@ public class MainApp extends Application {
         MainApp.show(FXMLLoader.load(new File(defaultpath).toURI().toURL()));
         stage.setScene(scene);
         stage.show();
+        new FileTool().createPdf("src/main/resources/test.pdf",mainView,FXMLLoader.load(new File(defaultpath).toURI().toURL()));
     }
 }
