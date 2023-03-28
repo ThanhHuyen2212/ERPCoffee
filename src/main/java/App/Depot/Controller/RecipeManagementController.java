@@ -27,11 +27,11 @@ public class RecipeManagementController implements Initializable {
     @FXML
     private TableView<Product> productTable;
     @FXML
-    private TableColumn<Product, ?> unitCol;
+    private TableColumn<Product, String> unitCol;
     @FXML
-    private TableColumn<Product, ?> idCol;
+    private TableColumn<Product, Integer> idCol;
     @FXML
-    private TableColumn<Product, ?> productNameCol;
+    private TableColumn<Product, String> productNameCol;
     @FXML
     private TableColumn<Product, String> qtyCol;
     @FXML
@@ -52,7 +52,9 @@ public class RecipeManagementController implements Initializable {
         qtyCol.setCellValueFactory(data -> new SimpleStringProperty(
                 String.valueOf(data.getValue().getRecipe().getProductQty())
         ));
-        unitCol.setCellValueFactory(new PropertyValueFactory<>(""));
+        unitCol.setCellValueFactory(data -> new SimpleStringProperty(
+                RecipeManagementController.setupUnit(data.getValue())
+        ));
 
         addBtn.setVisible(false);
         deleteBtn.setVisible(false);
@@ -147,6 +149,13 @@ public class RecipeManagementController implements Initializable {
             });
             return row;
         });
+    }
+
+    public static String setupUnit(Product p) {
+        if (p.getCategory().equalsIgnoreCase("bánh mì")) {
+            return "cái";
+        }
+        return "ml";
     }
 
 

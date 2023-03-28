@@ -59,20 +59,37 @@ public class ProductPreparationManagement {
         return true;
     }
 
+    private static void addIntoPreparedList(Product p, int batch, int productQty) {
+        if(ProductPreparationManagement.preparedList.containsKey(p)) {
+            ProductPreparationManagement.preparedList.replace(
+                    p,
+                    batch * productQty + preparedList.get(p)
+            );
+        } else {
+            ProductPreparationManagement.preparedList.put(
+                    p,
+                    batch * productQty
+            );
+        }
+    }
+
     public void handlePrepare() {
         for (Map.Entry<Product, Integer> productEntryPrep : preparations.entrySet()) {
             if(isEnoughInventory(productEntryPrep.getKey(), productEntryPrep.getValue())) {
                 recipeAccess.reduceInventory(productEntryPrep.getKey(), productEntryPrep.getValue());
-                ProductPreparationManagement.preparedList.put(
+                ProductPreparationManagement.addIntoPreparedList(
                         productEntryPrep.getKey(),
-                        productEntryPrep.getValue() * productEntryPrep.getKey().getRecipe().getProductQty()
+                        productEntryPrep.getValue(),
+                        productEntryPrep.getKey().getRecipe().getProductQty()
                 );
+//                ProductPreparationManagement.preparedList.put(
+//                        productEntryPrep.getKey(),
+//                        productEntryPrep.getValue() * productEntryPrep.getKey().getRecipe().getProductQty()
+//                );
                 productEntryPrep.getKey().getRecipe().getIngredientCosts().forEach((k, v) -> {
                     k.setIngredientStorage(
                             k.getIngredientStorage() - productEntryPrep.getValue() * v
                     );
-                    Management.ingredientManagement.getIngredients().remove(k);
-                    Management.ingredientManagement.getIngredients().add(k);
                 });
 
             }

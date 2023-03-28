@@ -64,7 +64,7 @@ public class ProductPreparationController implements Initializable {
         availableCol.setCellValueFactory(data -> new SimpleStringProperty(
                 ProductPreparationManagement.preparedList.get(data.getValue()) == null
                         ? String.valueOf(0)
-                        : ProductPreparationManagement.preparedList.get(data.getValue()) + "units"
+                        : ProductPreparationManagement.preparedList.get(data.getValue()) + " units"
         ));
         autofillBtn.setVisible(false);
 
