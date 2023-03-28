@@ -15,7 +15,15 @@ public class Product {
     private Date createAt;
     private Date deleteAt;
 
-    private HashMap<String,Integer> priceList;
+    public ArrayList<ProductDetails> getProductDetails() {
+        return productDetails;
+    }
+
+    public void setProductDetails(ArrayList<ProductDetails> productDetails) {
+        this.productDetails = productDetails;
+    }
+
+    private ArrayList<ProductDetails> productDetails;
 
     private ProductRecipe recipe;
 
@@ -30,12 +38,12 @@ public class Product {
         this.category=category;
 
     }
-    public Product(int productId, String productName, String imagePath, String category, HashMap<String, Integer> priceList) {
+    public Product(int productId, String productName, String imagePath, String category, ArrayList<ProductDetails> productDetails) {
         this.productId = productId;
         this.productName = productName;
         this.imagePath = imagePath;
         this.category = category;
-        this.priceList = priceList;
+        this.productDetails=productDetails;
     }
 
     public int getProductId() {
@@ -70,16 +78,14 @@ public class Product {
         this.category = category;
     }
 
-    public HashMap<String, Integer> getPriceList() {
-        return priceList;
-    }
-
-    public void setPriceList(HashMap<String, Integer> priceList) {
-        this.priceList = priceList;
-    }
-
     public int getPrice(Size size){
-        return priceList.get(size);
+        Integer price = null;
+        for(ProductDetails pd : productDetails){
+            if(size.getSign().equalsIgnoreCase(pd.getSize())){
+                price=pd.getPrice();
+            }
+        }
+        return price;
     }
 
     public Date getCreateAt() {
@@ -99,12 +105,13 @@ public class Product {
     }
 
     public int getPrice(String size){
-        for(String s : priceList.keySet()){
-            if(s.equals(size)){
-                return priceList.get(s);
+        Integer price = null;
+        for(ProductDetails pd : productDetails){
+            if(size.equalsIgnoreCase(pd.getSize())){
+                price=pd.getPrice();
             }
         }
-        return 0;
+        return price;
     }
 
 //    public ArrayList<String> getSizeList(){
@@ -116,7 +123,11 @@ public class Product {
 //                        .toList());
 //    }
     public ArrayList<String> getSizeList(){
-        return  new ArrayList<>(priceList.keySet().stream().toList());
+        ArrayList<String> sizeList = new ArrayList<>();
+        for(ProductDetails pd :productDetails){
+            sizeList.add(pd.getSize());
+        }
+        return sizeList;
     }
 
     public ProductRecipe getRecipe() {

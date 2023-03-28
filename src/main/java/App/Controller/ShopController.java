@@ -113,7 +113,7 @@ public class ShopController implements Initializable {
     private ProductManagement productManagement = new ProductManagement();
     private OrderManagement orderManagement = new OrderManagement();
     private List<Category> categoryList = new ArrayList<>();
-    public static ArrayList<Product> productList = new ArrayList<>();
+    public ArrayList<Product> productList = new ArrayList<>();
     public ArrayList<OrderDetail> orderList = new ArrayList<>();
     private List<Size> sizeList = new ArrayList<>();
     ObservableList<OrderTable> orderTableObservableList;
@@ -234,6 +234,7 @@ public class ShopController implements Initializable {
             row.setOnMouseClicked(e -> {
                 btnAdd.setDisable(true);
                 btnEdit.setDisable(false);
+                btnCacncel.setDisable(false);
                 if (e.getClickCount() == 1 && (!row.isEmpty())) {
                     OrderTable o = row.getItem();
                     setDetails(o.getOrderDetail());
@@ -265,7 +266,6 @@ public class ShopController implements Initializable {
             if (clickedButton.get() == ButtonType.NO) {
                 dialog.close();
             } else if (clickedButton.get() == ButtonType.YES) {
-                //code
             }
 
     }
@@ -290,6 +290,7 @@ public class ShopController implements Initializable {
         orderList.clear();
         orderTableObservableList.clear();
         orderDetailsTables.refresh();
+        totalmoneyLabel.setText("");
     }
 
     public void addOrderChangeSize(Product product) {
@@ -474,7 +475,18 @@ public class ShopController implements Initializable {
         }
         Quality.setText(String.valueOf(orderDetail.getQty()));
         btnEditEvent(orderDetail);
-
+        btnDelete(orderDetail);
+    }
+    public void btnDelete(OrderDetail orderDetail){
+        btnCacncel.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                orderList.remove(orderDetail);
+                orderTableObservableList.remove(orderDetail);
+                getDataOrderTable(orderList);
+                orderDetailsTables.refresh();
+            }
+        });
     }
 
     public void btnEditEvent(OrderDetail orderDetail) {
@@ -674,6 +686,9 @@ public class ShopController implements Initializable {
             orderGUIController.reload(order);
             printOrder( order);
             orderList.clear();
+            orderTableObservableList.clear();
+            orderDetailsTables.refresh();
+            totalmoneyLabel.setText("");
         }else if(clickedButton.get()==ButtonType.CANCEL){
             dialog.close();
         }
