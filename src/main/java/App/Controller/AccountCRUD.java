@@ -2,6 +2,7 @@ package App.Controller;
 
 import App.Model.AccountTable;
 import App.Model.EmployeeTable;
+import DAL.AccountAccess;
 import DAL.EmployeeAccess;
 import Entity.Role;
 import Entity.WorkPosition;
@@ -112,8 +113,11 @@ public class AccountCRUD implements Initializable {
                 try{
                     AccountTable account = new AccountTable(TFUsername.getText(),TFPass.getText(),Integer.parseInt(TFEmpID.getText()),TFEmpName.getText(),cb);
                     //Add
-//                    account.AddAccount();
-                    System.out.println(account.getEmpName());
+                    account.AddAccount();
+                    AccountTable table = new AccountTable();
+                    AccountTableViewList = table.getDataAccount();
+                    accountTable= FXCollections.observableArrayList(AccountTableViewList);
+                    TBAccount.setItems(accountTable);
                     showAlert("Success","Success!");
                 }catch (Exception e){
                     System.out.println("fail");
@@ -124,7 +128,21 @@ public class AccountCRUD implements Initializable {
         btnEditAccount.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-
+                String cb = String.valueOf(CBRole.getSelectionModel().getSelectedItem());
+//                System.out.println(cb);
+                try{
+                    AccountTable account = new AccountTable(TFUsername.getText(),TFPass.getText(),Integer.parseInt(TFEmpID.getText()),TFEmpName.getText(),cb);
+                    //Update
+                    account.EditAccount();
+                    AccountTable table = new AccountTable();
+                    AccountTableViewList = table.getDataAccount();
+                    accountTable= FXCollections.observableArrayList(AccountTableViewList);
+                    TBAccount.setItems(accountTable);
+                    showAlert("Success","Success!");
+                }catch (Exception e){
+                    System.out.println("fail");
+                    showAlert("error","Fail!");
+                }
             }
         });
         btnCancelAccount.setOnAction(new EventHandler<ActionEvent>() {
