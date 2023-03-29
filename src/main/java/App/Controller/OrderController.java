@@ -16,7 +16,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class OrderController implements Initializable{
@@ -63,8 +65,6 @@ public class OrderController implements Initializable{
 
     @FXML
     private Label dateLabel;
-    @FXML
-    private Label hhmmssLabel;
 
 
 
@@ -92,16 +92,16 @@ public class OrderController implements Initializable{
 
     public void RenderOrder(Order order){
         initTable(order.getDetails());
-        if(order.getCustomer()==null){
+        if(order.getCustomer()==null || order.getCustomer().getFullName().equalsIgnoreCase("")){
             CustomerLabel.setText("Alias");
             PhoneLabel.setText("Alias");
         }else{
             CustomerLabel.setText(order.getCustomer().getFullName());
             PhoneLabel.setText(order.getCustomer().getPhoneNumber());
         }
-        TotalPriceLabel.setText(String.valueOf(order.getTotalPrice()));
+        TotalPriceLabel.setText(NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(order.getTotalPrice()));
         dateLabel.setText(String.valueOf(order.getOrderDate()));
-        orderIdLabel.setText(String.valueOf(order.getOrderId()));
+        orderIdLabel.setText("#"+String.valueOf(order.getOrderId()));
     }
 
         @Override

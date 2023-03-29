@@ -1,5 +1,6 @@
 package App.Controller;
 
+import Entity.Member;
 import javafx.fxml.FXML;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
@@ -15,4 +16,10 @@ public class CustomerEdit {
 
     @FXML
     private TextField txtPoint;
+    public void setData(Member member){
+        txtName.setText(member.getFullName());
+        txtPhone.setText(member.getPhoneNumber());
+        txtPoint.setText(String.valueOf(member.getPoint()));
+    }
+
 }

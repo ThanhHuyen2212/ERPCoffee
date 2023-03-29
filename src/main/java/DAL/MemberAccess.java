@@ -37,6 +37,9 @@ public class MemberAccess extends DataAccess {
             System.out.println(e.getMessage());
         }
     }
+    public void updateMember(){
+
+    }
     public Member findByPhone(String phone){
         Member newMember = new Member();
         try {
