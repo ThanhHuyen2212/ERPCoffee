@@ -51,6 +51,7 @@ public class customerController implements Initializable {
     @FXML
     private TableColumn<Member, Integer> customerPoint;
 
+
     @FXML
     private TableView<Member> customerTable;
 

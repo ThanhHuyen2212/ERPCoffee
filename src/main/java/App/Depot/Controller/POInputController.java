@@ -44,6 +44,8 @@ public class POInputController implements Initializable {
     @FXML
     private TableColumn<PurchaseDetail, String> subtotalCol;
     @FXML
+    private TableColumn<PurchaseDetail, String> unitCol;
+    @FXML
     private ComboBox<String> ingredientCb;
     @FXML
     private Label dateLbl;
@@ -86,8 +88,11 @@ public class POInputController implements Initializable {
                 String.valueOf(data.getValue().getIngredient().getPrice())
         ));
         subtotalCol.setCellValueFactory(data -> new SimpleStringProperty(String.valueOf(
-                (int) ((data.getValue().getOrderQty() / 1000) * data.getValue().getIngredient().getPrice())
+                model.calSubtotal(data.getValue())
         )));
+        unitCol.setCellValueFactory(data -> new SimpleStringProperty(
+                IngredientManagementController.setupUnit(data.getValue().getIngredient())
+        ));
 
         dateLbl.setText(IngredientManagementController.sdf.format(new Date(new java.util.Date().getTime())));
         ingredientCb.setItems(FXCollections.observableArrayList(new IngredientManagement().getNameList()));
@@ -189,7 +194,7 @@ public class POInputController implements Initializable {
                 if (rs == 1) {
 //                    try {
                         String vendor = vendorTxf.getText();
-                        Employee staff = MainApp.currentUser;
+                        Employee staff = AppControl.currentUser;
                         Date date = Date.valueOf(dateLbl.getText());
                         model.handleAdd(
                                 model.getCurrent(),

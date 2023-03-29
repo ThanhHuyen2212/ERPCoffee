@@ -8,17 +8,13 @@ import Entity.Member;
 import java.util.ArrayList;
 
 public class MemberManagement {
-    MemberAccess memberAccess = new MemberAccess();
+    MemberAccess memberAccess;
     private ArrayList<Member> members;
 
     public MemberManagement() {
-        init();
-    }
-
-    private void init() {
+        memberAccess = new MemberAccess();
         members = memberAccess.retrieve();
     }
-
     public ArrayList<Member> getMembers() {
         return members;
     }
@@ -30,7 +26,6 @@ public class MemberManagement {
 
     public Member findByPhone(String phone) {
         Member member = new Member();
-        init();
         for (Member mb : members) {
             if (member.getPhoneNumber().equalsIgnoreCase(phone.trim())) {
                 member = mb;

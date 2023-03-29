@@ -3,6 +3,8 @@ package DAL;
 import Entity.Ingredient;
 import Entity.Product;
 import Logic.Depot.IngredientManagement;
+import Logic.Management;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,7 +14,7 @@ import java.util.Map;
 public class RecipeAccess extends DataAccess {
     public void retrieve(ArrayList<Product> products) {
         RecipeAccess recipeAccess = new RecipeAccess();
-        IngredientManagement logic = new IngredientManagement();
+        IngredientManagement logic = Management.ingredientManagement;
         try {
 //            recipeAccess.createConnection();
             PreparedStatement prSt = recipeAccess.getConn().prepareStatement("call select_productrecipe_with_id_product(?);");

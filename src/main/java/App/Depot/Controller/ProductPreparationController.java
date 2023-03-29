@@ -3,6 +3,7 @@ package App.Depot.Controller;
 import App.Depot.Model.ProductPreparationModel;
 import App.Depot.View.MessageDialog;
 import App.ModuleManager.AppControl;
+import Entity.Ingredient;
 import Entity.Product;
 import Logic.Depot.ProductPreparationManagement;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -63,7 +64,7 @@ public class ProductPreparationController implements Initializable {
         availableCol.setCellValueFactory(data -> new SimpleStringProperty(
                 ProductPreparationManagement.preparedList.get(data.getValue()) == null
                         ? String.valueOf(0)
-                        : ProductPreparationManagement.preparedList.get(data.getValue()) + "units"
+                        : ProductPreparationManagement.preparedList.get(data.getValue()) + " units"
         ));
         autofillBtn.setVisible(false);
 

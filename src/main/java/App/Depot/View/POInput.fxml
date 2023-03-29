@@ -68,14 +68,15 @@
         </HBox>
         <HBox prefHeight="372.0" prefWidth="1024.0" spacing="12.0" VBox.vgrow="ALWAYS">
             <children>
-                <TableView fx:id="ingredientTable" prefHeight="515.0" prefWidth="660.0" HBox.hgrow="ALWAYS">
+                <TableView fx:id="ingredientTable" prefHeight="515.0" prefWidth="660.0" tableMenuButtonVisible="true" HBox.hgrow="ALWAYS">
                     <columns>
-                        <TableColumn fx:id="idCol" prefWidth="71.24105167388916" text="ID" />
-                        <TableColumn fx:id="ingredientCol" prefWidth="178.2589340209961" text="Ingredient" />
-                        <TableColumn fx:id="typeCol" minWidth="0.0" prefWidth="107.22406005859375" text="Type" />
-                        <TableColumn fx:id="qtyCol" prefWidth="76.07284545898438" text="Quantity" />
-                        <TableColumn fx:id="priceCol" prefWidth="111.70404052734375" text="Unit Price" />
-                  <TableColumn fx:id="subtotalCol" prefWidth="129.0" text="Subtotal" />
+                        <TableColumn fx:id="idCol" maxWidth="1.7976931348623157E308" minWidth="45.0" prefWidth="45.0" text="ID" />
+                        <TableColumn fx:id="ingredientCol" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="166.0" text="Ingredient" />
+                        <TableColumn fx:id="typeCol" maxWidth="1.7976931348623157E308" minWidth="89.0" prefWidth="148.0" text="Type" />
+                        <TableColumn fx:id="qtyCol" maxWidth="1.7976931348623157E308" minWidth="72.0" prefWidth="82.0" text="Quantity" />
+                  <TableColumn fx:id="unitCol" maxWidth="1.7976931348623157E308" minWidth="55.0" prefWidth="59.0" text="Unit" />
+                        <TableColumn fx:id="priceCol" maxWidth="1.7976931348623157E308" minWidth="85.0" prefWidth="85.0" text="Unit Price" />
+                  <TableColumn fx:id="subtotalCol" maxWidth="1.7976931348623157E308" minWidth="67.0" prefWidth="90.0" text="Subtotal" />
                     </columns>
                 </TableView>
                 <VBox prefHeight="499.0" prefWidth="309.0" HBox.hgrow="ALWAYS">
