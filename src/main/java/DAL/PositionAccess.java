@@ -1,6 +1,7 @@
 package DAL;
 
 import Entity.Category;
+import Entity.Employee;
 import Entity.WorkPosition;
 
 import javax.swing.text.Position;

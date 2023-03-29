@@ -3,6 +3,7 @@ package DAL;
 import Entity.PurchaseDetail;
 import Entity.PurchaseOrder;
 import Logic.Depot.IngredientManagement;
+import Logic.Management;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,17 +14,19 @@ public class POAccess extends DataAccess {
     public ArrayList<PurchaseOrder> retrieve() {
         POAccess poAccess = new POAccess();
         ArrayList<PurchaseOrder> list = new ArrayList<>();
-
+        EmployeeAccess employeeAccessManagement = new EmployeeAccess();
+        employeeAccessManagement.getEmployee();
         try {
-//            poAccess.createConnection();
-            PreparedStatement prSt = poAccess.getConn().prepareStatement("call select_purchaseorder()");
+            PreparedStatement prSt = poAccess.getConn().prepareStatement("call select_purchaseorder();");
             ResultSet rs = prSt.executeQuery();
             while (rs.next()) {
                 list.add(new PurchaseOrder(
                         rs.getInt(1),
                         rs.getString(2),
                         rs.getDate(3),
-                        rs.getInt(4)
+                        rs.getInt(4),
+                        employeeAccessManagement.findById(rs.getInt(5)),
+                        employeeAccessManagement.findById(rs.getInt(6))
                 ));
             }
         } catch (SQLException e) {
@@ -31,19 +34,21 @@ public class POAccess extends DataAccess {
         }
 
         for (PurchaseOrder po : list) {
-            po.setDetails(PODetailsRetrieve(po));
+            PODetailsRetrieve(po);
         }
 
+        System.out.println(list.size());
         return list;
     }
 
-    public ArrayList<PurchaseDetail> PODetailsRetrieve(PurchaseOrder po) {
+    public void PODetailsRetrieve(PurchaseOrder po) {
         POAccess poAccess = new POAccess();
         try {
-//            poAccess.createConnection();
-            PreparedStatement prSt = poAccess.getConn().prepareStatement("call select_purchaseorderdetailwithid()");
+            PreparedStatement prSt = poAccess.getConn().prepareStatement("call select_purchaseorderdetail_with_id(?);");
+//            call select_purchaseorderdetail_with_id(id_purchaseorder)
+            prSt.setInt(1, po.getPurchaseOrderId());
+            IngredientManagement ingredientManagement = Management.ingredientManagement;
             ResultSet rs = prSt.executeQuery();
-            IngredientManagement ingredientManagement = new IngredientManagement();
             while (rs.next()) {
                 po.addDetails(
                         ingredientManagement.findByName(rs.getString(2)),
@@ -54,7 +59,6 @@ public class POAccess extends DataAccess {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return null;
     }
 
     public void update(PurchaseOrder curr) {

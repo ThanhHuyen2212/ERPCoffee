@@ -18,22 +18,23 @@ public class PurchaseOrder {
     }
 
     public PurchaseOrder(int purchaseOrderId, String supplier, Date purchaseOrderDate, int totalPrice,
-                         Employee employeeCreate, Employee employeeComfirm, ArrayList<PurchaseDetail> details) {
+                         Employee employeeCreate, Employee employeeConfirm, ArrayList<PurchaseDetail> details) {
         this.purchaseOrderId = purchaseOrderId;
         this.supplier = supplier;
         this.purchaseOrderDate = purchaseOrderDate;
         this.totalPrice = totalPrice;
         this.employeeCreate = employeeCreate;
-        this.employeeConfirm = employeeComfirm;
+        this.employeeConfirm = employeeConfirm;
         this.details = details;
     }
 
-    public PurchaseOrder(int purchaseOrderId, String supplier, Date purchaseOrderDate, int totalPrice, Employee employeeCreate, String status) {
+    public PurchaseOrder(int purchaseOrderId, String supplier, Date purchaseOrderDate, int totalPrice, Employee employeeCreate, Employee employeeConfirm) {
         this.purchaseOrderId = purchaseOrderId;
         this.supplier = supplier;
         this.purchaseOrderDate = purchaseOrderDate;
         this.totalPrice = totalPrice;
         this.employeeCreate = employeeCreate;
+        this.employeeConfirm = employeeConfirm;
         this.details = new ArrayList<>();
     }
 

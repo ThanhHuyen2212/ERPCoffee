@@ -60,10 +60,7 @@ public class POModel {
     }
 
     public boolean isConfirm() {
-        if (current.getEmployeeConfirm() != null) {
-            return true;
-        }
-        return false;
+        return current.getEmployeeConfirm() != null;
     }
 
     public void handleUpdateRevQty(Employee currentUser) {
@@ -94,12 +91,7 @@ public class POModel {
     public double calTotal() {
         double sum = 0;
         for (PurchaseDetail pd : current.getDetails()) {
-            if (pd.getIngredient().getIngredientName().equalsIgnoreCase("trứng")
-                    || pd.getIngredient().getIngredientName().equalsIgnoreCase("bánh mì")) {
-                sum += (double) pd.getOrderQty() * pd.getIngredient().getPrice();
-            } else {
-                sum += (double) pd.getOrderQty() / 1000.0 * pd.getIngredient().getPrice();
-            }
+            sum += calSubtotal(pd);
         }
         return sum;
     }
