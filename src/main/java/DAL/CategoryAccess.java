@@ -1,5 +1,6 @@
 package DAL;
 
+import App.Model.CategoryTable;
 import Entity.Category;
 import Logic.CategoryManagement;
 
@@ -26,5 +27,26 @@ public class CategoryAccess  extends DataAccess {
         }
         return categories;
     }
+    public void InsertCategory(CategoryTable category){
+        try {
+            createConnection();
+            PreparedStatement prSt = getConn().prepareStatement("call insert_category(?)");
+            prSt.setString(1,category.getCategoryName());
+            prSt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void UpdateCategory(CategoryTable category){
+        try {
+            createConnection();
+            PreparedStatement prSt = getConn().prepareStatement("call update_category(?, ?);");
+            prSt.setString(1, String.valueOf(category.getCategoryId()));
+            prSt.setString(2,category.getCategoryName());
+            prSt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
+    }
 }

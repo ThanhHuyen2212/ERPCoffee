@@ -2,6 +2,7 @@ package App.Controller;
 
 import App.Model.AccountTable;
 import App.Model.CategoryTable;
+import App.Model.EmployeeTable;
 import Entity.Category;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -73,6 +74,11 @@ public class CategoryCRUD implements Initializable {
                 try{
                     CategoryTable category = new CategoryTable(Integer.parseInt(TFCatagoryId.getText()),TFCategoryName.getText());
                     //Add
+                    category.addCategory();
+//                    CategoryTable tb = new CategoryTable();
+//                    CategoryTableViewList = tb.getDataCategory();
+//                    categoryTable = FXCollections.observableArrayList(CategoryTableViewList);
+//                    TBCategory.setItems(categoryTable);
                     showAlert("Success","Success!");
                 }catch (Exception e){
                     System.out.println("fail");
@@ -83,7 +89,19 @@ public class CategoryCRUD implements Initializable {
         btnEditCate.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-
+                try{
+                    CategoryTable category = new CategoryTable(Integer.parseInt(TFCatagoryId.getText()),TFCategoryName.getText());
+                    //Add
+                    category.editCategory();
+                    CategoryTable tb = new CategoryTable();
+                    CategoryTableViewList = tb.getDataCategory();
+                    categoryTable = FXCollections.observableArrayList(CategoryTableViewList);
+                    TBCategory.setItems(categoryTable);
+                    showAlert("Success","Success!");
+                }catch (Exception e){
+                    System.out.println("fail");
+                    showAlert("error","Fail!");
+                }
             }
         });
         btnCancelCate.setOnAction(new EventHandler<ActionEvent>() {
