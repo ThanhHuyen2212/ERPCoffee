@@ -1,5 +1,6 @@
 package App.Controller;
 
+import App.Model.AccountTable;
 import App.Model.EmployeeTable;
 import DAL.DataAccess;
 import App.Model.OrderTable;
@@ -67,7 +68,8 @@ public class EmployeeCRUD implements Initializable {
     private Button btnDelete;
     @FXML
     private Button btnCancel;
-
+    @FXML
+    private TextField TFSearch;
     public static ArrayList<EmployeeTable> EmployeeTableViewList;
     private ObservableList<EmployeeTable> employeeTable;
 
@@ -211,6 +213,28 @@ public class EmployeeCRUD implements Initializable {
             throw new RuntimeException(exc);
         }
     }
+    public void searchEmployee(){
+        ObservableList data =  empTable.getItems();
+        TFSearch.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (oldValue != null && (newValue.length() < oldValue.length())) {
+                empTable.setItems(data);
+            }
+            String value = newValue.toLowerCase();
+            ObservableList<EmployeeTable> subentries = FXCollections.observableArrayList();
+
+            long count = empTable.getColumns().stream().count();
+            for (int i = 0; i < empTable.getItems().size(); i++) {
+                for (int j = 0; j < count; j++) {
+                    String entry = "" + empTable.getColumns().get(j).getCellData(i);
+                    if (entry.toLowerCase().contains(value)) {
+                        subentries.add(empTable.getItems().get(i));
+                        break;
+                    }
+                }
+            }
+            empTable.setItems(subentries);
+        });
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
             EmployeeTable tb = new EmployeeTable();
@@ -224,6 +248,7 @@ public class EmployeeCRUD implements Initializable {
             fillDataDetail(empTable);
             setDataCBPosition();
             actionButton();
+            searchEmployee();
     }
 
 }

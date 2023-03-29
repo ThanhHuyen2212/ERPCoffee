@@ -27,11 +27,11 @@ public class DetailRecipeController implements Initializable {
     @FXML
     private TableColumn<Ingredient, String> idCol;
     @FXML
-    private TableColumn<Ingredient, ?> componentCol;
+    private TableColumn<Ingredient, String> componentCol;
     @FXML
     private TableColumn<Ingredient, String> qtyCol;
     @FXML
-    private TableColumn<Ingredient, ?> unitCol;
+    private TableColumn<Ingredient, String> unitCol;
     @FXML
     private Label productLbl;
     @FXML
@@ -59,7 +59,9 @@ public class DetailRecipeController implements Initializable {
         qtyCol.setCellValueFactory(data -> new SimpleStringProperty(
                 model.getSelected().getRecipe().getIngredientCosts().get(data.getValue()).toString()
         ));
-//        unitCol.setCellValueFactory(new PropertyValueFactory<>("ingredientStorage"));
+        unitCol.setCellValueFactory(data -> new SimpleStringProperty(
+                IngredientManagementController.setupUnit(data.getValue())
+        ));
 
         qtyProductTxf.setFocusTraversable(false);
     }

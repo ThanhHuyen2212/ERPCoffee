@@ -172,3 +172,7 @@
 .table-row-cell:filled:up {
     -fx-background-color: -fx-red-color;
 }
+
+.table-row-cell:filled:faded {
+    -fx-background-color: #B2B2B2;
+}

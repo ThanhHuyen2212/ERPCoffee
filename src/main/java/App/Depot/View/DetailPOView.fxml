@@ -16,7 +16,7 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="577.0" prefWidth="1048.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Depot.Controller.DetailPOController">
+<VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="577.0" prefWidth="1048.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Depot.Controller.DetailPOController">
     <children>
         <Label alignment="CENTER" maxWidth="1.7976931348623157E308" minHeight="42.0" prefHeight="42.0" prefWidth="1024.0" styleClass="filler" text="Recipes Management" VBox.vgrow="ALWAYS">
             <font>
@@ -70,7 +70,7 @@
                         <Insets right="20.0" />
                      </padding>
                   </Label>
-                  <Label fx:id="totalOrderLbl" minWidth="150.0" prefHeight="17.0" prefWidth="179.0" HBox.hgrow="ALWAYS" />
+                  <Label fx:id="totalOrderLbl" minWidth="150.0" prefHeight="17.0" prefWidth="179.0" textAlignment="RIGHT" HBox.hgrow="ALWAYS" />
                   <Label text="đ" />
                </children>
             </HBox>
@@ -81,7 +81,7 @@
                         <Insets right="20.0" />
                      </padding>
                   </Label>
-                  <Label fx:id="totalRevLbl" minWidth="150.0" prefHeight="17.0" prefWidth="179.0" HBox.hgrow="ALWAYS" />
+                  <Label fx:id="totalRevLbl" minWidth="150.0" prefHeight="17.0" prefWidth="179.0" textAlignment="RIGHT" HBox.hgrow="ALWAYS" />
                   <Label text="đ" />
                </children>
                <VBox.margin>

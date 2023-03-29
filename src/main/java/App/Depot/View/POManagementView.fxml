@@ -74,12 +74,12 @@
             <children>
                 <TableView fx:id="poTable" prefHeight="538.0" prefWidth="575.0" HBox.hgrow="ALWAYS">
                     <columns>
-                        <TableColumn fx:id="idCol" prefWidth="130.03749752044678" text="ID" />
-                        <TableColumn fx:id="vendorCol" prefWidth="295.36863708496094" text="Vendor" />
-                        <TableColumn fx:id="buyerCol" prefWidth="196.63137817382812" text="Buyer" />
-                        <TableColumn fx:id="orderDateCol" prefWidth="143.40618896484375" text="Order Date" />
-                        <TableColumn fx:id="totalCol" prefWidth="136.09381103515625" text="Total" />
-                        <TableColumn fx:id="statusCol" prefWidth="124.0374755859375" text="Status" />
+                        <TableColumn fx:id="idCol" maxWidth="1.7976931348623157E308" prefWidth="130.03749752044678" text="ID" />
+                        <TableColumn fx:id="vendorCol" maxWidth="1.7976931348623157E308" prefWidth="295.36863708496094" text="Vendor" />
+                        <TableColumn fx:id="buyerCol" maxWidth="1.7976931348623157E308" prefWidth="196.63137817382812" text="Buyer" />
+                        <TableColumn fx:id="orderDateCol" maxWidth="1.7976931348623157E308" prefWidth="143.40618896484375" text="Order Date" />
+                        <TableColumn fx:id="totalCol" maxWidth="1.7976931348623157E308" prefWidth="136.09381103515625" text="Total" />
+                        <TableColumn fx:id="statusCol" maxWidth="1.7976931348623157E308" prefWidth="124.0374755859375" text="Status" />
                     </columns>
                 </TableView>
             </children>
