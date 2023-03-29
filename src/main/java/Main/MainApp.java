@@ -80,8 +80,7 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-//        String defaultpath = "src/main/java/App/LogIn/View/LogIn.fxml";
-        String defaultpath = "src/main/java/App/View/CategoryCRUD.fxml";
+        String defaultpath = "src/main/java/App/LogIn/View/LogIn.fxml";
         System.out.println("Tại sao code ko chạy");
         initGUI();
         initData();
