@@ -73,6 +73,10 @@ public class AccountTable {
     }
     public void AddAccount(){
         AccountAccess accountAccess = new AccountAccess();
-        accountAccess.Insert(getUsername(),getPassword(),getEmpId(),getPositionName());
+        accountAccess.Insert(this);
+    }
+    public void EditAccount(){
+        AccountAccess accountAccess = new AccountAccess();
+        accountAccess.Update(this);
     }
 }

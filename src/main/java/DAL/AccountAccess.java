@@ -28,14 +28,27 @@ public class AccountAccess extends DataAccess {
         }
         return accountlist;
     }
-    public void Insert(String username,String pass,int empId,String rolename){
+    public void Insert(AccountTable accountTable){
         try {
             createConnection();
             PreparedStatement prSt = getConn().prepareStatement("call insert_account(?,?,?,?)");
-            prSt.setString(1,username);
-            prSt.setString(2,pass);
-            prSt.setInt(3,empId);
-            prSt.setString(4,rolename);
+            prSt.setString(1,accountTable.getUsername());
+            prSt.setString(2,accountTable.getPassword());
+            prSt.setInt(3,accountTable.getEmpId());
+            prSt.setString(4,accountTable.getPositionName());
+            prSt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void Update(AccountTable accountTable){
+        try {
+            createConnection();
+            PreparedStatement prSt = getConn().prepareStatement("call update_password_rolesid_account(?,?,?)");
+            prSt.setString(1,accountTable.getUsername());
+            prSt.setString(2,accountTable.getPassword());
+            prSt.setString(3,accountTable.getPositionName());
+            prSt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

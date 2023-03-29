@@ -22,6 +22,14 @@ public class CategoryTable extends Category  implements Initializable {
         CategoryAccess categoryAccess = new CategoryAccess();
         return categoryAccess.retrieve();
     }
+    public void addCategory(){
+        CategoryAccess categoryAccess = new CategoryAccess();
+        categoryAccess.InsertCategory(this);
+    }
+    public void editCategory(){
+        CategoryAccess categoryAccess = new CategoryAccess();
+        categoryAccess.UpdateCategory(this);
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 

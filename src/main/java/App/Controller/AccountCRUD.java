@@ -2,11 +2,15 @@ package App.Controller;
 
 import App.Model.AccountTable;
 import App.Model.EmployeeTable;
+import DAL.AccountAccess;
 import DAL.EmployeeAccess;
 import Entity.Role;
 import Entity.WorkPosition;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -65,6 +69,8 @@ public class AccountCRUD implements Initializable {
 
     @FXML
     private Button btnEditAccount;
+    @FXML
+    private TextField TFSearch;
     public static ArrayList<AccountTable> AccountTableViewList;
     private ObservableList<AccountTable> accountTable;
     public void fillDataDetail(TableView tableView){
@@ -78,7 +84,9 @@ public class AccountCRUD implements Initializable {
                     TFUsername.setText(rowData.getUsername());
                     TFPass.setText(rowData.getPassword());
                     CBRole.getSelectionModel().select(rowData.getPositionName());
-//                    CBRole.getSelectionModel().select(rowData.getPosition());
+                    TFEmpID.setDisable(true);
+                    TFEmpName.setDisable(true);
+                    TFUsername.setDisable(true);
                 }
             });
             return row ;
@@ -105,8 +113,11 @@ public class AccountCRUD implements Initializable {
                 try{
                     AccountTable account = new AccountTable(TFUsername.getText(),TFPass.getText(),Integer.parseInt(TFEmpID.getText()),TFEmpName.getText(),cb);
                     //Add
-//                    account.AddAccount();
-                    System.out.println(account.getEmpName());
+                    account.AddAccount();
+                    AccountTable table = new AccountTable();
+                    AccountTableViewList = table.getDataAccount();
+                    accountTable= FXCollections.observableArrayList(AccountTableViewList);
+                    TBAccount.setItems(accountTable);
                     showAlert("Success","Success!");
                 }catch (Exception e){
                     System.out.println("fail");
@@ -117,7 +128,21 @@ public class AccountCRUD implements Initializable {
         btnEditAccount.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-
+                String cb = String.valueOf(CBRole.getSelectionModel().getSelectedItem());
+//                System.out.println(cb);
+                try{
+                    AccountTable account = new AccountTable(TFUsername.getText(),TFPass.getText(),Integer.parseInt(TFEmpID.getText()),TFEmpName.getText(),cb);
+                    //Update
+                    account.EditAccount();
+                    AccountTable table = new AccountTable();
+                    AccountTableViewList = table.getDataAccount();
+                    accountTable= FXCollections.observableArrayList(AccountTableViewList);
+                    TBAccount.setItems(accountTable);
+                    showAlert("Success","Success!");
+                }catch (Exception e){
+                    System.out.println("fail");
+                    showAlert("error","Fail!");
+                }
             }
         });
         btnCancelAccount.setOnAction(new EventHandler<ActionEvent>() {
@@ -128,6 +153,9 @@ public class AccountCRUD implements Initializable {
                 TFUsername.setText(null);
                 TFPass.setText(null);
                 CBRole.getSelectionModel().select(0);
+                TFEmpID.setDisable(false);
+                TFEmpName.setDisable(false);
+                TFUsername.setDisable(false);
             }
         });
         btnDeleteAccount.setOnAction(new EventHandler<ActionEvent>() {
@@ -156,6 +184,28 @@ public class AccountCRUD implements Initializable {
             throw new RuntimeException(exc);
         }
     }
+    public void searchAccount(){
+        ObservableList data =  TBAccount.getItems();
+        TFSearch.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (oldValue != null && (newValue.length() < oldValue.length())) {
+                TBAccount.setItems(data);
+            }
+            String value = newValue.toLowerCase();
+            ObservableList<AccountTable> subentries = FXCollections.observableArrayList();
+
+            long count = TBAccount.getColumns().stream().count();
+            for (int i = 0; i < TBAccount.getItems().size(); i++) {
+                for (int j = 0; j < count; j++) {
+                    String entry = "" + TBAccount.getColumns().get(j).getCellData(i);
+                    if (entry.toLowerCase().contains(value)) {
+                        subentries.add(TBAccount.getItems().get(i));
+                        break;
+                    }
+                }
+            }
+            TBAccount.setItems(subentries);
+        });
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         AccountTable accTb = new AccountTable();
@@ -169,5 +219,6 @@ public class AccountCRUD implements Initializable {
         fillDataDetail(TBAccount);
         setDataCBRole();
         actionButton();
+        searchAccount();
     }
 }

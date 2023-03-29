@@ -16,15 +16,31 @@
   <children>
     <GridPane layoutX="0.0" layoutY="0.0" prefHeight="800.0" prefWidth="1200.0">
       <children>
-        <Label alignment="CENTER" prefHeight="50.0" prefWidth="809.0" text="Employee" GridPane.columnIndex="0" GridPane.rowIndex="0">
-          <font>
-            <Font name="System Bold" size="25.0" fx:id="x1" />
-          </font>
-          <textFill>
-            <Color blue="0.831" green="0.204" red="0.282" fx:id="x4" />
-          </textFill>
+        <FlowPane minWidth="398.0" prefHeight="65.0" prefWidth="808.9998779296875" GridPane.columnIndex="0" GridPane.rowIndex="0">
+          <children>
+            <Label alignment="CENTER" prefHeight="40.0" prefWidth="809.0" text="Employee">
+              <font>
+                <Font name="System Bold" size="25.0" fx:id="x1" />
+              </font>
+              <textFill>
+                <Color blue="0.831" green="0.204" red="0.282" fx:id="x4" />
+              </textFill>
+              <FlowPane.margin>
+                <Insets top="20.0" />
+              </FlowPane.margin>
+            </Label>
+            <TextField fx:id="TFSearch" prefWidth="237.0" promptText="Search" text="">
+              <FlowPane.margin>
+                <Insets left="570.0" />
+              </FlowPane.margin>
+            </TextField>
+          </children>
+        </FlowPane>
+        <Label alignment="CENTER" font="$x1" prefHeight="50.0" prefWidth="391.0" text="Detail" textFill="$x4" GridPane.columnIndex="1" GridPane.rowIndex="0">
+          <GridPane.margin>
+            <Insets />
+          </GridPane.margin>
         </Label>
-        <Label alignment="CENTER" font="$x1" prefHeight="50.0" prefWidth="391.0" text="Detail" textFill="$x4" GridPane.columnIndex="1" GridPane.rowIndex="0" />
         <TableView fx:id="empTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
           <columns>
             <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="209.0" text="ID" fx:id="IdCol" />
@@ -61,7 +77,7 @@
                 </Button>
                 <Button fx:id="btnEdit" font="$x2" mnemonicParsing="false" prefHeight="50.0" prefWidth="85.0" style="-fx-background-color:linear-gradient(to bottom right,#2193b0,#6dd5ed);&#10;" text="Edit" FlowPane.margin="$x3" />
                 <Button fx:id="btnDelete" disable="true" font="$x2" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" text="Delete" FlowPane.margin="$x3" />
-                <Button fx:id="btnCancel" font="$x2" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" style="-fx-background-color:linear-gradient(to bottom right,#02aab0,#00cdac);&#10;" text="Clear" FlowPane.margin="$x3" />
+                <Button fx:id="btnCancel" font="$x2" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" style="-fx-background-color:linear-gradient(to bottom right,#eb3349,#f45c43);&#10;" text="Clear" FlowPane.margin="$x3" />
               </children>
             </FlowPane>
           </children>
@@ -72,8 +88,8 @@
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="597.0" minWidth="10.0" prefWidth="391.0" />
       </columnConstraints>
       <rowConstraints>
-        <RowConstraints maxHeight="394.0" minHeight="10.0" prefHeight="65.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="755.0" minHeight="10.0" prefHeight="735.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="394.0" minHeight="10.0" prefHeight="90.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="755.0" minHeight="10.0" prefHeight="710.0" vgrow="SOMETIMES" />
       </rowConstraints>
     </GridPane>
   </children>
