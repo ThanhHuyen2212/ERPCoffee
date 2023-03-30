@@ -3,8 +3,8 @@ package App.ModuleManager;
 
 import App.Controller.AlertController;
 import Entity.Employee;
+import Logic.Depot.ProductPreparationManagement;
 import Main.MainApp;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -27,6 +27,7 @@ import static Main.MainApp.getFunction;
 public class AppControl {
     public static Employee currentUser;
     public static Connection conn;
+    public static HashMap<Integer, Integer> preparedList;
 
 
     HashMap<String,String> modulePath = new HashMap<>(){{
@@ -71,6 +72,7 @@ public class AppControl {
     public AppControl() {
         views = new HashMap<>();
         buttons = new HashMap<>();
+        preparedList = ProductPreparationManagement.preparedList;
     }
 
     public AppControl(ArrayList<String> permissons) {
