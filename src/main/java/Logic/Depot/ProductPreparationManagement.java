@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ProductPreparationManagement {
-    public static HashMap<Product, Integer> preparedList = new HashMap<>();
+    public static HashMap<Integer, Integer> preparedList = new HashMap<>();
     private ArrayList<Product> products;
     private HashMap<Product, Integer> preparations;
     private RecipeAccess recipeAccess;
@@ -62,12 +62,12 @@ public class ProductPreparationManagement {
     private static void addIntoPreparedList(Product p, int batch, int productQty) {
         if(ProductPreparationManagement.preparedList.containsKey(p)) {
             ProductPreparationManagement.preparedList.replace(
-                    p,
+                    p.getProductId(),
                     batch * productQty + preparedList.get(p)
             );
         } else {
             ProductPreparationManagement.preparedList.put(
-                    p,
+                    p.getProductId(),
                     batch * productQty
             );
         }

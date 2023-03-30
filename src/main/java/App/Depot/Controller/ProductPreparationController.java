@@ -3,11 +3,9 @@ package App.Depot.Controller;
 import App.Depot.Model.ProductPreparationModel;
 import App.Depot.View.MessageDialog;
 import App.ModuleManager.AppControl;
-import Entity.Ingredient;
 import Entity.Product;
 import Logic.Depot.ProductPreparationManagement;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleSetProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -62,9 +60,9 @@ public class ProductPreparationController implements Initializable {
                 data.getValue().getRecipe().getProductQty() + " units / batch"
         ));
         availableCol.setCellValueFactory(data -> new SimpleStringProperty(
-                ProductPreparationManagement.preparedList.get(data.getValue()) == null
+                ProductPreparationManagement.preparedList.get(data.getValue().getProductId()) == null
                         ? String.valueOf(0)
-                        : ProductPreparationManagement.preparedList.get(data.getValue()) + " units"
+                        : ProductPreparationManagement.preparedList.get(data.getValue().getProductId()) + " units"
         ));
         autofillBtn.setVisible(false);
 
