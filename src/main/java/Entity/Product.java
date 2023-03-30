@@ -78,7 +78,7 @@ public class Product {
         this.category = category;
     }
 
-    public int getPrice(Size size){
+    public Integer getPrice(Size size){
         Integer price = null;
         for(ProductDetails pd : productDetails){
             if(size.getSign().equalsIgnoreCase(pd.getSize())){
@@ -86,6 +86,15 @@ public class Product {
             }
         }
         return price;
+    }
+    public Integer getVle(Size size){
+        Integer vle = null;
+        for(ProductDetails pd : productDetails){
+            if(size.getSign().equalsIgnoreCase(pd.getSize())){
+                vle=pd.getVle();
+            }
+        }
+        return vle;
     }
 
     public Date getCreateAt() {

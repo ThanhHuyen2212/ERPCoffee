@@ -2,6 +2,7 @@ package App.Controller;
 import App.Model.OrderTable;
 import Entity.*;
 import Logic.CategoryManagement;
+import Logic.Depot.ProductPreparationManagement;
 import Logic.OrderManagement;
 import Logic.ProductManagement;
 import Logic.SizeManagement;
@@ -106,6 +107,7 @@ public class ShopController implements Initializable {
     public ArrayList<Product> productList = new ArrayList<>();
     public ArrayList<OrderDetail> orderList = new ArrayList<>();
     private List<Size> sizeList = new ArrayList<>();
+    public HashMap<Integer, Integer> preListTemp = new HashMap<>();
     ObservableList<OrderTable> orderTableObservableList;
     public void getData(){
         categoryList = categoryManagement.getCategoriesList();
@@ -194,11 +196,19 @@ public class ShopController implements Initializable {
             Quality.setText(String.valueOf(inputValue));
         }
     }
-
+    public void checkPreList(OrderDetail orderDetail){
+       if(preListTemp.containsKey(orderDetail.getProduct().getProductId())
+            && (preListTemp.get(orderDetail.getProduct().getProductId())<= ProductPreparationManagement.preparedList.get(orderDetail.getProduct()))
+       ){
+           Integer oldVle = preListTemp.get(orderDetail.getProduct().getProductId());
+           preListTemp.put(orderDetail.getProduct().getProductId(),oldVle+orderDetail.getProduct().getVle(orderDetail.getSize())*orderDetail.getQty());
+       }
+    }
     public boolean checkProductChoose(OrderDetail orderDetail) {
         for (OrderDetail o : orderList) {
             if (orderDetail.getProduct() == o.getProduct() && o.getSize().getSign().equalsIgnoreCase(cbSizePrice.getValue())) {
                 o.setQty(o.getQty() + Integer.parseInt(Quality.getText()));
+                checkPreList(orderDetail);
                 System.out.println(o.getProduct().getProductName() + "-" + o.getQty() + "-" + o.getSize().getSign());
                 return true;
             }
@@ -221,7 +231,6 @@ public class ShopController implements Initializable {
         orderDetail.setSize(size);
         return orderDetail;
     }
-
     public void AddOrderDetails(OrderDetail product) {
         btnAdd.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -246,7 +255,7 @@ public class ShopController implements Initializable {
                 for (OrderDetail o : orderList) {
                     sumTotal += o.getProduct().getPrice(o.getSize().getSign()) * o.getQty();
                 }
-
+                preListTemp.put(product.getProduct().getProductId(), product.getQty()*product.getProduct().getVle(product.getSize())*product.getQty());
                 totalmoneyLabel.setText(NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(sumTotal));
             }
 
@@ -571,7 +580,11 @@ public class ShopController implements Initializable {
             if(btn.get()==ButtonType.YES){
                 shopHBox.setStyle("-fx-opacity:" + "1; \n");
                 Member member = customerController.getMember();
-                labelCustomer.setText(member.getFullName());
+                if(member==null){
+                    labelCustomer.setText("Alias");
+                }else {
+                    labelCustomer.setText(member.getFullName());
+                }
             }else if(btn.get()==ButtonType.NO){
                 shopHBox.setStyle("-fx-opacity:" + "1; \n");
                 dialog.close();
