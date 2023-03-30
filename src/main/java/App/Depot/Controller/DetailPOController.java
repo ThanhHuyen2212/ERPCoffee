@@ -73,6 +73,7 @@ public class DetailPOController implements Initializable {
         detailTable.setItems(model.getCurrentDetails());
 
         handleInitGUI();
+        handleActionBtn();
     }
 
     public void handleInitGUI() {

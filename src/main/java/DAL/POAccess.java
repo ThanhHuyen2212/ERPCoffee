@@ -129,7 +129,7 @@ public class POAccess extends DataAccess {
                 prSt.setInt(1, poId);
                 prSt.setInt(2, pd.getIngredient().getIngredientId());
                 prSt.setInt(3, pd.getOrderQty());
-                ResultSet rs = prSt.executeQuery();
+                prSt.executeQuery();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

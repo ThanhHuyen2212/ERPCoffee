@@ -101,7 +101,7 @@ public class POInputController implements Initializable {
     public void init(POModel modelOfSib) {
         this.model = modelOfSib;
 
-        idLbl.setText(String.valueOf(model.getCurrent().getPurchaseOrderId()));
+        idLbl.setText(String.format("%010d",model.getLogic().getPurchaseOrders().size() + 1));
 
         handleActionOnRow();
         handleActionBtn();
