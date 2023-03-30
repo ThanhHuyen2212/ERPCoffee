@@ -129,7 +129,7 @@
                         </Pane>
                         <TextField fx:id="Quality" alignment="CENTER" prefHeight="42.0" prefWidth="47.0" styleClass="transparent" stylesheets="@css/style.css" text="1">
                            <font>
-                              <Font size="25.0" />
+                              <Font size="18.0" />
                            </font>
                         </TextField>
                         <Pane prefHeight="87.0" prefWidth="27.0">

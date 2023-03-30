@@ -33,4 +33,7 @@ public class MemberManagement {
         }
         return member;
     }
+    public void updateMember(){
+        memberAccess.updateMember();
+    }
 }
