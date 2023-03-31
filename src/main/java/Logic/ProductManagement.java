@@ -20,5 +20,6 @@ public class ProductManagement {
     public ArrayList<Product> getProducts(){
         return products;
     }
-
+    public void addProduct(Product product){productAccess.Insert(product);}
+    public void updateProduct(Product product){productAccess.Update(product);}
 }
