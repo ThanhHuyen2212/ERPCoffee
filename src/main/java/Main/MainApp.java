@@ -56,6 +56,7 @@ public class MainApp extends Application {
         for(String func : APP.getPermission()){
             addButton(APP.getPOSButton(func));
         }
+        if(!mainMenu.getChildren().isEmpty()) addButton(APP.getLogoutButton());
     }
 
     private void initGUI(){
