@@ -40,4 +40,10 @@ public class ProductPreparationModel {
         logic.handlePrepare();
         logic.setPreparations(new HashMap<>());
     }
+
+    public void handleFillQty() {
+        logic.getProducts().forEach(product -> {
+            logic.getPreparations().put(product, 10);
+        });
+    }
 }

@@ -5,6 +5,7 @@ import App.Depot.View.MessageDialog;
 import App.ModuleManager.AppControl;
 import Entity.Employee;
 import Entity.PurchaseDetail;
+import Entity.PurchaseOrder;
 import Logic.Depot.IngredientManagement;
 import Main.MainApp;
 import javafx.beans.property.SimpleStringProperty;
@@ -27,6 +28,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.util.ResourceBundle;
+
+import static App.Depot.Controller.IngredientManagementController.nf;
+import static Main.MainApp.APP;
 
 public class POInputController implements Initializable {
     @FXML
@@ -88,7 +92,7 @@ public class POInputController implements Initializable {
                 String.valueOf(data.getValue().getIngredient().getPrice())
         ));
         subtotalCol.setCellValueFactory(data -> new SimpleStringProperty(String.valueOf(
-                model.calSubtotal(data.getValue())
+                nf.format(model.calSubtotal(data.getValue()))
         )));
         unitCol.setCellValueFactory(data -> new SimpleStringProperty(
                 IngredientManagementController.setupUnit(data.getValue().getIngredient())
@@ -131,7 +135,7 @@ public class POInputController implements Initializable {
                 }
                 ingredientTable.refresh();
                 ingredientTable.setItems(model.getCurrentDetails());
-                totalLbl.setText(String.valueOf(model.calTotal()));
+                totalLbl.setText(String.valueOf(nf.format(model.calTotal())));
             }
         };
 
@@ -155,7 +159,7 @@ public class POInputController implements Initializable {
                                 "\n\nHoặc bạn chưa chọn thành phần cần thay đổi");
                     }
                     ingredientTable.refresh();
-                    totalLbl.setText(String.valueOf(model.calTotal()));
+                    totalLbl.setText(String.valueOf(nf.format(model.calTotal())));
                 }
             }
         };
@@ -174,7 +178,7 @@ public class POInputController implements Initializable {
                         System.out.println("Loi dong 172 file POInputController");
                     }
                     ingredientTable.setItems(model.getCurrentDetails());
-                    totalLbl.setText(String.valueOf(model.calTotal()));
+                    totalLbl.setText(String.valueOf(nf.format(model.calTotal())));
                 }
             }
         };
@@ -192,20 +196,26 @@ public class POInputController implements Initializable {
                         "Warning", "Bạn muốn tạo mới đơn đặt hàng?" +
                                 "\n\nCác thay đổi sẽ mất nếu bạn không lưu.");
                 if (rs == 1) {
-//                    try {
+                    try {
                         String vendor = vendorTxf.getText();
                         Employee staff = AppControl.currentUser;
                         Date date = Date.valueOf(dateLbl.getText());
-                        model.handleAdd(
+                        int id;
+                        id = model.handleAdd(
                                 model.getCurrent(),
                                 vendor,
                                 staff,
                                 date
                         );
-//                    } catch (Exception e) {
-//                        AppControl.showAlert("error", "Giá trị số lượng không hợp lệ!");
-//                    }
-                    ingredientTable.setItems(model.getCurrentDetails());
+                        if(id != 0) {
+                            AppControl.showAlert("success", "Hoàn tất tạo đơn đặt hàng!");
+                            MainApp.show(APP.getViews().get("purchase"));
+                            model.setCurrent(new PurchaseOrder());
+
+                        }
+                    } catch (Exception e) {
+                        AppControl.showAlert("error", "Đã có lỗi xảy ra!");
+                    }
                 }
             }
         };

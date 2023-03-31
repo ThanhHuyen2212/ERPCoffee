@@ -4,8 +4,6 @@ import DAL.RecipeAccess;
 import Entity.Ingredient;
 import Entity.Product;
 
-import java.util.ArrayList;
-
 public class RecipeManagement {
     private final RecipeAccess recipeDAO;
 
