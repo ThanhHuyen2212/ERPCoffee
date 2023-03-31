@@ -136,7 +136,7 @@ public class AppControl {
             btnType.setDialogPane((DialogPane) alert);
             AlertController alert1 = fxmlLoader.getController();
             try {
-                alert1.RenderAlert("error",message);
+                alert1.RenderAlert(type,message);
             } catch (MalformedURLException exc) {
                 throw new RuntimeException(exc);
             }
@@ -148,5 +148,9 @@ public class AppControl {
 
     public ArrayList<String> getPermission() {
         return this.permissons;
+    }
+
+    public HashMap<String, Node> getViews() {
+        return views;
     }
 }

@@ -3,6 +3,7 @@ package App.Depot.Controller;
 import App.Controller.Alert2Controller;
 import App.Depot.Model.DetailRecipeModel;
 import App.Depot.View.MessageDialog;
+import App.ModuleManager.AppControl;
 import Entity.Ingredient;
 import Entity.Product;
 import Logic.Depot.IngredientManagement;
@@ -20,6 +21,8 @@ import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import static App.Depot.Controller.IngredientManagementController.messageInvalidNumber;
 
 public class DetailRecipeController implements Initializable {
     @FXML
@@ -102,7 +105,6 @@ public class DetailRecipeController implements Initializable {
                         "Warning", "Bạn muốn thêm thành phần mới?" +
                                 "\n\nCác thay đổi sẽ mất nếu bạn không lưu.");
                 if(rs == 1) {
-//                    model.handleCreate("Ca phe hat", 12);
                     try{
                         model.handleAdd(
                                 componentCb.getValue(),
@@ -137,7 +139,7 @@ public class DetailRecipeController implements Initializable {
                         }
                     }
                 } catch (Exception e) {
-                    System.out.println("Khong bat duoc selected");
+                    System.out.println("DetailRecipeController - Khong bat duoc selected");
                 }
                 detailTable.refresh();
                 detailTable.setItems(FXCollections.observableArrayList(
@@ -175,12 +177,15 @@ public class DetailRecipeController implements Initializable {
             public void handle(ActionEvent event) {
                 try{
                     int newQty = Integer.parseInt(qtyProductTxf.getText());
-                    if( newQty != model.getSelected().getRecipe().getProductQty()) {
-                            model.handleUpdatePrdQty(newQty);
+                    if(model.getSelected().getRecipe().getProductQty() <= 0)
+                        throw new Exception();
+                    if( newQty != model.getSelected().getRecipe().getProductQty() &&
+                            model.getSelected().getRecipe().getProductQty() > 0) {
+                        model.handleUpdatePrdQty(newQty);
+                        ((Stage) ((Node)event.getSource()).getScene().getWindow()).close();
                     }
-                    ((Stage) ((Node)event.getSource()).getScene().getWindow()).close();
                 } catch(Exception e) {
-                    System.out.println("Loi parse int");
+                    AppControl.showAlert("error", messageInvalidNumber);
                 }
             }
         };

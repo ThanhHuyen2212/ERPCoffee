@@ -1,12 +1,10 @@
 package App.Depot.Controller;
 
-import App.Controller.Alert2Controller;
 import App.Depot.Model.POModel;
 import App.Depot.View.MessageDialog;
 import App.ModuleManager.AppControl;
 import Entity.PurchaseDetail;
 import Entity.PurchaseOrder;
-import Main.MainApp;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -22,6 +20,9 @@ import javafx.util.StringConverter;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static App.Depot.Controller.IngredientManagementController.messageInvalidNumber;
+import static App.Depot.Controller.IngredientManagementController.nf;
+
 public class DetailPOController implements Initializable {
     @FXML
     private TableView<PurchaseDetail> detailTable;
@@ -36,6 +37,8 @@ public class DetailPOController implements Initializable {
     @FXML
     private TableColumn<PurchaseDetail, String> priceCol;
     @FXML
+    private TableColumn<PurchaseDetail, String> unitCol;
+    @FXML
     private Label totalOrderLbl;
     @FXML
     private Label totalRevLbl;
@@ -43,6 +46,8 @@ public class DetailPOController implements Initializable {
     private Button cancelBtn;
     @FXML
     private Button confirmBtn;
+    @FXML
+    private Button revAllBtn;
     @FXML
     private Button printBtn;
     private POModel model;
@@ -62,8 +67,12 @@ public class DetailPOController implements Initializable {
         priceCol.setCellValueFactory(data -> new SimpleStringProperty(
                 String.valueOf(data.getValue().getIngredient().getPrice())
         ));
+        unitCol.setCellValueFactory(data -> new SimpleStringProperty(
+                IngredientManagementController.setupUnit(data.getValue().getIngredient())
+        ));
 
-        confirmBtn.setVisible(false);
+        printBtn.setVisible(false);
+
     }
 
     public void init(POModel modelOfSib, PurchaseOrder selected) {
@@ -77,27 +86,26 @@ public class DetailPOController implements Initializable {
     }
 
     public void handleInitGUI() {
-        float sum = 0;
-        for (PurchaseDetail pd : model.getCurrent().getDetails()) {
-            sum += pd.getIngredient().getPrice() * pd.getOrderQty();
-        }
-        totalOrderLbl.setText(String.valueOf(sum));
 
-        sum = 0;
+        totalOrderLbl.setText(String.valueOf(nf.format(model.calTotal())));
+
+        double sum = 0;
         for (PurchaseDetail pd : model.getCurrent().getDetails()) {
             sum += pd.getIngredient().getPrice() * pd.getReceiveQty();
         }
-        totalRevLbl.setText(String.valueOf(sum));
+        totalRevLbl.setText(nf.format(sum));
 
 //        If PO has been not confirmed, the confirmation button is visible
-        if (!model.isConfirm()) {
-            confirmBtn.setVisible(true);
+        if (model.isConfirm()) {
+            confirmBtn.setVisible(false);
+            revAllBtn.setVisible(false);
+        } else {
             editableCols();
         }
     }
 
     public void editableCols() {
-        receiveCol.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Integer>() {
+        receiveCol.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<>() {
             @Override
             public String toString(Integer integer) {
                 return String.valueOf(integer);
@@ -105,11 +113,15 @@ public class DetailPOController implements Initializable {
 
             @Override
             public Integer fromString(String s) {
-                int value = model.getCurrent().getDetails().get(detailTable.getSelectionModel().getSelectedIndex()).getReceiveQty();
+                int value;
                 try {
                     value = Integer.parseInt(s);
+                    if(value < 0) {
+                        throw new NumberFormatException();
+                    }
                 } catch (NumberFormatException e) {
-                    AppControl.showAlert("error", "Giá trị số lượng không hợp lệ!");
+                    AppControl.showAlert("error", messageInvalidNumber);
+                    value = model.getCurrent().getDetails().get(detailTable.getSelectionModel().getSelectedIndex()).getReceiveQty();
                 }
                 return value;
             }
@@ -123,6 +135,14 @@ public class DetailPOController implements Initializable {
     }
 
     public void handleActionBtn() {
+        EventHandler<ActionEvent> buttonRevAllHandler = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                model.receiveAll();
+                detailTable.refresh();
+            }
+        };
+
         EventHandler<ActionEvent> buttonConfirmHandler = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -133,7 +153,7 @@ public class DetailPOController implements Initializable {
                     boolean legal = true;
                     for (PurchaseDetail pd : model.getCurrent().getDetails()) {
                         if (pd.getReceiveQty() < 0 && legal) {
-                            AppControl.showAlert("error", "Giá trị số lượng không hợp lệ!");
+                            AppControl.showAlert("error", messageInvalidNumber);
                             legal = false;
                         }
                     }
@@ -148,18 +168,20 @@ public class DetailPOController implements Initializable {
         EventHandler<ActionEvent> buttonCancelHandler = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                int rs = MessageDialog.showAlert(
-                        "Warning", "Bạn muốn thoát trạng thái hiện tại?" +
-                                "\n\nCác thay đổi sẽ mất nếu bạn không lưu.");
+                int rs = 1;
+                if (!model.isConfirm()) {
+                    rs = MessageDialog.showAlert(
+                            "Warning", "Bạn muốn thoát trạng thái hiện tại?" +
+                                    "\n\nCác thay đổi sẽ mất nếu bạn không lưu.");
+                }
                 if (rs == 1) {
                     ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
                 }
             }
         };
 
+        revAllBtn.setOnAction(buttonRevAllHandler);
         confirmBtn.setOnAction(buttonConfirmHandler);
         cancelBtn.setOnAction(buttonCancelHandler);
     }
-
-
 }
