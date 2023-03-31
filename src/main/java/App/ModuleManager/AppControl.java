@@ -7,6 +7,7 @@ import Logic.Depot.ProductPreparationManagement;
 import Main.MainApp;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -61,12 +62,14 @@ public class AppControl {
         put("staff","src/main/java/Assets/Icons/latte.png");
         put("statistic","src/main/java/Assets/Icons/analytics.png");
         put("order","src/main/java/Assets/Icons/orders.png");
+        put("logout","src/main/java/Assets/Icons/log-out1.png");
     }};
 
 
     private HashMap<String, Node> views;
     private ArrayList<String> permissons;
     private HashMap<String,ToggleButton> buttons;
+    private ToggleButton logoutButton;
 
 
     public AppControl() {
@@ -152,5 +155,38 @@ public class AppControl {
 
     public HashMap<String, Node> getViews() {
         return views;
+    }
+    public Parent getLogoutView(){
+        try {
+            return FXMLLoader.load(
+                    new File("src/main/java/App/LogIn/View/LogIn.fxml").toURI().toURL());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public ToggleButton getLogoutButton(){
+        if(logoutButton == null){
+            logoutButton = new ToggleButton("LogOut");
+            logoutButton.getStyleClass().add("hau-menu-button");
+            logoutButton.getStyleClass().add("hau-toggle-button");
+            logoutButton.setContentDisplay(ContentDisplay.TOP);
+            if(!iconPath.get("logout").equals("")){
+                try {
+                    ImageView img = new ImageView(new Image(new FileInputStream(iconPath.get("logout"))));
+                    img.setFitHeight(50);
+                    img.setFitWidth(50);
+                    logoutButton.setGraphic(img);
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            logoutButton.setOnMouseClicked( e->{
+                currentUser = null;
+                this.permissons.clear();
+                MainApp.getFunction();
+                MainApp.show(getLogoutView());
+            });
+        }
+        return logoutButton;
     }
 }
