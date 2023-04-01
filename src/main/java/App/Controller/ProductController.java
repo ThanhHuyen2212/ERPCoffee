@@ -2,7 +2,6 @@ package App.Controller;
 
 import App.Model.CategoryTable;
 import App.Model.ProductModel;
-import DAL.ProductAccess;
 import Entity.Category;
 import Entity.Product;
 import javafx.collections.FXCollections;
@@ -102,6 +101,14 @@ public class ProductController implements Initializable {
 
     @FXML
     private TextField TFProductNameSize;
+    @FXML
+    private TableView<Product> TBProductSize;
+    @FXML
+    private TableColumn<Product, String> ColCategorySize;
+    @FXML
+    private TableColumn<Product, Integer> ColProductIdSize;
+    @FXML
+    private TableColumn<Product, String> ColProductNameSize;
     public static ArrayList<Product> ProductViewList;
     private ObservableList<Product> ProductTable;
     public void fillDataDetail(TableView tableView){
@@ -122,16 +129,24 @@ public class ProductController implements Initializable {
             return row ;
         });
     }
-    public void refillData(){
-        ProductModel productModel = new ProductModel();
+    public void fillDataSize(TableView tableView){
+        tableView.setRowFactory( tv -> {
+            TableRow<Product> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+                    Product rowData = row.getItem();
+                    TFProductNameSize.setText(rowData.getProductName());
+
+                }
+            });
+            return row ;
+        });
+    }
+    public void refillData(ProductModel productModel){
         ProductViewList = productModel.getProducts();
         ProductTable = FXCollections.observableArrayList(ProductViewList);
-        ColProductId.setCellValueFactory(new PropertyValueFactory<Product,Integer>("productId"));
-        ColProductName.setCellValueFactory(new PropertyValueFactory<Product,String>("productName"));
-        ColCreateAt.setCellValueFactory(new PropertyValueFactory<Product, Date>("createAt"));
-        ColDeleteAt.setCellValueFactory(new PropertyValueFactory<Product, Date>("deleteAt"));
-        ColCategory.setCellValueFactory(new PropertyValueFactory<Product,String>("category"));
         TBProduct.setItems(ProductTable);
+        TBProduct.refresh();
     }
     public void setDataCBCategory(){
         CategoryTable categoryTable = new CategoryTable();
@@ -253,11 +268,15 @@ public class ProductController implements Initializable {
         ProductViewList = productModel.getProducts();
         ProductTable = FXCollections.observableArrayList(ProductViewList);
         ColProductId.setCellValueFactory(new PropertyValueFactory<Product,Integer>("productId"));
+        ColProductIdSize.setCellValueFactory(new PropertyValueFactory<Product,Integer>("productId"));
         ColProductName.setCellValueFactory(new PropertyValueFactory<Product,String>("productName"));
+        ColProductNameSize.setCellValueFactory(new PropertyValueFactory<Product,String>("productName"));
         ColCreateAt.setCellValueFactory(new PropertyValueFactory<Product, Date>("createAt"));
         ColDeleteAt.setCellValueFactory(new PropertyValueFactory<Product, Date>("deleteAt"));
         ColCategory.setCellValueFactory(new PropertyValueFactory<Product,String>("category"));
+        ColCategorySize.setCellValueFactory(new PropertyValueFactory<Product,String>("category"));
         TBProduct.setItems(ProductTable);
+        TBProductSize.setItems(ProductTable);
         File file = new File("src/main/java/Assets/Icons/no-pictures.png");
         Image image = new Image(file.toURI().toString());
         ImgProduct.setImage(image);
