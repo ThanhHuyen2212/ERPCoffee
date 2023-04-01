@@ -96,6 +96,15 @@ public class Product {
         }
         return vle;
     }
+    public Integer getVle(String size){
+        Integer vle = null;
+        for(ProductDetails pd : productDetails){
+            if(size.equalsIgnoreCase(pd.getSize())){
+                vle=pd.getVle();
+            }
+        }
+        return vle;
+    }
 
     public Date getCreateAt() {
         return createAt;
