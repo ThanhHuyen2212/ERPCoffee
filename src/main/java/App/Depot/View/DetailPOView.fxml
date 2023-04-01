@@ -23,9 +23,24 @@
                 <Font name="System Bold" size="24.0" />
             </font>
         </Label>
-        <HBox alignment="CENTER_RIGHT" prefHeight="71.0" prefWidth="1032.0" VBox.vgrow="ALWAYS">
+        <HBox alignment="CENTER_RIGHT" prefHeight="71.0" prefWidth="1032.0" spacing="20.0" VBox.vgrow="ALWAYS">
             <children>
-                <Button fx:id="printBtn" alignment="CENTER" maxWidth="100.0" minWidth="60.0" mnemonicParsing="false" styleClass="wrapper-btn" text="Print" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+            <Button fx:id="revAllBtn" alignment="CENTER" maxWidth="100.0" minWidth="60.0" mnemonicParsing="false" text="Receive All" textAlignment="CENTER">
+               <padding>
+                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+               </padding>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <styleClass>
+                  <String fx:value="wrapper-btn" />
+                  <String fx:value="normal-btn" />
+               </styleClass>
+            </Button>
+                <Button fx:id="printBtn" alignment="CENTER" maxWidth="100.0" minWidth="60.0" mnemonicParsing="false" text="Print" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                     <padding>
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                     </padding>
@@ -42,6 +57,10 @@
                     <cursor>
                         <Cursor fx:constant="HAND" />
                     </cursor>
+               <styleClass>
+                  <String fx:value="wrapper-btn" />
+                  <String fx:value="normal-btn" />
+               </styleClass>
                 </Button>
             </children>
             <VBox.margin>
@@ -54,9 +73,10 @@
                     <columns>
                         <TableColumn fx:id="idCol" prefWidth="86.19086742401123" text="ID" />
                         <TableColumn fx:id="ingredientNameCol" prefWidth="377.5" text="Ingredient" />
-                        <TableColumn fx:id="qtyCol" minWidth="0.0" prefWidth="196.0" text="Order Quantity" />
-                        <TableColumn fx:id="receiveCol" prefWidth="175.5" text="Received" />
-                        <TableColumn fx:id="priceCol" prefWidth="187.5" text="Unit Price" />
+                        <TableColumn fx:id="qtyCol" minWidth="0.0" prefWidth="134.0" text="Order Quantity" />
+                        <TableColumn fx:id="receiveCol" prefWidth="144.5" text="Received" />
+                  <TableColumn fx:id="unitCol" prefWidth="87.5" text="Unit" />
+                        <TableColumn fx:id="priceCol" prefWidth="193.0" text="Unit Price" />
                     </columns>
                 </TableView>
             </children>

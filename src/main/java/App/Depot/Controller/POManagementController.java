@@ -9,7 +9,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -20,6 +19,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import static Main.MainApp.APP;
 
 public class POManagementController implements Initializable {
     @FXML
@@ -60,6 +61,11 @@ public class POManagementController implements Initializable {
         ));
 
         init();
+
+        APP.getPOSButton("purchase").setOnAction(e -> {
+            poTable.setItems(model.getPurchaseOrderObservableList());
+            poTable.refresh();
+        });
     }
 
     public void init() {
@@ -75,9 +81,9 @@ public class POManagementController implements Initializable {
         poTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 String filepath = "src/main/java/App/Depot/View/DetailPOView.fxml";
-                FXMLLoader fxmlLoader = null;
+                FXMLLoader fxmlLoader;
                 Stage childStage = new Stage();
-                Parent root = null;
+                Parent root;
                 try {
                     fxmlLoader = new FXMLLoader(new File(filepath).toURI().toURL());
                     root = fxmlLoader.load();
@@ -85,6 +91,7 @@ public class POManagementController implements Initializable {
                     controller.init(model, newSelection);
                     childStage.setScene(new Scene(root));
                     childStage.showAndWait();
+                    poTable.refresh();
                 } catch (IOException e) {
                     System.out.println("Khong load duoc child stage");
                     throw new RuntimeException(e);
@@ -111,5 +118,4 @@ public class POManagementController implements Initializable {
 
         addBtn.setOnAction(buttonAddHandler);
     }
-
 }
