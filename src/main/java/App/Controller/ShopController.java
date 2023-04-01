@@ -1,5 +1,4 @@
 package App.Controller;
-import App.Model.OrderGUI;
 import App.Model.OrderTable;
 import Entity.*;
 import Logic.CategoryManagement;
@@ -21,7 +20,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -29,7 +27,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -57,10 +54,6 @@ public class ShopController implements Initializable {
 
     @FXML
     private Button btnAdd;
-
-    @FXML
-    private Button btnCacncel;
-
     @FXML
     private Button btnEdit;
 
@@ -75,9 +68,6 @@ public class ShopController implements Initializable {
 
     @FXML
     private HBox hboxCartegory;
-
-    @FXML
-    private Button minusBtn;
     @FXML
     private HBox shopHBox;
 
@@ -90,8 +80,6 @@ public class ShopController implements Initializable {
     @FXML
     private TableColumn<OrderTable, Integer> quantityColumn;
 
-    @FXML
-    private ScrollPane scroll;
     @FXML
     private Label labelCustomer;
 
@@ -106,9 +94,6 @@ public class ShopController implements Initializable {
 
     @FXML
     private Label txtProductNamedetails;
-
-    @FXML
-    private AnchorPane viewControl;
     @FXML
     private Label totalmoneyLabel;
 
@@ -306,7 +291,8 @@ public class ShopController implements Initializable {
             Optional<ButtonType> clickedButton = dialog.showAndWait();
             if (clickedButton.get() == ButtonType.NO) {
                 dialog.close();
-            } else if (clickedButton.get() == ButtonType.YES) {
+            } else if(clickedButton.get() == ButtonType.YES) {
+            //code
             }
 
     }
@@ -468,19 +454,11 @@ public class ShopController implements Initializable {
        ObservableList<String> observableArrayList = FXCollections.observableArrayList(product.getSizeList());
         txtProductNamedetails.setText(product.getProductName());
         javafx.scene.image.Image newImage;
-        if(product != null){
             try {
                 newImage = new Image(String.valueOf((new File("src/main/java/Assets/Images/"+product.getImagePath()).toURI()).toURL()));
             } catch (MalformedURLException e) {
                 throw new RuntimeException(e);
             }
-        }else{
-            try {
-                newImage = new Image(String.valueOf((new File("src/main/java/Assets/Images/WhiteCoffee.png").toURI()).toURL()));
-            } catch (MalformedURLException e) {
-                throw new RuntimeException(e);
-            }
-        }
         imgProduct.setImage(newImage);
         cbSizePrice.setItems(observableArrayList);
 
@@ -537,13 +515,12 @@ public class ShopController implements Initializable {
                                 if(o.getSize()==size){
                                         o.setQty(o.getQty()+quantity);
                                         orderList.remove(orderDetail);
-                                        break;
                                 }else {
                                        orderDetail.setSize(size);
                                        orderDetail.setQty(quantity);
                                     System.out.println(size.getSign());
-                                    break;
                                 }
+                                break;
                             }
                         }
                     }else if(orderDetail.getSize()==size) {
@@ -555,17 +532,6 @@ public class ShopController implements Initializable {
                             }
                         }
                     }
-//                    if (orderDetail.getSize() != size || orderDetail.getQty() != quantity) {
-//                        for (OrderDetail od : orderList) {
-//                            if (od.getProduct() == orderDetail.getProduct() && od.getSize() == size) {
-//                                od.setQty(od.getQty() + quantity);
-//                                od.setSize(size);
-//                                orderList.remove(orderDetail);
-//                            } else if (od.getProduct() == orderDetail.getProduct() && od.getSize() != size) {
-//                                orderDetail.setSize(size);
-//                                orderDetail.setQty(quantity);
-//                            }
-//                        }
                         initTable(getDataOrderTable(orderList));
                         orderDetailsTables.refresh();
                         Integer sumTotal = 0;
@@ -634,7 +600,6 @@ public class ShopController implements Initializable {
         dialog.setDialogPane((DialogPane) alert);
         ArrayList<Product> products = productList;
         ArrayList<Product> ProductsForSearch = new ArrayList<>();
-
             ProductsForSearch.clear();
             if (!textSearch.getText().equals("")) {
                 String pattern = ".*" + textSearch.getText() + ".*";

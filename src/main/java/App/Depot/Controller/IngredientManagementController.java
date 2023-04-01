@@ -14,6 +14,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ResourceBundle;
 
@@ -21,6 +23,8 @@ import static Main.MainApp.APP;
 
 public class IngredientManagementController implements Initializable {
     public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    public static final NumberFormat nf = new DecimalFormat( "###,###,###,###.##" );
+    public static final String messageInvalidNumber = "Giá trị số lượng không hợp lệ !";
     //    Code convert java.sql.Date to Local Date
 //    Covert LocalDate to java.sql.Date
 //    java.sql.Date.valueOf(dateToConvert);
@@ -134,7 +138,7 @@ public class IngredientManagementController implements Initializable {
                         ));
                         ingredientTable.setItems(model.getList());
                     } catch (Exception exception) {
-                        AppControl.showAlert("error", "Giá trị số lượng không hợp lệ!");
+                        AppControl.showAlert("error", messageInvalidNumber);
                     }
                 }
             }

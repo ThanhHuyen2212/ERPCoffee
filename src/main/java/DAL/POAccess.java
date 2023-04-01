@@ -36,8 +36,6 @@ public class POAccess extends DataAccess {
         for (PurchaseOrder po : list) {
             PODetailsRetrieve(po);
         }
-
-        System.out.println(list.size());
         return list;
     }
 
@@ -88,7 +86,9 @@ public class POAccess extends DataAccess {
 //            call update_ingredient_where_name(name_column, value_update, name_ingredient)
             for(PurchaseDetail pd : curr.getDetails()) {
                 prSt2.setString(1,"IngredientStorage");
-                prSt2.setInt(2, pd.getIngredient().getIngredientStorage() + pd.getReceiveQty());
+                prSt2.setString(2, String.valueOf(
+                        pd.getIngredient().getIngredientStorage() + pd.getReceiveQty()
+                ));
                 prSt2.setString(3, pd.getIngredient().getIngredientName());
                 prSt2.executeQuery();
             }
@@ -129,7 +129,7 @@ public class POAccess extends DataAccess {
                 prSt.setInt(1, poId);
                 prSt.setInt(2, pd.getIngredient().getIngredientId());
                 prSt.setInt(3, pd.getOrderQty());
-                ResultSet rs = prSt.executeQuery();
+                prSt.executeQuery();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ProductPreparationManagement {
-    public static HashMap<Product, Integer> preparedList = new HashMap<>();
+    public static HashMap<Integer, Integer> preparedList = new HashMap<>();
     private ArrayList<Product> products;
     private HashMap<Product, Integer> preparations;
     private RecipeAccess recipeAccess;
@@ -31,7 +31,6 @@ public class ProductPreparationManagement {
     }
 
     public HashMap<Product, Integer> getPreparations() {
-
         return preparations;
     }
 
@@ -47,6 +46,20 @@ public class ProductPreparationManagement {
         }
     }
 
+    private static void addIntoPreparedList(Product p, int batch, int productQty) {
+        if(ProductPreparationManagement.preparedList.containsKey(p.getProductId())) {
+            ProductPreparationManagement.preparedList.replace(
+                    p.getProductId(),
+                    batch * productQty + preparedList.get(p.getProductId())
+            );
+        } else {
+            ProductPreparationManagement.preparedList.put(
+                    p.getProductId(),
+                    batch * productQty
+            );
+        }
+    }
+
     public boolean isEnoughInventory(Product p, int batch) {
         for (Map.Entry<Ingredient, Integer> recipe : p.getRecipe().getIngredientCosts().entrySet()) {
             Ingredient i = Management.ingredientManagement.findById(recipe.getKey().getIngredientId());
@@ -59,20 +72,6 @@ public class ProductPreparationManagement {
         return true;
     }
 
-    private static void addIntoPreparedList(Product p, int batch, int productQty) {
-        if(ProductPreparationManagement.preparedList.containsKey(p)) {
-            ProductPreparationManagement.preparedList.replace(
-                    p,
-                    batch * productQty + preparedList.get(p)
-            );
-        } else {
-            ProductPreparationManagement.preparedList.put(
-                    p,
-                    batch * productQty
-            );
-        }
-    }
-
     public void handlePrepare() {
         for (Map.Entry<Product, Integer> productEntryPrep : preparations.entrySet()) {
             if(isEnoughInventory(productEntryPrep.getKey(), productEntryPrep.getValue())) {
@@ -82,10 +81,6 @@ public class ProductPreparationManagement {
                         productEntryPrep.getValue(),
                         productEntryPrep.getKey().getRecipe().getProductQty()
                 );
-//                ProductPreparationManagement.preparedList.put(
-//                        productEntryPrep.getKey(),
-//                        productEntryPrep.getValue() * productEntryPrep.getKey().getRecipe().getProductQty()
-//                );
                 productEntryPrep.getKey().getRecipe().getIngredientCosts().forEach((k, v) -> {
                     k.setIngredientStorage(
                             k.getIngredientStorage() - productEntryPrep.getValue() * v

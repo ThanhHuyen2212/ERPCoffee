@@ -3,11 +3,9 @@ package App.Depot.Controller;
 import App.Depot.Model.ProductPreparationModel;
 import App.Depot.View.MessageDialog;
 import App.ModuleManager.AppControl;
-import Entity.Ingredient;
 import Entity.Product;
 import Logic.Depot.ProductPreparationManagement;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleSetProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -22,8 +20,10 @@ import javafx.util.StringConverter;
 
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.ResourceBundle;
+
+import static App.Depot.Controller.IngredientManagementController.messageInvalidNumber;
+import static Main.MainApp.APP;
 
 public class ProductPreparationController implements Initializable {
     @FXML
@@ -62,13 +62,16 @@ public class ProductPreparationController implements Initializable {
                 data.getValue().getRecipe().getProductQty() + " units / batch"
         ));
         availableCol.setCellValueFactory(data -> new SimpleStringProperty(
-                ProductPreparationManagement.preparedList.get(data.getValue()) == null
+                ProductPreparationManagement.preparedList.get(data.getValue().getProductId()) == null
                         ? String.valueOf(0)
-                        : ProductPreparationManagement.preparedList.get(data.getValue()) + " units"
+                        : ProductPreparationManagement.preparedList.get(data.getValue().getProductId()) + " units"
         ));
-        autofillBtn.setVisible(false);
 
         init();
+
+        APP.getPOSButton("manufacturing").setOnAction(e -> {
+            productTable.refresh();
+        });
     }
 
     public void init() {
@@ -95,7 +98,7 @@ public class ProductPreparationController implements Initializable {
                         throw new Exception();
                     }
                 } catch (Exception e) {
-                    AppControl.showAlert("error", "Giá trị số lượng không hợp lệ!");
+                    AppControl.showAlert("error", messageInvalidNumber);
                 }
                 return value;
             }
@@ -106,15 +109,21 @@ public class ProductPreparationController implements Initializable {
                     e.getTableView().getItems().get(e.getTablePosition().getRow()),
                     e.getNewValue()
             );
-            for (Map.Entry<Product, Integer> productEntryPrep : model.getLogic().getPreparations().entrySet())
-                System.out.println(productEntryPrep.getKey().getProductName() +" "+
-                        productEntryPrep.getValue());
         });
 
         productTable.setEditable(true);
     }
 
     public void handleActionBtn() {
+
+        EventHandler<ActionEvent> buttonAutoFillHandler = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                model.handleFillQty();
+                productTable.refresh();
+            }
+        };
+
         EventHandler<ActionEvent> buttonConfirmHandler = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -136,6 +145,7 @@ public class ProductPreparationController implements Initializable {
             }
         };
 
+        autofillBtn.setOnAction(buttonAutoFillHandler);
         confirmBtn.setOnAction(buttonConfirmHandler);
         clearBtn.setOnAction(buttonClearHandler);
     }

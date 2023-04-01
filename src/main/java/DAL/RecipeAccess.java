@@ -91,8 +91,6 @@ public class RecipeAccess extends DataAccess {
             PreparedStatement prSt = recipeAccess.getConn().prepareStatement(
                     "call update_ingredient_where_name(?, ?, ?);");
 //            call update_ingredient_where_name(name_column, value_update, name_ingredient)
-
-//            System.out.println(p.getRecipe().getIngredientCosts().entrySet().size());
             for(Map.Entry<Ingredient, Integer> recipe : p.getRecipe().getIngredientCosts().entrySet()) {
                 prSt.setString(1,"IngredientStorage");
                 prSt.setInt(2, (recipe.getKey().getIngredientStorage() - batch * recipe.getValue()));

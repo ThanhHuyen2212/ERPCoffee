@@ -41,6 +41,7 @@ public class POModel {
 
     public void setCurrent(PurchaseOrder current) {
         this.current = current;
+        this.currentDetails = FXCollections.observableArrayList(current.getDetails());
     }
 
     public ObservableList<PurchaseDetail> getCurrentDetails() {
@@ -63,6 +64,12 @@ public class POModel {
         return current.getEmployeeConfirm() != null;
     }
 
+    public void receiveAll() {
+        for(PurchaseDetail pd : current.getDetails()) {
+            pd.setReceiveQty(pd.getOrderQty());
+        }
+    }
+
     public void handleUpdateRevQty(Employee currentUser) {
         current.setEmployeeConfirm(currentUser);
         logic.handleUpdateRevQty(current);
@@ -83,9 +90,11 @@ public class POModel {
         currentDetails = FXCollections.observableArrayList(current.getDetails());
     }
 
-    public void handleAdd(PurchaseOrder current, String vendor, Employee staff, Date date) {
-        logic.handleAdd(current, vendor, staff, date);
+    public int handleAdd(PurchaseOrder current, String vendor, Employee staff, Date date) {
+        int id;
+        id = logic.handleAdd(current, vendor, staff, date);
         purchaseOrderObservableList = FXCollections.observableArrayList(logic.getPurchaseOrders());
+        return id;
     }
 
     public double calTotal() {
@@ -103,9 +112,5 @@ public class POModel {
         } else {
             return (double) pd.getOrderQty() / 1000.0 * pd.getIngredient().getPrice();
         }
-    }
-
-    public void handleConfirm(PurchaseOrder current, String vendor, Integer staffId, Date date) {
-        purchaseOrderObservableList = FXCollections.observableArrayList(logic.getPurchaseOrders());
     }
 }
