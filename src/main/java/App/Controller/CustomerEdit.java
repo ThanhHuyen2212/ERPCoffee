@@ -21,5 +21,11 @@ public class CustomerEdit {
         txtPhone.setText(member.getPhoneNumber());
         txtPoint.setText(String.valueOf(member.getPoint()));
     }
+    public Member newMember(){
+        String name= txtName.getText();
+        String phone =txtPhone.getText();
+        int point = Integer.parseInt(txtPoint.getText());
+        return new Member(phone,name,point);
+    }
 
 }

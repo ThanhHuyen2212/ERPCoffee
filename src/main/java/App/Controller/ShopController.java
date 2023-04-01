@@ -1,10 +1,8 @@
 package App.Controller;
 import App.Model.OrderTable;
 import Entity.*;
-import Logic.CategoryManagement;
-import Logic.OrderManagement;
-import Logic.ProductManagement;
-import Logic.SizeManagement;
+import Logic.*;
+import Logic.Depot.ProductPreparationManagement;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -106,6 +104,7 @@ public class ShopController implements Initializable {
     public ArrayList<Product> productList = new ArrayList<>();
     public ArrayList<OrderDetail> orderList = new ArrayList<>();
     private List<Size> sizeList = new ArrayList<>();
+    public HashMap<Integer, Integer> preListTemp = new HashMap<>();
     ObservableList<OrderTable> orderTableObservableList;
     public void getData(){
         categoryList = categoryManagement.getCategoriesList();
@@ -119,15 +118,9 @@ public class ShopController implements Initializable {
             OrderTable newOrderTable = new OrderTable(o);
             orderTables.add(newOrderTable);
         }
-        if (orderTables.size() > 0) {
-            System.out.println("co");
-        } else {
-            System.out.println("Khong");
-        }
         return orderTables;
 
     }
-
     public void initTable(ArrayList<OrderTable> orderTables) {
         editOrderDetails();
         orderTableObservableList = FXCollections.observableArrayList(orderTables);
@@ -152,6 +145,7 @@ public class ShopController implements Initializable {
                             for (OrderDetail o : orderList) {
                                 sumTotal += o.getProduct().getPrice(o.getSize().getSign()) * o.getQty();
                             }
+                            preListTemp.put(data.getOrderDetail().getProduct().getProductId(),0);
 
                             totalmoneyLabel.setText(NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(sumTotal));
                         });
@@ -185,6 +179,33 @@ public class ShopController implements Initializable {
         Quality.setText(String.valueOf(inputValue));
 
     }
+    public void showDialogAlert(Product  product){
+        FXMLLoader loader = new FXMLLoader();
+        try {
+            loader.setLocation(new File("src/main/java/App/View/Alert.fxml").toURI().toURL());
+        } catch (MalformedURLException ex) {
+            throw new RuntimeException(ex);
+        }
+        Pane alert = null;
+        try {
+            alert = loader.load();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+        Dialog<ButtonType> dialog = new Dialog<>();
+        AlertController alertController = loader.getController();
+        dialog.setDialogPane((DialogPane) alert);
+        try {
+            alertController.RenderAlert("Warning", product.getProductName()+" không đủ số lượng để bán");
+        } catch (MalformedURLException ex) {
+            throw new RuntimeException(ex);
+        }
+        Optional<ButtonType> clickedButton = dialog.showAndWait();
+        if (clickedButton.get() == ButtonType.OK) {
+            dialog.close();
+        }
+
+    }
 
     //minusBtn
     public void Minus(ActionEvent e) {
@@ -195,16 +216,63 @@ public class ShopController implements Initializable {
         }
     }
 
-    public boolean checkProductChoose(OrderDetail orderDetail) {
-        for (OrderDetail o : orderList) {
-            if (orderDetail.getProduct() == o.getProduct() && o.getSize().getSign().equalsIgnoreCase(cbSizePrice.getValue())) {
-                o.setQty(o.getQty() + Integer.parseInt(Quality.getText()));
-                System.out.println(o.getProduct().getProductName() + "-" + o.getQty() + "-" + o.getSize().getSign());
+    public boolean checkPreList(OrderDetail orderDetail){
+        if(preListTemp.containsKey(orderDetail.getProduct().getProductId())
+                && ProductPreparationManagement.preparedList.containsKey(orderDetail.getProduct().getProductId())
+                && preListTemp.get(orderDetail.getProduct().getProductId())<= ProductPreparationManagement.preparedList.get(orderDetail.getProduct().getProductId())){
+           Integer oldVle = preListTemp.get(orderDetail.getProduct().getProductId());
+           if (oldVle+orderDetail.getProduct().getVle(orderDetail.getSize())*orderDetail.getQty()<= ProductPreparationManagement.preparedList.get(orderDetail.getProduct().getProductId())) {
+               System.out.println("san pham add:"+preListTemp.get(orderDetail.getProduct().getProductId()));
+               System.out.println("san pham da chuan bi:"+ProductPreparationManagement.preparedList.get(orderDetail.getProduct().getProductId()));
+               preListTemp.put(orderDetail.getProduct().getProductId(),oldVle+orderDetail.getProduct().getVle(orderDetail.getSize())*orderDetail.getQty());
+               return true;
+           }else {
+               System.out.println("Tra lai gia tri cu");
+               showDialogAlert(orderDetail.getProduct());
+               return false;
+           }
+       }else {
+            System.out.println("San pham chua dc cb");
+            showDialogAlert(orderDetail.getProduct());
+            return false;
+        }
+    }
+    public boolean checkPreList(Product product, String size, Integer quantity){
+        Integer newVle;
+        Integer oldVle;
+        if(preListTemp.containsKey(product.getProductId())){
+            newVle=product.getVle(size);
+            oldVle=preListTemp.get(product.getProductId());
+            preListTemp.put(product.getProductId(),newVle*quantity);
+            if(ProductPreparationManagement.preparedList.containsKey(product.getProductId())
+                    && preListTemp.get(product.getProductId())<= ProductPreparationManagement.preparedList.get(product.getProductId())){
                 return true;
             }
+            else {
+                preListTemp.put(product.getProductId(),oldVle);
+            }
         }
-        orderList.add(orderDetail);
-        return false;
+        showDialogAlert(product);
+        return  false;
+    }
+    public boolean checkProductChoose(OrderDetail orderDetail) {
+        boolean existed=false;
+        for (OrderDetail o : orderList) {
+            if (orderDetail.getProduct() == o.getProduct()
+                    && o.getSize().getSign().equalsIgnoreCase(cbSizePrice.getValue())
+                    &&checkPreList(orderDetail)) {
+                    o.setQty(o.getQty() + Integer.parseInt(Quality.getText()));
+                existed=true;
+            }
+        }
+        if(!existed){
+            if(ProductPreparationManagement.preparedList.containsKey(orderDetail.getProduct().getProductId())
+            && orderDetail.getQty()*orderDetail.getProduct().getVle(orderDetail.getSize()) <= ProductPreparationManagement.preparedList.get(orderDetail.getProduct().getProductId())){
+                preListTemp.put(orderDetail.getProduct().getProductId(),orderDetail.getQty()*orderDetail.getProduct().getVle(orderDetail.getSize()));
+                orderList.add(orderDetail);
+            }
+        }
+        return existed;
     }
 
     public OrderDetail orderDetailsChoose(Product product, String sizeChoose) {
@@ -221,32 +289,23 @@ public class ShopController implements Initializable {
         orderDetail.setSize(size);
         return orderDetail;
     }
-
+    public void checkPreListFirst(OrderDetail product){}
     public void AddOrderDetails(OrderDetail product) {
         btnAdd.setOnAction(new EventHandler<ActionEvent>() {
-
             @Override
             public void handle(ActionEvent actionEvent) {
-                if (orderList.size() > 0) {
+                ProductPreparationManagement.preparedList.forEach((k,v)->{
+                    System.out.println("Khi nhan add");
+                    System.out.println(k +"="+v);
+                });
                     btnEdit.setDisable(true);
-                    if (checkProductChoose(product)) {
-                        System.out.println("San pham cu");
-                    } else {
-                        System.out.println("San pham moi");
-                        product.setQty(Integer.parseInt(Quality.getText()));
-                    }
-                } else {
-                    System.out.println("San pham moi 1");
-                    orderList.add(product);
-                    product.setQty(Integer.parseInt(Quality.getText()));
-                }
+                    checkProductChoose(product);
                 initTable(getDataOrderTable(orderList));
                 orderDetailsTables.refresh();
                 Integer sumTotal = 0;
                 for (OrderDetail o : orderList) {
                     sumTotal += o.getProduct().getPrice(o.getSize().getSign()) * o.getQty();
                 }
-
                 totalmoneyLabel.setText(NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(sumTotal));
             }
 
@@ -314,6 +373,7 @@ public class ShopController implements Initializable {
     }
 
     public void clearOrderList(ActionEvent e) {
+        preListTemp.clear();
         orderList.clear();
         orderTableObservableList.clear();
         orderDetailsTables.refresh();
@@ -513,12 +573,15 @@ public class ShopController implements Initializable {
                         for(OrderDetail o : orderList){
                             if(o.getProduct()==orderDetail.getProduct()){
                                 if(o.getSize()==size){
+                                    if(checkPreList(o.getProduct(),size.getSign(),o.getQty()+quantity)){
                                         o.setQty(o.getQty()+quantity);
                                         orderList.remove(orderDetail);
+                                    }
                                 }else {
-                                       orderDetail.setSize(size);
-                                       orderDetail.setQty(quantity);
-                                    System.out.println(size.getSign());
+                                    if(checkPreList(orderDetail.getProduct(),size.getSign(),quantity)){
+                                        orderDetail.setSize(size);
+                                        orderDetail.setQty(quantity);
+                                    }
                                 }
                                 break;
                             }
@@ -527,7 +590,12 @@ public class ShopController implements Initializable {
                         for (OrderDetail o : orderList) {
                             if (orderDetail.getProduct() == o.getProduct()) {
                                 if (orderDetail.getQty() != quantity) {
-                                orderDetail.setQty(quantity);
+                                    if(checkPreList(orderDetail.getProduct(),orderDetail.getSize().getSign(),quantity)){
+                                        orderDetail.setQty(quantity);
+                                    }else {
+
+                                    }
+
                                 }
                             }
                         }
@@ -571,7 +639,11 @@ public class ShopController implements Initializable {
             if(btn.get()==ButtonType.YES){
                 shopHBox.setStyle("-fx-opacity:" + "1; \n");
                 Member member = customerController.getMember();
-                labelCustomer.setText(member.getFullName());
+                if(member==null){
+                    labelCustomer.setText("Alias");
+                }else {
+                    labelCustomer.setText(member.getFullName());
+                }
             }else if(btn.get()==ButtonType.NO){
                 shopHBox.setStyle("-fx-opacity:" + "1; \n");
                 dialog.close();

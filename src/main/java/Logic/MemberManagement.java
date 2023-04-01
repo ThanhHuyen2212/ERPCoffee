@@ -33,7 +33,7 @@ public class MemberManagement {
         }
         return member;
     }
-    public void updateMember(){
-        memberAccess.updateMember();
+    public void updateMember( Member member){
+        memberAccess.updateMember(member);
     }
 }
