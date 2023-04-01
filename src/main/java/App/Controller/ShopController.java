@@ -1,11 +1,8 @@
 package App.Controller;
 import App.Model.OrderTable;
 import Entity.*;
-import Logic.CategoryManagement;
+import Logic.*;
 import Logic.Depot.ProductPreparationManagement;
-import Logic.OrderManagement;
-import Logic.ProductManagement;
-import Logic.SizeManagement;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -121,15 +118,9 @@ public class ShopController implements Initializable {
             OrderTable newOrderTable = new OrderTable(o);
             orderTables.add(newOrderTable);
         }
-        if (orderTables.size() > 0) {
-            System.out.println("co");
-        } else {
-            System.out.println("Khong");
-        }
         return orderTables;
 
     }
-
     public void initTable(ArrayList<OrderTable> orderTables) {
         editOrderDetails();
         orderTableObservableList = FXCollections.observableArrayList(orderTables);
@@ -154,6 +145,7 @@ public class ShopController implements Initializable {
                             for (OrderDetail o : orderList) {
                                 sumTotal += o.getProduct().getPrice(o.getSize().getSign()) * o.getQty();
                             }
+                            preListTemp.put(data.getOrderDetail().getProduct().getProductId(),0);
 
                             totalmoneyLabel.setText(NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(sumTotal));
                         });
@@ -229,18 +221,18 @@ public class ShopController implements Initializable {
                 && ProductPreparationManagement.preparedList.containsKey(orderDetail.getProduct().getProductId())
                 && preListTemp.get(orderDetail.getProduct().getProductId())<= ProductPreparationManagement.preparedList.get(orderDetail.getProduct().getProductId())){
            Integer oldVle = preListTemp.get(orderDetail.getProduct().getProductId());
-           preListTemp.put(orderDetail.getProduct().getProductId(),oldVle+orderDetail.getProduct().getVle(orderDetail.getSize())*orderDetail.getQty());
-           if (preListTemp.get(orderDetail.getProduct().getProductId())<= ProductPreparationManagement.preparedList.get(orderDetail.getProduct().getProductId())) {
+           if (oldVle+orderDetail.getProduct().getVle(orderDetail.getSize())*orderDetail.getQty()<= ProductPreparationManagement.preparedList.get(orderDetail.getProduct().getProductId())) {
                System.out.println("san pham add:"+preListTemp.get(orderDetail.getProduct().getProductId()));
                System.out.println("san pham da chuan bi:"+ProductPreparationManagement.preparedList.get(orderDetail.getProduct().getProductId()));
+               preListTemp.put(orderDetail.getProduct().getProductId(),oldVle+orderDetail.getProduct().getVle(orderDetail.getSize())*orderDetail.getQty());
                return true;
            }else {
-              //preListTemp.put(orderDetail.getProduct().getProductId(),oldVle);
                System.out.println("Tra lai gia tri cu");
                showDialogAlert(orderDetail.getProduct());
                return false;
            }
        }else {
+            System.out.println("San pham chua dc cb");
             showDialogAlert(orderDetail.getProduct());
             return false;
         }
@@ -264,15 +256,23 @@ public class ShopController implements Initializable {
         return  false;
     }
     public boolean checkProductChoose(OrderDetail orderDetail) {
+        boolean existed=false;
         for (OrderDetail o : orderList) {
             if (orderDetail.getProduct() == o.getProduct()
                     && o.getSize().getSign().equalsIgnoreCase(cbSizePrice.getValue())
                     &&checkPreList(orderDetail)) {
                     o.setQty(o.getQty() + Integer.parseInt(Quality.getText()));
-                    return true;
+                existed=true;
             }
         }
-        return false;
+        if(!existed){
+            if(ProductPreparationManagement.preparedList.containsKey(orderDetail.getProduct().getProductId())
+            && orderDetail.getQty()*orderDetail.getProduct().getVle(orderDetail.getSize()) <= ProductPreparationManagement.preparedList.get(orderDetail.getProduct().getProductId())){
+                preListTemp.put(orderDetail.getProduct().getProductId(),orderDetail.getQty()*orderDetail.getProduct().getVle(orderDetail.getSize()));
+                orderList.add(orderDetail);
+            }
+        }
+        return existed;
     }
 
     public OrderDetail orderDetailsChoose(Product product, String sizeChoose) {
@@ -299,59 +299,7 @@ public class ShopController implements Initializable {
                     System.out.println(k +"="+v);
                 });
                     btnEdit.setDisable(true);
-             if(orderList.size()>0){
-                 if (checkProductChoose(product)) {
-                     System.out.println("San pham cu");
-                 } else {
-                     System.out.println("San pham moi");
-                     if(!preListTemp.containsKey(product.getProduct().getProductId())){
-                         product.setQty(Integer.parseInt(Quality.getText()));
-                         preListTemp.put(product.getProduct().getProductId(), product.getProduct().getVle(product.getSize()) * product.getQty());
-                         if(ProductPreparationManagement.preparedList.containsKey(product.getProduct().getProductId())
-                                 && preListTemp.get(product.getProduct().getProductId())<= ProductPreparationManagement.preparedList.get(product.getProduct().getProductId())) {
-                             orderList.add(product);
-                         } else {
-                                 showDialogAlert(product.getProduct());
-                             }
-
-                 }else if(product.getSize().getSign().equalsIgnoreCase(cbSizePrice.getValue())){
-                         System.out.println("do");
-                         product.setQty(Integer.parseInt(Quality.getText()));
-                         if(ProductPreparationManagement.preparedList.containsKey(product.getProduct().getProductId())
-                                 && preListTemp.get(product.getProduct().getProductId())<= ProductPreparationManagement.preparedList.get(product.getProduct().getProductId())) {
-                             preListTemp.put(product.getProduct().getProductId(),preListTemp.get(product.getProduct().getProductId())+product.getQty()*product.getProduct().getVle(product.getSize()));
-                             if (preListTemp.get(product.getProduct().getProductId()) <= ProductPreparationManagement.preparedList.get(product.getProduct().getProductId())) {
-                                 orderList.add(product);
-                             } else {
-                                 showDialogAlert(product.getProduct());
-                             }
-                         }
-                     }else {
-                         if(ProductPreparationManagement.preparedList.containsKey(product.getProduct().getProductId())
-                                 && preListTemp.get(product.getProduct().getProductId())<= ProductPreparationManagement.preparedList.get(product.getProduct().getProductId())) {
-                             preListTemp.put(product.getProduct().getProductId(),preListTemp.get(product.getProduct().getProductId())+product.getQty()*product.getProduct().getVle(product.getSize()));
-                             if (preListTemp.get(product.getProduct().getProductId()) <= ProductPreparationManagement.preparedList.get(product.getProduct().getProductId())) {
-                                 orderList.add(product);
-                             } else {
-                                 showDialogAlert(product.getProduct());
-                             }
-                         }
-                     }
-             }
-             }else{
-                 System.out.println("San pham moi 1");
-                 product.setQty(Integer.parseInt(Quality.getText()));
-                 preListTemp.put(product.getProduct().getProductId(),product.getQty()*product.getProduct().getVle(product.getSize()));
-                 if(preListTemp.containsKey(product.getProduct().getProductId())
-                         && ProductPreparationManagement.preparedList.containsKey(product.getProduct().getProductId())
-                         && preListTemp.get(product.getProduct().getProductId())<= ProductPreparationManagement.preparedList.get(product.getProduct().getProductId())) {
-                         orderList.add(product);
-                     } else {
-                        // preListTemp.put(product.getProduct().getProductId(), 0);
-                         System.out.println("Tra lai gia tri cu 1");
-                         showDialogAlert(product.getProduct());
-                     }
-             }
+                    checkProductChoose(product);
                 initTable(getDataOrderTable(orderList));
                 orderDetailsTables.refresh();
                 Integer sumTotal = 0;
@@ -425,6 +373,7 @@ public class ShopController implements Initializable {
     }
 
     public void clearOrderList(ActionEvent e) {
+        preListTemp.clear();
         orderList.clear();
         orderTableObservableList.clear();
         orderDetailsTables.refresh();
