@@ -88,12 +88,7 @@ public class DetailPOController implements Initializable {
     public void handleInitGUI() {
 
         totalOrderLbl.setText(String.valueOf(nf.format(model.calTotal())));
-
-        double sum = 0;
-        for (PurchaseDetail pd : model.getCurrent().getDetails()) {
-            sum += pd.getIngredient().getPrice() * pd.getReceiveQty();
-        }
-        totalRevLbl.setText(nf.format(sum));
+        totalRevLbl.setText(nf.format(model.getCurrent().getTotalPrice()));
 
 //        If PO has been not confirmed, the confirmation button is visible
         if (model.isConfirm()) {
