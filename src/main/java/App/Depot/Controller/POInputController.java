@@ -104,6 +104,7 @@ public class POInputController implements Initializable {
 
     public void init(POModel modelOfSib) {
         this.model = modelOfSib;
+        model.setCurrent(new PurchaseOrder());
 
         idLbl.setText(String.format("%010d",model.getLogic().getPurchaseOrders().size() + 1));
 
@@ -145,8 +146,10 @@ public class POInputController implements Initializable {
             public void handle(ActionEvent event) {
                 PurchaseDetail selected = ingredientTable.getSelectionModel().getSelectedItem();
                 int rs = MessageDialog.showAlert(
-                        "Warning", "Bạn muốn thay đổi thông tin nguyên liệu đặt?" +
-                                "\n\nCác thay đổi sẽ mất nếu bạn không lưu.");
+                        "Warning", """
+                                Bạn muốn thay đổi thông tin nguyên liệu đặt?
+
+                                Các thay đổi sẽ mất nếu bạn không lưu.""");
                 if (rs == 1) {
                     try {
                         model.handleUpdateDetail(
@@ -155,8 +158,10 @@ public class POInputController implements Initializable {
                                 Integer.parseInt(qtyTxf.getText())
                         );
                     } catch (Exception e) {
-                        AppControl.showAlert("error", "Giá trị số lượng không hợp lệ!" +
-                                "\n\nHoặc bạn chưa chọn thành phần cần thay đổi");
+                        AppControl.showAlert("error", """
+                                Giá trị số lượng không hợp lệ!
+
+                                Hoặc bạn chưa chọn thành phần cần thay đổi""");
                     }
                     ingredientTable.refresh();
                     totalLbl.setText(String.valueOf(nf.format(model.calTotal())));
@@ -169,8 +174,10 @@ public class POInputController implements Initializable {
             public void handle(ActionEvent event) {
                 PurchaseDetail selected = ingredientTable.getSelectionModel().getSelectedItem();
                 int rs = MessageDialog.showAlert(
-                        "Warning", "Bạn muốn xóa nguyên liệu đặt?" +
-                                "\n\nCác thay đổi sẽ mất nếu bạn không lưu.");
+                        "Warning", """
+                                Bạn muốn xóa nguyên liệu đặt?
+
+                                Các thay đổi sẽ mất nếu bạn không lưu.""");
                 if (rs == 1) {
                     try {
                         model.handleDeleteDetail(selected);
@@ -210,8 +217,6 @@ public class POInputController implements Initializable {
                         if(id != 0) {
                             AppControl.showAlert("success", "Hoàn tất tạo đơn đặt hàng!");
                             MainApp.show(APP.getViews().get("purchase"));
-                            model.setCurrent(new PurchaseOrder());
-
                         }
                     } catch (Exception e) {
                         AppControl.showAlert("error", "Đã có lỗi xảy ra!");
@@ -225,8 +230,10 @@ public class POInputController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 int rs = MessageDialog.showAlert(
-                        "Warning", "Bạn muốn thoát trạng thái hiện tại?" +
-                                "\n\nCác thay đổi sẽ mất nếu bạn không lưu.");
+                        "Warning", """
+                                Bạn muốn thoát trạng thái hiện tại?
+
+                                Các thay đổi sẽ mất nếu bạn không lưu.""");
                 if (rs == 1) {
                     String filepath = "src/main/java/App/Depot/View/POManagementView.fxml";
                     try {
