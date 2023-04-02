@@ -92,7 +92,7 @@ public class OrderController implements Initializable{
 
     public void RenderOrder(Order order){
         initTable(order.getDetails());
-        if(order.getCustomer()==null || order.getCustomer().getFullName().equalsIgnoreCase("")){
+        if(order.getCustomer()==null || order.getCustomer().getFullName()==null){
             CustomerLabel.setText("Alias");
             PhoneLabel.setText("Alias");
         }else{

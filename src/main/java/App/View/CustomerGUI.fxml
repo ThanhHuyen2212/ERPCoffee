@@ -25,7 +25,7 @@
                       <TableColumn fx:id="customerPoint" prefWidth="171.0" text="Point" />
                   </columns>
               </TableView>
-              <Button fx:id="btnAdd" layoutX="536.0" layoutY="559.0" mnemonicParsing="false" onAction="#changeSceneAddEvent" styleClass="button-admin">
+              <Button fx:id="btnAdd" layoutX="665.0" layoutY="558.0" mnemonicParsing="false" onAction="#changeSceneEditEvent" styleClass="button-admin">
                   <graphic>
                       <ImageView fitHeight="46.0" fitWidth="49.0" pickOnBounds="true" preserveRatio="true" styleClass="button-admin">
                           <image>
@@ -34,20 +34,11 @@
                       </ImageView>
                   </graphic>
               </Button>
-              <Button fx:id="btnEdit" layoutX="263.0" layoutY="557.0" mnemonicParsing="false" onAction="#changeSceneAddEvent" styleClass="button-admin">
+              <Button fx:id="btnEdit" layoutX="414.0" layoutY="558.0" mnemonicParsing="false" onAction="#changeSceneAddEvent" styleClass="button-admin">
                   <graphic>
                       <ImageView fitHeight="47.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true" styleClass="button-admin">
                           <image>
                               <Image url="@../../Assets/Icons/addproduct.png" />
-                          </image>
-                      </ImageView>
-                  </graphic>
-              </Button>
-              <Button fx:id="btnDelete" layoutX="727.0" layoutY="561.0" mnemonicParsing="false" styleClass="button-admin">
-                  <graphic>
-                      <ImageView fitHeight="46.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" styleClass="button-admin">
-                          <image>
-                              <Image url="@../../Assets/Icons/delete.png" />
                           </image>
                       </ImageView>
                   </graphic>
