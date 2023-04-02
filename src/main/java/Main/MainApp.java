@@ -37,9 +37,11 @@ public class MainApp extends Application {
     private static ToggleGroup group;
 
     public static AppControl APP;
+    private static ScrollPane scrollView;
 
     public static void show(Node view){
-        mainView.setCenter(view);
+        scrollView.setContent(view);
+//        mainView.setCenter(view);
     }
 
     public static void addButton(ToggleButton funcBtn){
@@ -60,6 +62,7 @@ public class MainApp extends Application {
     }
 
     private void initGUI(){
+        scrollView = new ScrollPane();
         mainView = new BorderPane();
         mainMenu = new VBox();
         group = new ToggleGroup();
@@ -71,6 +74,9 @@ public class MainApp extends Application {
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         scrollPane.setFitToHeight(true);
         mainView.setLeft(scrollPane);
+        mainView.setCenter(scrollView);
+        scrollView.setFitToHeight(true);
+        scrollView.setFitToWidth(true);
     }
 
     private void initData() {
