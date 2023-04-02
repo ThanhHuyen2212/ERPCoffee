@@ -2,8 +2,11 @@ package App.Model;
 
 import DAL.ProductAccess;
 import Entity.Product;
+import Entity.Size;
 import Logic.ProductManagement;
+import Logic.SizeManagement;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 public class ProductModel {
@@ -11,7 +14,7 @@ public class ProductModel {
     private ProductManagement dataGetter;
 
     public ProductModel(){
-
+            dataGetter = new ProductManagement();
     }
     public ProductModel(ArrayList<Product> products){
         this.products = products;
@@ -37,6 +40,14 @@ public class ProductModel {
         productAccess.Insert(product);
     }
     public void updateOldProduct(Product product){
-        dataGetter.updateProduct(product);
+        ProductAccess productAccess = new ProductAccess();
+        productAccess.Update(product);
+    }
+    public void addProdSize(String name,String size,int  vle,int price){
+        dataGetter.insertProdSize(name,size,vle,price);
+    }
+    public ArrayList<Size> getSize(){
+        SizeManagement sizeManagement = new SizeManagement();
+        return sizeManagement.getSizes();
     }
 }

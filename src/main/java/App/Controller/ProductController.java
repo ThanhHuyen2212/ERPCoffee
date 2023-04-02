@@ -1,12 +1,18 @@
 package App.Controller;
 
+import App.Model.AccountTable;
 import App.Model.CategoryTable;
 import App.Model.ProductModel;
+import DAL.ProductAccess;
 import Entity.Category;
 import Entity.Product;
+import Entity.Size;
+import Logic.ProductManagement;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,9 +29,13 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.ResourceBundle;
+
+import static java.lang.String.valueOf;
 
 public class ProductController implements Initializable {
     @FXML
@@ -59,7 +69,7 @@ public class ProductController implements Initializable {
     private ComboBox CBCategory;
 
     @FXML
-    private ComboBox<?> CBSize;
+    private ComboBox CBSize;
 
     @FXML
     private TableColumn<Product, String> ColCategory;
@@ -109,6 +119,19 @@ public class ProductController implements Initializable {
     private TableColumn<Product, Integer> ColProductIdSize;
     @FXML
     private TableColumn<Product, String> ColProductNameSize;
+    @FXML
+    private TextField TFVolume;
+    @FXML
+    private Tab TabSize;
+    @FXML
+    private Tab TabProduct;
+    @FXML
+    private TabPane TPProduct;
+    @FXML
+    private TextField TFSearchProd;
+
+    @FXML
+    private TextField TFSearchSize;
     public static ArrayList<Product> ProductViewList;
     private ObservableList<Product> ProductTable;
     public void fillDataDetail(TableView tableView){
@@ -117,7 +140,7 @@ public class ProductController implements Initializable {
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
                     Product rowData = row.getItem();
-                    TFProductId.setText(String.valueOf(rowData.getProductId()));
+                    TFProductId.setText(valueOf(rowData.getProductId()));
                     TFProductName.setText(rowData.getProductName());
                     File file = new File("src/main/java/Assets/Images/"+rowData.getImagePath());
                     Image image = new Image(file.toURI().toString());
@@ -136,17 +159,35 @@ public class ProductController implements Initializable {
                 if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
                     Product rowData = row.getItem();
                     TFProductNameSize.setText(rowData.getProductName());
-
+                    CBSize.getSelectionModel().select(1);
+                    changeSize(String.valueOf(CBSize.getSelectionModel().getSelectedItem()),rowData);
+                    CBSize.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent actionEvent) {
+                            try{
+                                changeSize(String.valueOf(CBSize.getSelectionModel().getSelectedItem()),rowData);
+                            }catch (Exception e){
+                                showAlert("error","Fail!");
+                            }
+                        }
+                    });
                 }
             });
             return row ;
         });
     }
-    public void refillData(ProductModel productModel){
+    public void changeSize(String size,Product product){
+        TFVolume.setText(String.valueOf(product.getVolume(size)));
+        TFPrice.setText(String.valueOf(product.getPrice(size)));
+    }
+    public void refillData(){
+        ProductModel productModel = new ProductModel();
         ProductViewList = productModel.getProducts();
         ProductTable = FXCollections.observableArrayList(ProductViewList);
         TBProduct.setItems(ProductTable);
+        TBProductSize.setItems(ProductTable);
         TBProduct.refresh();
+        TBProductSize.refresh();
     }
     public void setDataCBCategory(){
         CategoryTable categoryTable = new CategoryTable();
@@ -159,6 +200,17 @@ public class ProductController implements Initializable {
         }
         CBCategory.getItems().clear();
         CBCategory.getItems().addAll(array);
+    }
+    public void  setDataCBSize(){
+        ProductModel productModel = new ProductModel();
+        ArrayList<Size> SizeList = productModel.getSize();
+        int size = SizeList.size();
+        String[] array = new String[size];
+        for (int i = 0 ; i < size ; i++ ){
+            array[i] = SizeList.get(i).getSign();
+        }
+        CBSize.getItems().clear();
+        CBSize.getItems().addAll(array);
     }
     public void actionButton(){
         BtnUpload.setOnAction(new EventHandler<ActionEvent>() {
@@ -179,11 +231,11 @@ public class ProductController implements Initializable {
             public void handle(ActionEvent actionEvent) {
 
                 try{
-                    String s = String.valueOf(ImgProduct.getImage().getUrl());
+                    String s = valueOf(ImgProduct.getImage().getUrl());
                     String[] words=s.split("/");
                     s = words[words.length-1];
                     String name = TFProductName.getText();
-                    String category = String.valueOf(CBCategory.getSelectionModel().getSelectedItem());
+                    String category = valueOf(CBCategory.getSelectionModel().getSelectedItem());
 //                    System.out.println(words[words.length-1]);
                     Product product = new Product(name,s,category);
                     ProductModel productModel = new ProductModel();
@@ -191,7 +243,9 @@ public class ProductController implements Initializable {
                     ProductViewList = productModel.getProducts();
                     ProductTable = FXCollections.observableArrayList(ProductViewList);
                     TBProduct.setItems(ProductTable);
+                    TBProductSize.setItems(ProductTable);
                     TBProduct.refresh();
+                    TBProductSize.refresh();
                     showAlert("Success","Success!");
                 }catch (Exception e){
                     System.out.println("fail");
@@ -203,12 +257,12 @@ public class ProductController implements Initializable {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try{
-                    String s = String.valueOf(ImgProduct.getImage().getUrl());
+                    String s = valueOf(ImgProduct.getImage().getUrl());
                     String[] words=s.split("/");
                     s = words[words.length-1]; //path imange
                     int id = Integer.parseInt(TFProductId.getText());
                     String name = TFProductName.getText();
-                    String category = String.valueOf(CBCategory.getSelectionModel().getSelectedItem());
+                    String category = valueOf(CBCategory.getSelectionModel().getSelectedItem());
                     Product product = new Product(id,name,s,category);
                     //Update
                     ProductModel productModel = new ProductModel();
@@ -216,6 +270,8 @@ public class ProductController implements Initializable {
                     ProductViewList = productModel.getProducts();
                     ProductTable = FXCollections.observableArrayList(ProductViewList);
                     TBProduct.setItems(ProductTable);
+                    TBProductSize.setItems(ProductTable);
+                    TBProductSize.refresh();
                     TBProduct.refresh();
                     showAlert("Success","Success!");
                 }catch (Exception e){
@@ -238,10 +294,96 @@ public class ProductController implements Initializable {
                 }
             }
         });
-        ProductModel productModel = new ProductModel();
-        ProductViewList = productModel.getProducts();
-        ProductTable = FXCollections.observableArrayList(ProductViewList);
-        TBProduct.setItems(ProductTable);
+        BtnAddSize.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+
+                try{
+//                    ProductModel productModel = new ProductModel();
+                    ProductAccess productAccess = new ProductAccess();
+//                    ProductManagement productManagement = new ProductManagement();
+                    String name = TFProductNameSize.getText();
+                    String size = String.valueOf(CBSize.getSelectionModel().getSelectedItem());
+                    int vle = Integer.parseInt(TFVolume.getText());
+                    int price = Integer.parseInt(TFPrice.getText());
+                    productAccess.InsertProductSize(name,size,vle,price);
+//                    productModel.addProdSize(name,size,vle,price);
+//                    productManagement.insertProdSize(name,size,vle,price);
+                    refillData();
+                    showAlert("success","Success!");
+                }catch (Exception e){
+                    showAlert("error","Fail!");
+                }
+            }
+        });
+        BtnUpdateSize.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try{
+                    String name = TFProductNameSize.getText();
+                    String size = String.valueOf(CBSize.getSelectionModel().getSelectedItem());
+                    int vle = Integer.parseInt(TFVolume.getText());
+                    int price = Integer.parseInt(TFPrice.getText());
+                    System.out.println(name+" "+size+" "+vle+" "+price);
+                    ProductAccess productAccess = new ProductAccess();
+                    productAccess.UpdateProductSize(name,size,vle,price);
+                    ProductModel productModel = new ProductModel();
+                    ProductViewList = productModel.getProducts();
+                    ProductTable = FXCollections.observableArrayList(ProductViewList);
+                    TBProductSize.setItems(ProductTable);
+                    TBProductSize.refresh();
+                    showAlert("success","Success!");
+                }catch (Exception e){
+                    showAlert("error","Fail!");
+                }
+            }
+        });
+        BtnClearSize.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    TFProductNameSize.setText(null);
+                    CBSize.getSelectionModel().select(2);
+                    TFPrice.setText(null);
+                    TFVolume.setText(null);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+
+    }
+    public void changeTab(){
+        TabSize.setOnSelectionChanged(new EventHandler<Event>() {
+            @Override
+            public void handle(Event t) {
+                if (TabSize.isSelected()) {
+                    refillData();
+                }
+            }
+        });
+    }
+    public void searchProduct(TableView<Product> tableView, TextField textField  ){
+        ObservableList data =  tableView.getItems();
+        textField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (oldValue != null && (newValue.length() < oldValue.length())) {
+                tableView.setItems(data);
+            }
+            String value = newValue.toLowerCase();
+            ObservableList<Product> subentries = FXCollections.observableArrayList();
+
+            long count = tableView.getColumns().stream().count();
+            for (int i = 0; i < tableView.getItems().size(); i++) {
+                for (int j = 0; j < count; j++) {
+                    String entry = "" + tableView.getColumns().get(j).getCellData(i);
+                    if (entry.toLowerCase().contains(value)) {
+                        subentries.add(tableView.getItems().get(i));
+                        break;
+                    }
+                }
+            }
+            tableView.setItems(subentries);
+        });
     }
     public static void showAlert(String type,String message){
         try {
@@ -281,7 +423,11 @@ public class ProductController implements Initializable {
         Image image = new Image(file.toURI().toString());
         ImgProduct.setImage(image);
         fillDataDetail(TBProduct);
+        fillDataSize(TBProductSize);
         setDataCBCategory();
+        setDataCBSize();
         actionButton();
+        searchProduct(TBProduct,TFSearchProd);
+        searchProduct(TBProductSize,TFSearchSize);
     }
 }

@@ -75,6 +75,30 @@ public class ProductAccess extends DataAccess {
             throw new RuntimeException(e);
         }
     }
+    public void InsertProductSize(String name,String size,int vle,int  price){
+        try {
+            PreparedStatement prst =  getConn().prepareStatement("call insert_productsize(?,?,?,?);");
+            prst.setString(1,name);
+            prst.setString(2,size);
+            prst.setInt(3,price);
+            prst.setInt(4,vle);
+            prst.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void UpdateProductSize(String name,String size,int vle,int  price){
+        try {
+            PreparedStatement prst =  getConn().prepareStatement("call update_productsize_with_name(?,?,?,?)");
+            prst.setString(1,name);
+            prst.setString(2,size);
+            prst.setInt(3,price);
+            prst.setInt(4,vle);
+            prst.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
     public void findById(int id){
 
     }

@@ -21,5 +21,11 @@ public class ProductManagement {
         return products;
     }
     public void addProduct(Product product){productAccess.Insert(product);}
-    public void updateProduct(Product product){productAccess.Update(product);}
+    public void updateProduct(Product product){
+        ProductAccess productAccess1 = new ProductAccess();
+        productAccess1.Update(product);
+    }
+    public void insertProdSize(String name,String size,int vle,int price){
+        productAccess.InsertProductSize(name,size,vle,price);
+    }
 }
