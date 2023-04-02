@@ -1,6 +1,4 @@
 package App.Controller;
-
-import App.Model.OrderTable;
 import Entity.Member;
 import Logic.MemberManagement;
 import javafx.collections.FXCollections;
@@ -16,8 +14,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.StageStyle;
-
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -28,14 +24,6 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class customerController implements Initializable {
-    @FXML
-    private Button btnAdd;
-
-    @FXML
-    private Button btnDelete;
-
-    @FXML
-    private Button btnEdit;
     @FXML
     private Button btnSearch;
 
@@ -54,7 +42,6 @@ public class customerController implements Initializable {
 
     @FXML
     private TableView<Member> customerTable;
-
     @FXML
     private TextField txtSearchCustomer;
     public static ArrayList<Member> memberList;
@@ -66,9 +53,6 @@ public class customerController implements Initializable {
         memberList = memberManagement.getMembers();
     }
 
-    /**
-     * Fake dữ liệu
-     */
 
     private void initTable(ArrayList<Member> memberList){
         MemberObservableList = FXCollections.observableArrayList(memberList);
@@ -101,24 +85,47 @@ public class customerController implements Initializable {
         FXMLLoader loader = new FXMLLoader();
         Member selected = customerTable.getSelectionModel().getSelectedItem();
         if (selected==null){
-            loader.setLocation(this.getClass().getResource("../View/Alert.fxml"));
-            Pane EditParentView = loader.load();
+            try {
+                loader.setLocation(new File("src/main/java/App/View/Alert.fxml").toURI().toURL());
+            } catch (MalformedURLException ex) {
+                throw new RuntimeException(ex);
+            }
+            Pane alert = null;
+            try {
+                alert = loader.load();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
             Dialog<ButtonType> dialog = new Dialog<>();
-            dialog.setDialogPane((DialogPane) EditParentView);
-            dialog.showAndWait();
+            AlertController alertController = loader.getController();
+            dialog.setDialogPane((DialogPane) alert);
+            try {
+                alertController.RenderAlert("Warning", "Chưa chọn khách hàng cần cập nhật!!!");
+            } catch (MalformedURLException ex) {
+                throw new RuntimeException(ex);
+            }
+            Optional<ButtonType> clickedButton = dialog.showAndWait();
+            if (clickedButton.get() == ButtonType.OK) {
+                dialog.close();
+            }
         }else{
             loader.setLocation(new File("src/main/java/App/View/CustomerEdit.fxml").toURI().toURL());
             Pane ProductEditViewParent = loader.load();
             CustomerEdit customerEdit = loader.getController();
-            //customerEdit.handleEvent(selected);
+            customerEdit.setData(selected);
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setDialogPane((DialogPane) ProductEditViewParent);
             dialog.initStyle(StageStyle.TRANSPARENT);
             Optional<ButtonType> clickedButton = dialog.showAndWait();
             if(clickedButton.get() == ButtonType.APPLY){
-                //customerEdit.EditProduct(selected);
-                customerTable.setItems(FXCollections.observableArrayList(memberList));
-                customerTable.refresh();
+                Member newMember= customerEdit.newMember();
+                memberManagement.updateMember(newMember);
+                for(Member m :memberList){
+                    if(m.getPhoneNumber().equalsIgnoreCase(newMember.getPhoneNumber())){
+                        m.setFullName(newMember.getFullName());
+                        m.setPoint(newMember.getPoint());
+                    }
+                }
             }else if(clickedButton.get()==ButtonType.CLOSE){
                 dialog.close();
             }
