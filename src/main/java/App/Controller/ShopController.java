@@ -1,5 +1,7 @@
 package App.Controller;
+
 import App.Model.OrderTable;
+import App.ModuleManager.AppControl;
 import Entity.*;
 import Logic.*;
 import Logic.Depot.ProductPreparationManagement;
@@ -25,6 +27,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -106,10 +109,11 @@ public class ShopController implements Initializable {
     private List<Size> sizeList = new ArrayList<>();
     public HashMap<Integer, Integer> preListTemp = new HashMap<>();
     ObservableList<OrderTable> orderTableObservableList;
-    public void getData(){
+
+    public void getData() {
         categoryList = categoryManagement.getCategoriesList();
-        sizeList=sizeManagement.getSizes();
-        productList=productManagement.getProducts();
+        sizeList = sizeManagement.getSizes();
+        productList = productManagement.getProducts();
     }
 
     public ArrayList<OrderTable> getDataOrderTable(ArrayList<OrderDetail> orderList) {
@@ -121,10 +125,11 @@ public class ShopController implements Initializable {
         return orderTables;
 
     }
+
     public void initTable(ArrayList<OrderTable> orderTables) {
         editOrderDetails();
         orderTableObservableList = FXCollections.observableArrayList(orderTables);
-        NoColumn.setCellValueFactory(data->new SimpleStringProperty(String.valueOf(orderTables.indexOf(data.getValue())+1)));
+        NoColumn.setCellValueFactory(data -> new SimpleStringProperty(String.valueOf(orderTables.indexOf(data.getValue()) + 1)));
         ProductColumn.setCellValueFactory(new PropertyValueFactory<OrderTable, String>("product"));
         quantityColumn.setCellValueFactory(new PropertyValueFactory<OrderTable, Integer>("quantity"));
         totalColumn.setCellValueFactory(new PropertyValueFactory<OrderTable, String>("total"));
@@ -134,18 +139,19 @@ public class ShopController implements Initializable {
                 final TableCell<OrderTable, Void> cell = new TableCell<OrderTable, Void>() {
 
                     private final Button btn = new Button("Delete");
+
                     {
                         btn.setOnAction((ActionEvent event) -> {
                             OrderTable data = getTableView().getItems().get(getIndex());
-                           orderList.remove(data.getOrderDetail());
-                           orderTables.remove(data);
-                           orderTableObservableList.remove(data);
-                           orderDetailsTables.refresh();
+                            orderList.remove(data.getOrderDetail());
+                            orderTables.remove(data);
+                            orderTableObservableList.remove(data);
+                            orderDetailsTables.refresh();
                             Integer sumTotal = 0;
                             for (OrderDetail o : orderList) {
                                 sumTotal += o.getProduct().getPrice(o.getSize().getSign()) * o.getQty();
                             }
-                            preListTemp.put(data.getOrderDetail().getProduct().getProductId(),0);
+                            preListTemp.put(data.getOrderDetail().getProduct().getProductId(), 0);
 
                             totalmoneyLabel.setText(NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(sumTotal));
                         });
@@ -179,7 +185,8 @@ public class ShopController implements Initializable {
         Quality.setText(String.valueOf(inputValue));
 
     }
-    public void showDialogAlert(Product  product){
+
+    public void showDialogAlert(Product product) {
         FXMLLoader loader = new FXMLLoader();
         try {
             loader.setLocation(new File("src/main/java/App/View/Alert.fxml").toURI().toURL());
@@ -196,7 +203,7 @@ public class ShopController implements Initializable {
         AlertController alertController = loader.getController();
         dialog.setDialogPane((DialogPane) alert);
         try {
-            alertController.RenderAlert("Warning", product.getProductName()+" không đủ số lượng để bán");
+            alertController.RenderAlert("Warning", product.getProductName() + " không đủ số lượng để bán");
         } catch (MalformedURLException ex) {
             throw new RuntimeException(ex);
         }
@@ -216,61 +223,104 @@ public class ShopController implements Initializable {
         }
     }
 
-    public boolean checkPreList(OrderDetail orderDetail){
-        if(preListTemp.containsKey(orderDetail.getProduct().getProductId())
-                && ProductPreparationManagement.preparedList.containsKey(orderDetail.getProduct().getProductId())
-                && preListTemp.get(orderDetail.getProduct().getProductId())<= ProductPreparationManagement.preparedList.get(orderDetail.getProduct().getProductId())){
-           Integer oldVle = preListTemp.get(orderDetail.getProduct().getProductId());
-           if (oldVle+orderDetail.getProduct().getVle(orderDetail.getSize())*orderDetail.getQty()<= ProductPreparationManagement.preparedList.get(orderDetail.getProduct().getProductId())) {
-               System.out.println("san pham add:"+preListTemp.get(orderDetail.getProduct().getProductId()));
-               System.out.println("san pham da chuan bi:"+ProductPreparationManagement.preparedList.get(orderDetail.getProduct().getProductId()));
-               preListTemp.put(orderDetail.getProduct().getProductId(),oldVle+orderDetail.getProduct().getVle(orderDetail.getSize())*orderDetail.getQty());
-               return true;
-           }else {
-               System.out.println("Tra lai gia tri cu");
-               showDialogAlert(orderDetail.getProduct());
-               return false;
-           }
-       }else {
-            System.out.println("San pham chua dc cb");
-            showDialogAlert(orderDetail.getProduct());
-            return false;
-        }
+    public boolean checkPreList(OrderDetail orderDetail) {
+        Integer currentTarget = orderDetail.getProduct().getProductId();
+//        if(ProductPreparationManagement.preparedList.containsKey(currentTarget)
+//                && preListTemp.containsKey(currentTarget)){
+//            System.out.println("prepare:");
+//                    System.out.println(ProductPreparationManagement.preparedList.get(currentTarget));
+//                    System.out.println("choice:");
+//            System.out.println(orderDetail.getQty());
+//            System.out.println(orderDetail.getProduct().getVle(orderDetail.getSize()));
+//                    System.out.println(orderDetail.getProduct().getVle(orderDetail.getSize()) * Integer.parseInt(Quality.getText())
+//                            + preListTemp.get(currentTarget));
+//        }
+
+
+
+        return (ProductPreparationManagement.preparedList.containsKey(currentTarget)
+                    && !preListTemp.containsKey(currentTarget))
+                || (ProductPreparationManagement.preparedList.containsKey(currentTarget)
+                        && ProductPreparationManagement.preparedList.get(currentTarget)
+                        >= orderDetail.getProduct().getVle(orderDetail.getSize()) * Integer.parseInt(Quality.getText())
+                            + preListTemp.get(currentTarget))   ;
     }
-    public boolean checkPreList(Product product, String size, Integer quantity){
-        Integer newVle;
-        Integer oldVle;
-        if(preListTemp.containsKey(product.getProductId())){
-            newVle=product.getVle(size);
-            oldVle=preListTemp.get(product.getProductId());
-            preListTemp.put(product.getProductId(),newVle*quantity);
-            if(ProductPreparationManagement.preparedList.containsKey(product.getProductId())
-                    && preListTemp.get(product.getProductId())<= ProductPreparationManagement.preparedList.get(product.getProductId())){
-                return true;
-            }
-            else {
-                preListTemp.put(product.getProductId(),oldVle);
-            }
+
+    public boolean checkPreList(Product product, String size, Integer quantity) {
+        Integer newVle = product.getVle(size)*quantity;
+        OrderDetail oldSelected = orderDetailsTables.getSelectionModel().getSelectedItem().getOrderDetail();
+        Integer oldVle = oldSelected.getProduct().getVle(oldSelected.getSize())*oldSelected.getQty();
+        if(ProductPreparationManagement.preparedList.get(oldSelected.getProduct().getProductId())
+                >= preListTemp.get(oldSelected.getProduct().getProductId()) - oldVle + newVle){
+            preListTemp.replace(oldSelected.getProduct().getProductId(),preListTemp.get(oldSelected.getProduct().getProductId()) - oldVle + newVle);
+            System.out.println("true");
+            System.out.println("prepare");
+            System.out.println(ProductPreparationManagement.preparedList.get(oldSelected.getProduct().getProductId()));
+            System.out.println("Choice:");
+            System.out.println(oldVle);
+            System.out.println(newVle);
+            System.out.println(preListTemp.get(oldSelected.getProduct().getProductId()) - oldVle + newVle);
+            return true;
         }
-        showDialogAlert(product);
-        return  false;
+        System.out.println("false");
+        System.out.println("prepare");
+        System.out.println(ProductPreparationManagement.preparedList.get(oldSelected.getProduct().getProductId()));
+        System.out.println("Choice:");
+        System.out.println(oldVle);
+        System.out.println(newVle);
+        System.out.println(preListTemp.get(oldSelected.getProduct().getProductId()) - oldVle + newVle);
+        return false;
+//
+//        if (preListTemp.containsKey(product.getProductId())) {
+//            newVle = product.getVle(size);
+//            oldVle = preListTemp.get(product.getProductId());
+//            preListTemp.put(product.getProductId(), newVle * quantity);
+//            if (ProductPreparationManagement.preparedList.containsKey(product.getProductId())
+//                    && preListTemp.get(product.getProductId()) <= ProductPreparationManagement.preparedList.get(product.getProductId())) {
+//                return true;
+//            } else {
+//                preListTemp.put(product.getProductId(), oldVle);
+//            }
+//        }
+//        showDialogAlert(product);
+//        return false;
     }
+
     public boolean checkProductChoose(OrderDetail orderDetail) {
-        boolean existed=false;
-        for (OrderDetail o : orderList) {
-            if (orderDetail.getProduct() == o.getProduct()
-                    && o.getSize().getSign().equalsIgnoreCase(cbSizePrice.getValue())
-                    &&checkPreList(orderDetail)) {
-                    o.setQty(o.getQty() + Integer.parseInt(Quality.getText()));
-                existed=true;
+        boolean existed = false;
+        Integer newVl = 0;
+        if (checkPreList(orderDetail)) {
+            for (OrderDetail o : orderList) {
+                if (orderDetail.getProduct() == o.getProduct()){
+                    if(o.getSize().getSign().equalsIgnoreCase(cbSizePrice.getValue())){
+                        System.out.println(o);
+                        System.out.println(orderDetail);
+                        o.setQty(o.getQty() + Integer.parseInt(Quality.getText()));
+//                        preListTemp.replace(o.getProduct().getProductId(),
+//                                (orderDetail.getQty()*orderDetail.getProduct().getVle(orderDetail.getSize()))
+//                                        +o.getQty() * o.getProduct().getVle(o.getSize()));
+                        existed = true;
+                    }
+                }
             }
-        }
-        if(!existed){
-            if(ProductPreparationManagement.preparedList.containsKey(orderDetail.getProduct().getProductId())
-            && orderDetail.getQty()*orderDetail.getProduct().getVle(orderDetail.getSize()) <= ProductPreparationManagement.preparedList.get(orderDetail.getProduct().getProductId())){
-                preListTemp.put(orderDetail.getProduct().getProductId(),orderDetail.getQty()*orderDetail.getProduct().getVle(orderDetail.getSize()));
-                orderList.add(orderDetail);
+            if (!existed) {
+                if (ProductPreparationManagement.preparedList.containsKey(orderDetail.getProduct().getProductId())
+                        && orderDetail.getQty() * orderDetail.getProduct().getVle(orderDetail.getSize()) <= ProductPreparationManagement.preparedList.get(orderDetail.getProduct().getProductId())) {
+                    orderDetail.setQty(Integer.parseInt(Quality.getText()));
+                    orderList.add(orderDetail);
+                }
+
             }
+            if(preListTemp.containsKey(orderDetail.getProduct().getProductId())) {
+                preListTemp.replace(orderDetail.getProduct().getProductId(),
+                        preListTemp.get(orderDetail.getProduct().getProductId())
+                                + Integer.parseInt(Quality.getText()) * orderDetail.getProduct().getVle(orderDetail.getSize()));
+            } else {
+                preListTemp.put(orderDetail.getProduct().getProductId(), orderDetail.getQty() * orderDetail.getProduct().getVle(orderDetail.getSize()));
+
+            }
+        }else{
+            showDialogAlert(orderDetail.getProduct());
         }
         return existed;
     }
@@ -278,8 +328,9 @@ public class ShopController implements Initializable {
     public OrderDetail orderDetailsChoose(Product product, String sizeChoose) {
         OrderDetail orderDetail = new OrderDetail();
         orderDetail.setProduct(product);
-        int quantity = Integer.parseInt(Quality.getText());
+       int quantity = Integer.parseInt(Quality.getText());
         Size size = null;
+
         for (Size s : sizeList) {
             if (s.getSign().equalsIgnoreCase(sizeChoose)) {
                 size = s;
@@ -289,17 +340,17 @@ public class ShopController implements Initializable {
         orderDetail.setSize(size);
         return orderDetail;
     }
-    public void checkPreListFirst(OrderDetail product){}
+
+    public void checkPreListFirst(OrderDetail product) {
+    }
+
     public void AddOrderDetails(OrderDetail product) {
         btnAdd.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                ProductPreparationManagement.preparedList.forEach((k,v)->{
-                    System.out.println("Khi nhan add");
-                    System.out.println(k +"="+v);
-                });
-                    btnEdit.setDisable(true);
-                    checkProductChoose(product);
+                btnEdit.setDisable(true);
+                //product.setQty(Integer.parseInt(Quality.getText()));
+                checkProductChoose(product);
                 initTable(getDataOrderTable(orderList));
                 orderDetailsTables.refresh();
                 Integer sumTotal = 0;
@@ -308,11 +359,28 @@ public class ShopController implements Initializable {
                 }
                 totalmoneyLabel.setText(NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(sumTotal));
             }
-
-
         });
-
     }
+
+//    public void AddOrderDetails(ArrayList<Product> products) {
+//        btnAdd.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent actionEvent) {
+//                btnEdit.setDisable(true);
+////                product.setQty(Integer.parseInt(Quality.getText()));
+//                OrderDetail tmp = orderDetailsChoose(products.get(0), cbSizePrice.getValue());
+//                tmp.setQty(Integer.parseInt(Quality.getText()));
+//                checkProductChoose(tmp);
+//                initTable(getDataOrderTable(orderList));
+//                orderDetailsTables.refresh();
+//                Integer sumTotal = 0;
+//                for (OrderDetail o : orderList) {
+//                    sumTotal += o.getProduct().getPrice(o.getSize().getSign()) * o.getQty();
+//                }
+//                totalmoneyLabel.setText(NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(sumTotal));
+//            }
+//        });
+//    }
 
     public void editOrderDetails() {
         orderDetailsTables.setRowFactory(tv -> {
@@ -346,13 +414,13 @@ public class ShopController implements Initializable {
         Dialog<ButtonType> dialog = new Dialog<>();
         OrderController orderController = loader.getController();
         dialog.setDialogPane((DialogPane) order);
-            orderController.RenderOrder(newOrder);
-            Optional<ButtonType> clickedButton = dialog.showAndWait();
-            if (clickedButton.get() == ButtonType.NO) {
-                dialog.close();
-            } else if(clickedButton.get() == ButtonType.YES) {
+        orderController.RenderOrder(newOrder);
+        Optional<ButtonType> clickedButton = dialog.showAndWait();
+        if (clickedButton.get() == ButtonType.NO) {
+            dialog.close();
+        } else if (clickedButton.get() == ButtonType.YES) {
             //code
-            }
+        }
 
     }
 
@@ -415,6 +483,7 @@ public class ShopController implements Initializable {
                     Event(product);
                     OrderDetail o = orderDetailsChoose(product, cbSizePrice.getValue());
                     AddOrderDetails(o);
+//                    AddOrderDetails(products);
                     addOrderChangeSize(product);
                     editOrderDetails();
                 }
@@ -454,12 +523,12 @@ public class ShopController implements Initializable {
 
     public AnchorPane renderCategory(Category category, ArrayList<Product> products) {
         ArrayList<Product> productFilter;
-        if(category.getCategoryName().equalsIgnoreCase("All")){
-            productFilter=products;
-        }else{
+        if (category.getCategoryName().equalsIgnoreCase("All")) {
+            productFilter = products;
+        } else {
             productFilter = new ArrayList<>();
-            for(Product p : products){
-                if(p.getCategory().equalsIgnoreCase(category.getCategoryName())){
+            for (Product p : products) {
+                if (p.getCategory().equalsIgnoreCase(category.getCategoryName())) {
                     productFilter.add(p);
                 }
             }
@@ -499,9 +568,9 @@ public class ShopController implements Initializable {
      */
     public void renderCategories() throws IOException {
         hboxCartegory.setStyle("-fx-effect:" + "dropShadow(three-pass-box, rgba(0,0,0,0.1),10.0,0.0,0.0,10.0);");
-        hboxCartegory.getChildren().add(renderCategory(new Category(0, "All"),productList));
+        hboxCartegory.getChildren().add(renderCategory(new Category(0, "All"), productList));
         for (int i = 0; i < categoryList.size(); i++) {
-            hboxCartegory.getChildren().add(renderCategory(categoryList.get(i),productList));
+            hboxCartegory.getChildren().add(renderCategory(categoryList.get(i), productList));
         }
     }
 
@@ -511,14 +580,14 @@ public class ShopController implements Initializable {
      * @param product
      */
     public void setDetails(Product product) {
-       ObservableList<String> observableArrayList = FXCollections.observableArrayList(product.getSizeList());
+        ObservableList<String> observableArrayList = FXCollections.observableArrayList(product.getSizeList());
         txtProductNamedetails.setText(product.getProductName());
         javafx.scene.image.Image newImage;
-            try {
-                newImage = new Image(String.valueOf((new File("src/main/java/Assets/Images/"+product.getImagePath()).toURI()).toURL()));
-            } catch (MalformedURLException e) {
-                throw new RuntimeException(e);
-            }
+        try {
+            newImage = new Image(String.valueOf((new File("src/main/java/Assets/Images/" + product.getImagePath()).toURI()).toURL()));
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
         imgProduct.setImage(newImage);
         cbSizePrice.setItems(observableArrayList);
 
@@ -532,13 +601,13 @@ public class ShopController implements Initializable {
         ObservableList<String> observableArrayList = FXCollections.observableArrayList(orderDetail.getProduct().getSizeList());
         txtProductNamedetails.setText(orderDetail.getProduct().getProductName());
         javafx.scene.image.Image newImage;
-        if(orderDetail != null){
+        if (orderDetail != null) {
             try {
-                newImage = new Image(String.valueOf((new File("src/main/java/Assets/Images/"+orderDetail.getProduct().getImagePath()).toURI()).toURL()));
+                newImage = new Image(String.valueOf((new File("src/main/java/Assets/Images/" + orderDetail.getProduct().getImagePath()).toURI()).toURL()));
             } catch (MalformedURLException e) {
                 throw new RuntimeException(e);
             }
-        }else{
+        } else {
             try {
                 newImage = new Image(String.valueOf((new File("src/main/java/Assets/Images/WhiteCoffee.png").toURI()).toURL()));
             } catch (MalformedURLException e) {
@@ -569,16 +638,16 @@ public class ShopController implements Initializable {
                             size = s;
                         }
                     }
-                    if(orderDetail.getSize()!=size){
-                        for(OrderDetail o : orderList){
-                            if(o.getProduct()==orderDetail.getProduct()){
-                                if(o.getSize()==size){
-                                    if(checkPreList(o.getProduct(),size.getSign(),o.getQty()+quantity)){
-                                        o.setQty(o.getQty()+quantity);
+                    if (orderDetail.getSize() != size) {
+                        for (OrderDetail o : orderList) {
+                            if (o.getProduct() == orderDetail.getProduct()) {
+                                if (o.getSize() == size) {
+                                    if (checkPreList(o.getProduct(), size.getSign(),  quantity)) {
+                                        o.setQty(o.getQty() + quantity);
                                         orderList.remove(orderDetail);
                                     }
-                                }else {
-                                    if(checkPreList(orderDetail.getProduct(),size.getSign(),quantity)){
+                                } else {
+                                    if (checkPreList(orderDetail.getProduct(), size.getSign(), quantity)) {
                                         orderDetail.setSize(size);
                                         orderDetail.setQty(quantity);
                                     }
@@ -586,65 +655,63 @@ public class ShopController implements Initializable {
                                 break;
                             }
                         }
-                    }else if(orderDetail.getSize()==size) {
+                    } else if (orderDetail.getSize() == size) {
                         for (OrderDetail o : orderList) {
                             if (orderDetail.getProduct() == o.getProduct()) {
                                 if (orderDetail.getQty() != quantity) {
-                                    if(checkPreList(orderDetail.getProduct(),orderDetail.getSize().getSign(),quantity)){
+                                    if (checkPreList(orderDetail.getProduct(), orderDetail.getSize().getSign(), quantity)) {
                                         orderDetail.setQty(quantity);
-                                    }else {
-
                                     }
-
                                 }
                             }
                         }
                     }
-                        initTable(getDataOrderTable(orderList));
-                        orderDetailsTables.refresh();
-                        Integer sumTotal = 0;
-                        for (OrderDetail o : orderList) {
-                            sumTotal += o.getProduct().getPrice(o.getSize().getSign()) * o.getQty();
-                        }
-
-                        totalmoneyLabel.setText(NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(sumTotal));
+                    initTable(getDataOrderTable(orderList));
+                    orderDetailsTables.refresh();
+                    Integer sumTotal = 0;
+                    for (OrderDetail o : orderList) {
+                        sumTotal += o.getProduct().getPrice(o.getSize().getSign()) * o.getQty();
                     }
 
+                    totalmoneyLabel.setText(NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(sumTotal));
                 }
+
+            }
             //}
         });
     }
-    private void disLayCustomer(){
+
+    private void disLayCustomer() {
         customerBtn.setOnAction(actionEvent -> {
-        FXMLLoader loader = new FXMLLoader();
-        String orderFIle = "src/main/java/App/View/CustomerGUI.fxml";
-        try {
-            loader.setLocation(new File(orderFIle).toURI().toURL());
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
-        Pane customerPane = null;
-        try {
-            customerPane = loader.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        Dialog<ButtonType> dialog = new Dialog<>();
-        customerController customerController = loader.getController();
-        dialog.setDialogPane((DialogPane) customerPane);
-        dialog.initStyle(StageStyle.TRANSPARENT);
+            FXMLLoader loader = new FXMLLoader();
+            String orderFIle = "src/main/java/App/View/CustomerGUI.fxml";
+            try {
+                loader.setLocation(new File(orderFIle).toURI().toURL());
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
+            }
+            Pane customerPane = null;
+            try {
+                customerPane = loader.load();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            Dialog<ButtonType> dialog = new Dialog<>();
+            customerController customerController = loader.getController();
+            dialog.setDialogPane((DialogPane) customerPane);
+            dialog.initStyle(StageStyle.TRANSPARENT);
 
             shopHBox.setStyle("-fx-opacity:" + "0.5; \n");
-            Optional<ButtonType> btn=dialog.showAndWait();
-            if(btn.get()==ButtonType.YES){
+            Optional<ButtonType> btn = dialog.showAndWait();
+            if (btn.get() == ButtonType.YES) {
                 shopHBox.setStyle("-fx-opacity:" + "1; \n");
                 Member member = customerController.getMember();
-                if(member==null){
+                if (member == null) {
                     labelCustomer.setText("Alias");
-                }else {
+                } else {
                     labelCustomer.setText(member.getFullName());
                 }
-            }else if(btn.get()==ButtonType.NO){
+            } else if (btn.get() == ButtonType.NO) {
                 shopHBox.setStyle("-fx-opacity:" + "1; \n");
                 dialog.close();
             }
@@ -655,23 +722,23 @@ public class ShopController implements Initializable {
 
     public void searchProduct() {
         BtnSearch.setOnAction(e -> {
-        FXMLLoader loader = new FXMLLoader();
-        try {
-            loader.setLocation(new File("src/main/java/App/View/Alert.fxml").toURI().toURL());
-        } catch (MalformedURLException ex) {
-            throw new RuntimeException(ex);
-        }
-        Pane alert = null;
-        try {
-            alert = loader.load();
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-        Dialog<ButtonType> dialog = new Dialog<>();
-        AlertController alertController = loader.getController();
-        dialog.setDialogPane((DialogPane) alert);
-        ArrayList<Product> products = productList;
-        ArrayList<Product> ProductsForSearch = new ArrayList<>();
+            FXMLLoader loader = new FXMLLoader();
+            try {
+                loader.setLocation(new File("src/main/java/App/View/Alert.fxml").toURI().toURL());
+            } catch (MalformedURLException ex) {
+                throw new RuntimeException(ex);
+            }
+            Pane alert = null;
+            try {
+                alert = loader.load();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            Dialog<ButtonType> dialog = new Dialog<>();
+            AlertController alertController = loader.getController();
+            dialog.setDialogPane((DialogPane) alert);
+            ArrayList<Product> products = productList;
+            ArrayList<Product> ProductsForSearch = new ArrayList<>();
             ProductsForSearch.clear();
             if (!textSearch.getText().equals("")) {
                 String pattern = ".*" + textSearch.getText() + ".*";
@@ -711,19 +778,21 @@ public class ShopController implements Initializable {
 
         });
     }
-    private Order order(ArrayList<OrderDetail> orderList){
+
+    private Order order(ArrayList<OrderDetail> orderList) {
         Order newOder = new Order();
         customerController customerController = new customerController();
-        String memberName= labelCustomer.getText();
-        if(memberName.equalsIgnoreCase(" ")){
-            Member member =customerController.findByName(memberName);
-           newOder= orderManagement.insertOrder(orderList,member);
-        }else{
-            newOder= orderManagement.insertOrder(orderList);
+        String memberName = labelCustomer.getText();
+        if (memberName.equalsIgnoreCase(" ")) {
+            Member member = customerController.findByName(memberName);
+            newOder = orderManagement.insertOrder(orderList, member);
+        } else {
+            newOder = orderManagement.insertOrder(orderList);
         }
         return newOder;
     }
-    private void orderDialog(){
+
+    private void orderDialog() {
         FXMLLoader loader = new FXMLLoader();
         try {
             loader.setLocation(new File("src/main/java/App/View/Alert2.fxml").toURI().toURL());
@@ -746,23 +815,27 @@ public class ShopController implements Initializable {
         }
         Optional<ButtonType> clickedButton = dialog.showAndWait();
         if (clickedButton.get() == ButtonType.OK) {
-            OrderGUIController orderGUIController =new OrderGUIController();
+            OrderGUIController orderGUIController = new OrderGUIController();
             Order order = order(orderList);
             orderGUIController.reload(order);
-            printOrder( order);
+            printOrder(order);
+            preListTemp.forEach((k,v)->{
+                ProductPreparationManagement.preparedList.replace(k,ProductPreparationManagement.preparedList.get(k)-v);
+            });
             orderList.clear();
             orderTableObservableList.clear();
             orderDetailsTables.refresh();
             totalmoneyLabel.setText("");
-        }else if(clickedButton.get()==ButtonType.CANCEL){
+        } else if (clickedButton.get() == ButtonType.CANCEL) {
             dialog.close();
         }
     }
-    private void orderEvent(){
-        btnOrder.setOnAction(e->{
-            if(orderList.size()>0){
+
+    private void orderEvent() {
+        btnOrder.setOnAction(e -> {
+            if (orderList.size() > 0) {
                 orderDialog();
-            }else {
+            } else {
                 FXMLLoader loader = new FXMLLoader();
                 try {
                     loader.setLocation(new File("src/main/java/App/View/Alert.fxml").toURI().toURL());

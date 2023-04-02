@@ -12,50 +12,50 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane onMousePressed="#click" prefHeight="344.0" prefWidth="252.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Controller.itemController">
-   <styleClass>
-      <String fx:value="shadow" />
-      <String fx:value="product-item" />
-      <String fx:value="transparent" />
-   </styleClass>
-   <children>
-      <VBox alignment="CENTER" layoutX="37.0" prefHeight="256.0" prefWidth="199.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <ImageView fx:id="imgProduct" fitHeight="163.0" fitWidth="124.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../Assets/Images/WhiteCoffee.png" />
-               </image>
-            </ImageView>
-            <Pane prefHeight="44.0" prefWidth="213.0" />
-            <VBox prefHeight="81.0" prefWidth="204.0">
-               <children>
-                  <Label fx:id="textCategory" styleClass="text-product" text="Smart Phone">
-                     <VBox.margin>
-                        <Insets left="25.0" />
-                     </VBox.margin>
-                     <font>
-                        <Font name="Segoe UI Symbol" size="16.0" />
-                     </font></Label>
-                  <Label fx:id="textName" contentDisplay="CENTER" prefHeight="49.0" prefWidth="168.0" styleClass="text-product" text="White coffe" textFill="#0c60f5" wrapText="true">
-                     <font>
-                        <Font name="Segoe UI Italic" size="21.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets left="10.0" right="10.0" />
-                     </VBox.margin>
-                  </Label>
-               </children>
-               <styleClass>
-                  <String fx:value="product-footer" />
-                  <String fx:value="chonsen-fruit-card" />
-                  <String fx:value="transparent" />
-               </styleClass>
-            </VBox>
-            <Pane prefHeight="44.0" prefWidth="213.0" />
-         </children></VBox>
-   </children>
-   <stylesheets>
-      <URL value="@css/style.css" />
-      <URL value="@css/AdminApplication.css" />
-      <URL value="@css/Application.css" />
-   </stylesheets>
+    <styleClass>
+        <String fx:value="shadow" />
+        <String fx:value="product-item" />
+        <String fx:value="transparent" />
+    </styleClass>
+    <children>
+        <VBox alignment="CENTER" layoutX="37.0" prefHeight="256.0" prefWidth="199.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <ImageView fx:id="imgProduct" fitHeight="163.0" fitWidth="124.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../Assets/Images/WhiteCoffee.png" />
+                    </image>
+                </ImageView>
+                <Pane prefHeight="44.0" prefWidth="213.0" />
+                <VBox prefHeight="81.0" prefWidth="204.0">
+                    <children>
+                        <Label fx:id="textCategory" styleClass="text-product" text="Smart Phone">
+                            <VBox.margin>
+                                <Insets left="25.0" />
+                            </VBox.margin>
+                            <font>
+                                <Font name="Segoe UI Symbol" size="16.0" />
+                            </font></Label>
+                        <Label fx:id="textName" contentDisplay="CENTER" prefHeight="49.0" prefWidth="168.0" styleClass="text-product" text="White coffe" textFill="#0c60f5" wrapText="true">
+                            <font>
+                                <Font name="Segoe UI Italic" size="21.0" />
+                            </font>
+                            <VBox.margin>
+                                <Insets left="10.0" right="10.0" />
+                            </VBox.margin>
+                        </Label>
+                    </children>
+                    <styleClass>
+                        <String fx:value="product-footer" />
+                        <String fx:value="chonsen-fruit-card" />
+                        <String fx:value="transparent" />
+                    </styleClass>
+                </VBox>
+                <Pane prefHeight="44.0" prefWidth="213.0" />
+            </children></VBox>
+    </children>
+    <stylesheets>
+        <URL value="@css/style.css" />
+        <URL value="@css/AdminApplication.css" />
+        <URL value="@css/Application.css" />
+    </stylesheets>
 </AnchorPane>
