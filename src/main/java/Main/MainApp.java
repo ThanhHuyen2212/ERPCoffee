@@ -19,6 +19,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -26,6 +27,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.sql.SQLException;
 
 
 public class MainApp extends Application {
@@ -41,7 +43,6 @@ public class MainApp extends Application {
 
     public static void show(Node view){
         scrollView.setContent(view);
-//        mainView.setCenter(view);
     }
 
     public static void addButton(ToggleButton funcBtn){
@@ -62,21 +63,21 @@ public class MainApp extends Application {
     }
 
     private void initGUI(){
-        scrollView = new ScrollPane();
         mainView = new BorderPane();
         mainMenu = new VBox();
         group = new ToggleGroup();
         mainMenu.setPrefWidth(110);
         mainMenu.setSpacing(5);
         mainMenu.setAlignment(Pos.CENTER);
+        scrollView = new ScrollPane();
+        scrollView.setFitToWidth(true);
+        scrollView.setFitToHeight(true);
         ScrollPane scrollPane = new ScrollPane(mainMenu);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         scrollPane.setFitToHeight(true);
         mainView.setLeft(scrollPane);
         mainView.setCenter(scrollView);
-        scrollView.setFitToHeight(true);
-        scrollView.setFitToWidth(true);
     }
 
     private void initData() {
@@ -106,6 +107,13 @@ public class MainApp extends Application {
         MainApp.show(FXMLLoader.load(new File(defaultpath).toURI().toURL()));
         stage.setScene(scene);
         stage.show();
+        stage.setOnCloseRequest(windowEvent -> {
+            try {
+                AppControl.conn.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
        // new FileTool().createPdf("src/main/resources/test.pdf",mainView,FXMLLoader.load(new File(defaultpath).toURI().toURL()));
     }
 }
