@@ -10,9 +10,9 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1400.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="App.Controller.ProductController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1450.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="App.Controller.ProductController">
   <children>
-    <TabPane fx:id="TPProduct" layoutX="0.0" layoutY="50.0" prefHeight="750.0" prefWidth="1400.0" tabClosingPolicy="UNAVAILABLE">
+    <TabPane fx:id="TPProduct" layoutX="20.0" layoutY="50.0" prefHeight="750.0" prefWidth="1400.0" tabClosingPolicy="UNAVAILABLE">
       <tabs>
         <Tab fx:id="TabProduct" text="Product">
           <content>
@@ -70,7 +70,11 @@
                         </Pane>
                         <Pane prefHeight="50.0" prefWidth="500.0">
                           <children>
-                            <Label fx:id="LBProductId" alignment="CENTER" layoutX="14.0" layoutY="0.0" prefHeight="50.0" prefWidth="150.0" text="Product ID" />
+                            <Label fx:id="LBProductId" alignment="CENTER" layoutX="14.0" layoutY="0.0" prefHeight="50.0" prefWidth="150.0" text="Product ID">
+                              <font>
+                                <Font size="18.0" fx:id="x4" />
+                              </font>
+                            </Label>
                             <TextField fx:id="TFProductId" alignment="CENTER_LEFT" disable="true" editable="true" layoutX="195.0" layoutY="10.0" prefWidth="291.0" visible="true" />
                           </children>
                           <padding>
@@ -83,13 +87,13 @@
                         <Pane prefHeight="50.0" prefWidth="500.0">
                           <children>
                             <TextField fx:id="TFProductName" alignment="CENTER_LEFT" layoutX="195.0" layoutY="10.0" prefWidth="291.0" />
-                            <Label fx:id="LBProductName" alignment="CENTER" layoutX="14.0" layoutY="0.0" prefHeight="50.0" prefWidth="150.0" text="Product Name" />
+                            <Label fx:id="LBProductName" alignment="CENTER" font="$x4" layoutX="14.0" layoutY="0.0" prefHeight="50.0" prefWidth="150.0" text="Product Name" />
                           </children>
                         </Pane>
                         <Pane prefHeight="50.0" prefWidth="500.0">
                           <children>
-                            <Label fx:id="LBCategory" alignment="CENTER" layoutX="14.0" layoutY="0.0" prefHeight="50.0" prefWidth="150.0" text="Category" />
-                            <ComboBox fx:id="CBCategory" layoutX="229.0" layoutY="10.0" prefWidth="215.0">
+                            <Label fx:id="LBCategory" alignment="CENTER" font="$x4" layoutX="14.0" layoutY="0.0" prefHeight="50.0" prefWidth="150.0" text="Category" />
+                            <ComboBox fx:id="CBCategory" layoutX="229.0" layoutY="10.0" prefWidth="215.0" style="-fx-background-color:linear-gradient(to bottom right,#11998E,#38EF7D);&#10;-fx-font-weight: bold;" styleClass="">
                               <items>
                                 <FXCollections fx:factory="observableArrayList" />
                               </items>
@@ -168,7 +172,7 @@
                         <Pane prefHeight="50.0" prefWidth="500.0">
                           <children>
                             <Label alignment="CENTER" layoutX="14.0" layoutY="0.0" prefHeight="50.0" prefWidth="150.0" text="Size" />
-                            <ComboBox fx:id="CBSize" layoutX="229.0" layoutY="10.0" prefWidth="215.0">
+                            <ComboBox fx:id="CBSize" layoutX="229.0" layoutY="10.0" prefWidth="215.0" style="-fx-background-color:linear-gradient(to bottom right,#11998E,#38EF7D);&#10;-fx-font-weight: bold;">
                               <items>
                                 <FXCollections fx:factory="observableArrayList" />
                               </items>
