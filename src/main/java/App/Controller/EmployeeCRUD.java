@@ -111,11 +111,10 @@ public class EmployeeCRUD implements Initializable {
                 String cb = String.valueOf(CBEmpPosition.getSelectionModel().getSelectedItem());
 //                System.out.println(cb);
                 try{
-                    EmployeeTable employee = new EmployeeTable(Integer.parseInt(TFEmpID.getText()),TFEmpName.getText(),TFEmpPhone.getText(),TFEmpAddress.getText(),cb);
+                    EmployeeTable employee = new EmployeeTable(TFEmpName.getText(),TFEmpPhone.getText(),TFEmpAddress.getText(),cb);
                     System.out.println(employee.getName());
                     //Add
-                    EmployeeAccess employeeAccess = new EmployeeAccess();
-                    employeeAccess.add(employee);
+                    employee.empAdd();
                     EmployeeTable tb = new EmployeeTable();
                     EmployeeTableViewList = tb.getData();
                     employeeTable = FXCollections.observableArrayList(EmployeeTableViewList);
@@ -135,8 +134,7 @@ public class EmployeeCRUD implements Initializable {
                     EmployeeTable employee = new EmployeeTable(Integer.parseInt(TFEmpID.getText()),TFEmpName.getText(),TFEmpPhone.getText(),TFEmpAddress.getText(),cb);
                     System.out.println(employee.getName());
                     //Edit
-                    EmployeeAccess employeeAccess = new EmployeeAccess();
-                    employeeAccess.edit(employee);
+                    employee.empUpdate();
                     EmployeeTable tb = new EmployeeTable();
                     EmployeeTableViewList = tb.getData();
                     employeeTable = FXCollections.observableArrayList(EmployeeTableViewList);
