@@ -45,7 +45,22 @@ public class Product {
         this.category = category;
         this.productDetails=productDetails;
     }
-
+    public Product(int productId, String productName, String imagePath, String category){
+        this.productId = productId;
+        this.productName = productName;
+        this.imagePath = imagePath;
+        this.category = category;
+    }
+    public Product(String productName, String imagePath, String category){
+        this.productName = productName;
+        this.imagePath = imagePath;
+        this.category = category;
+    }
+    public Product(int productId,String productName, String category){
+        this.productId = productId;
+        this.productName = productName;
+        this.category = category;
+    }
     public int getProductId() {
         return productId;
     }
@@ -162,5 +177,25 @@ public class Product {
 
     public void setRecipe(ProductRecipe recipe) {
         this.recipe = recipe;
+    }
+    public int getVolume(Size size){
+        Integer price = null;
+        for(ProductDetails pd : productDetails){
+            if(size.getSign().equalsIgnoreCase(pd.getSize())){
+                price=pd.getVle();
+            }
+        }
+        return price;
+    }
+    public int getVolume(String size) {
+        int vle = 0;
+        if (productDetails != null && size != null) {
+            for (ProductDetails pd : productDetails) {
+                if (size.equalsIgnoreCase(pd.getSize())) {
+                    vle = pd.getVle();
+                }
+            }
+        }
+        return vle;
     }
 }
