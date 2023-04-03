@@ -284,7 +284,7 @@
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <Label layoutX="237.0" layoutY="768.0" prefHeight="53.0" prefWidth="212.0" text="0đ">
+                  <Label fx:id="returnMoneyLabel" layoutX="237.0" layoutY="768.0" prefHeight="53.0" prefWidth="212.0" text="0đ">
                      <font>
                         <Font size="22.0" />
                      </font>
@@ -317,7 +317,7 @@
                         <Font size="21.0" />
                      </font>
                   </Label>
-                  <TextField layoutX="237.0" layoutY="705.0" prefHeight="44.0" prefWidth="219.0" text="0đ">
+                  <TextField fx:id="txtCustomerpay" layoutX="237.0" layoutY="705.0" prefHeight="44.0" prefWidth="219.0" text="0đ">
                      <font>
                         <Font name="System Bold" size="22.0" />
                      </font>

@@ -49,7 +49,10 @@ public class ShopController implements Initializable {
     private TableColumn<OrderTable, String> ProductColumn;
     @FXML
     private TableColumn<OrderTable, Void> DeleteColum;
-
+    @FXML
+    private TextField txtCustomerpay;
+    @FXML
+    private Label  returnMoneyLabel;
     @FXML
     private TextField Quality;
 
@@ -339,9 +342,6 @@ public class ShopController implements Initializable {
         orderDetail.setQty(quantity);
         orderDetail.setSize(size);
         return orderDetail;
-    }
-
-    public void checkPreListFirst(OrderDetail product) {
     }
 
     public void AddOrderDetails(OrderDetail product) {
@@ -830,7 +830,6 @@ public class ShopController implements Initializable {
             dialog.close();
         }
     }
-
     private void orderEvent() {
         btnOrder.setOnAction(e -> {
             if (orderList.size() > 0) {
