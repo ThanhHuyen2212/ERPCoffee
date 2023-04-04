@@ -4,6 +4,7 @@ import App.ModuleManager.AppControl;
 import App.Size.Model.SizeModel;
 import Entity.Size;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -41,6 +42,7 @@ public class SizeControl implements Initializable {
             Size s = createNewSize();
             if(s != null){
                 sizeModel.insertSize(s);
+                sizeTable.refresh();
                 AppControl.showAlert("success","Success");
             }else{
                 AppControl.showAlert("error","Not valid Sign Data");
@@ -48,9 +50,21 @@ public class SizeControl implements Initializable {
         });
         editBtn.setOnMouseClicked(e->{
             if(sizeTable.getSelectionModel().getSelectedItem()!=null){
-                String oldsign = sizeTable.getSelectionModel().getSelectedItem().getSign();
-                if(editSize(sizeTable.getSelectionModel().getSelectedItem()))
-                    sizeModel.editSize(oldsign,sizeTable.getSelectionModel().getSelectedItem());
+                Size oldsze = sizeTable.getSelectionModel().getSelectedItem();
+                Size s = editSize(sizeTable.getSelectionModel().getSelectedItem());
+                if(!oldsze.getSign().equalsIgnoreCase(s.getSign())
+                        || !oldsze.getDescription().equalsIgnoreCase(s.getDescription()))
+                {
+                    if(s.getSign().strip().equals("")){
+                        System.out.println("false");
+                        AppControl.showAlert("error","Sign cant be empty");
+                    }else{
+                        System.out.println("true");
+                        sizeModel.editSize(oldsze,s);
+                        sizeTable.refresh();
+                    }
+
+                }
             }else{
                 AppControl.showAlert("error","Not valid Data");
             }
@@ -85,7 +99,7 @@ public class SizeControl implements Initializable {
         dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
         dialog.setResultConverter(e->{
             if(isValidSign(sizeTxt.getText())){
-                return new Size(sizeTxt.getText(), desTxt.getSelectedText());
+                return new Size(sizeTxt.getText(), desTxt.getText());
             }else{
                 return new Size();
             }
@@ -96,9 +110,8 @@ public class SizeControl implements Initializable {
         return null;
     }
 
-    private boolean editSize(Size size){
-        AtomicBoolean changed = new AtomicBoolean(false);
-        Dialog<Boolean> dialog = new Dialog<>();
+    private Size editSize(Size size){
+        Dialog<Size> dialog = new Dialog<>();
         DialogPane pane = new DialogPane();
         Label sizeLbl = new Label("Sign");
         Label desLbl = new Label("Description");
@@ -122,19 +135,16 @@ public class SizeControl implements Initializable {
         dialog.setDialogPane(pane);
         dialog.getDialogPane().getButtonTypes().add(ButtonType.APPLY);
         dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
-        Size finalSize = size;
-        dialog.setResultConverter(e->{
-            if(isValidChange(finalSize,sizeTxt.getText(),desTxt.getText())){
-                finalSize.setSign(sizeTxt.getText());
-                finalSize.setDescription(desTxt.getText());
-                return true;
-            }else{
-                return false;
-            }
-        });
-        size.setSign(finalSize.getSign());
-        size.setDescription(finalSize.getDescription());
-        return dialog.showAndWait().get();
+        dialog.setResultConverter(e-> new Size(sizeTxt.getText(), desTxt.getText()));
+
+
+        Size s = dialog.showAndWait().get();
+        if(size.getSign().equalsIgnoreCase(s.getSign())
+                && size.getDescription().equalsIgnoreCase(s.getDescription())){
+            return size;
+        }else{
+            return s;
+        }
     }
 
     private boolean isValidSign(String sign){
