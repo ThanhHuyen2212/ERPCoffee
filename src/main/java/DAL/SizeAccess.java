@@ -40,4 +40,30 @@ public class SizeAccess extends DataAccess {
         return newSize;
     }
 
+    public void saveSize(Size s){
+        try {
+            PreparedStatement prS = getConn().prepareStatement( "call insert_sizes(?, ?)");
+            prS.setString(1,s.getSign());
+            prS.setString(2,s.getDescription());
+            prS.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteSize(Size s){
+
+    }
+    public void editSize(String oldsize,Size s){
+        try {
+            PreparedStatement prS = getConn().prepareStatement( "call update_sizes(?,?,?)");
+            prS.setString(1,oldsize);
+            prS.setString(2,s.getSign());
+            prS.setString(3,s.getDescription());
+            prS.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

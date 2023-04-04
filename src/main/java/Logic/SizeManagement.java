@@ -16,4 +16,10 @@ public class SizeManagement {
     public ArrayList<Size> getSizes(){
         return sizes;
     }
+    public void saveSize(Size s){
+        sizeAccess.saveSize(s);
+    }
+    public void editSize(String oldSize, Size s){
+        sizeAccess.editSize(oldSize,s);
+    }
 }
