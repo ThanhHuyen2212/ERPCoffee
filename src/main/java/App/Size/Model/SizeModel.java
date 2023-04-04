@@ -25,7 +25,9 @@ public class SizeModel {
         sizeManagement.saveSize(s);
         sizes.add(s);
     }
-    public void editSize(String oldsize, Size s){
-        sizeManagement.editSize(oldsize,s);
+    public void editSize(Size oldsize, Size s){
+        sizes.remove(oldsize);
+        sizes.add(s);
+        sizeManagement.editSize(oldsize.getSign(),s);
     }
 }
