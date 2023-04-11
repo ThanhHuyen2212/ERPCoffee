@@ -1,7 +1,6 @@
 package App.Controller;
 
 import App.Model.OrderTable;
-import App.ModuleManager.AppControl;
 import Entity.*;
 import Logic.*;
 import Logic.Depot.ProductPreparationManagement;
@@ -74,6 +73,8 @@ public class ShopController implements Initializable {
     private HBox hboxCartegory;
     @FXML
     private HBox shopHBox;
+    @FXML
+    private HBox Hbdiscount;
 
     @FXML
     private TableView<OrderTable> orderDetailsTables;
@@ -102,10 +103,10 @@ public class ShopController implements Initializable {
     private Label totalmoneyLabel;
 
     private MyListener myListener;
-    private CategoryManagement categoryManagement = new CategoryManagement();
-    private SizeManagement sizeManagement = new SizeManagement();
-    private ProductManagement productManagement = new ProductManagement();
-    private OrderManagement orderManagement = new OrderManagement();
+    private  final CategoryManagement categoryManagement = new CategoryManagement();
+    private final SizeManagement sizeManagement = new SizeManagement();
+    private final ProductManagement productManagement = new ProductManagement();
+    private final OrderManagement orderManagement = new OrderManagement();
     private List<Category> categoryList = new ArrayList<>();
     public ArrayList<Product> productList = new ArrayList<>();
     public ArrayList<OrderDetail> orderList = new ArrayList<>();
@@ -133,13 +134,13 @@ public class ShopController implements Initializable {
         editOrderDetails();
         orderTableObservableList = FXCollections.observableArrayList(orderTables);
         NoColumn.setCellValueFactory(data -> new SimpleStringProperty(String.valueOf(orderTables.indexOf(data.getValue()) + 1)));
-        ProductColumn.setCellValueFactory(new PropertyValueFactory<OrderTable, String>("product"));
-        quantityColumn.setCellValueFactory(new PropertyValueFactory<OrderTable, Integer>("quantity"));
-        totalColumn.setCellValueFactory(new PropertyValueFactory<OrderTable, String>("total"));
-        Callback<TableColumn<OrderTable, Void>, TableCell<OrderTable, Void>> cellFactory = new Callback<TableColumn<OrderTable, Void>, TableCell<OrderTable, Void>>() {
+        ProductColumn.setCellValueFactory(new PropertyValueFactory<>("product"));
+        quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        totalColumn.setCellValueFactory(new PropertyValueFactory<>("total"));
+        Callback<TableColumn<OrderTable, Void>, TableCell<OrderTable, Void>> cellFactory = new Callback<>() {
             @Override
             public TableCell<OrderTable, Void> call(final TableColumn<OrderTable, Void> param) {
-                final TableCell<OrderTable, Void> cell = new TableCell<OrderTable, Void>() {
+                final TableCell<OrderTable, Void> cell = new TableCell<>() {
 
                     private final Button btn = new Button("Delete");
 
@@ -228,19 +229,6 @@ public class ShopController implements Initializable {
 
     public boolean checkPreList(OrderDetail orderDetail) {
         Integer currentTarget = orderDetail.getProduct().getProductId();
-//        if(ProductPreparationManagement.preparedList.containsKey(currentTarget)
-//                && preListTemp.containsKey(currentTarget)){
-//            System.out.println("prepare:");
-//                    System.out.println(ProductPreparationManagement.preparedList.get(currentTarget));
-//                    System.out.println("choice:");
-//            System.out.println(orderDetail.getQty());
-//            System.out.println(orderDetail.getProduct().getVle(orderDetail.getSize()));
-//                    System.out.println(orderDetail.getProduct().getVle(orderDetail.getSize()) * Integer.parseInt(Quality.getText())
-//                            + preListTemp.get(currentTarget));
-//        }
-
-
-
         return (ProductPreparationManagement.preparedList.containsKey(currentTarget)
                     && !preListTemp.containsKey(currentTarget))
                 || (ProductPreparationManagement.preparedList.containsKey(currentTarget)
@@ -273,25 +261,10 @@ public class ShopController implements Initializable {
         System.out.println(newVle);
         System.out.println(preListTemp.get(oldSelected.getProduct().getProductId()) - oldVle + newVle);
         return false;
-//
-//        if (preListTemp.containsKey(product.getProductId())) {
-//            newVle = product.getVle(size);
-//            oldVle = preListTemp.get(product.getProductId());
-//            preListTemp.put(product.getProductId(), newVle * quantity);
-//            if (ProductPreparationManagement.preparedList.containsKey(product.getProductId())
-//                    && preListTemp.get(product.getProductId()) <= ProductPreparationManagement.preparedList.get(product.getProductId())) {
-//                return true;
-//            } else {
-//                preListTemp.put(product.getProductId(), oldVle);
-//            }
-//        }
-//        showDialogAlert(product);
-//        return false;
     }
 
     public boolean checkProductChoose(OrderDetail orderDetail) {
         boolean existed = false;
-        Integer newVl = 0;
         if (checkPreList(orderDetail)) {
             for (OrderDetail o : orderList) {
                 if (orderDetail.getProduct() == o.getProduct()){
@@ -299,9 +272,6 @@ public class ShopController implements Initializable {
                         System.out.println(o);
                         System.out.println(orderDetail);
                         o.setQty(o.getQty() + Integer.parseInt(Quality.getText()));
-//                        preListTemp.replace(o.getProduct().getProductId(),
-//                                (orderDetail.getQty()*orderDetail.getProduct().getVle(orderDetail.getSize()))
-//                                        +o.getQty() * o.getProduct().getVle(o.getSize()));
                         existed = true;
                     }
                 }
@@ -361,26 +331,6 @@ public class ShopController implements Initializable {
             }
         });
     }
-
-//    public void AddOrderDetails(ArrayList<Product> products) {
-//        btnAdd.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent actionEvent) {
-//                btnEdit.setDisable(true);
-////                product.setQty(Integer.parseInt(Quality.getText()));
-//                OrderDetail tmp = orderDetailsChoose(products.get(0), cbSizePrice.getValue());
-//                tmp.setQty(Integer.parseInt(Quality.getText()));
-//                checkProductChoose(tmp);
-//                initTable(getDataOrderTable(orderList));
-//                orderDetailsTables.refresh();
-//                Integer sumTotal = 0;
-//                for (OrderDetail o : orderList) {
-//                    sumTotal += o.getProduct().getPrice(o.getSize().getSign()) * o.getQty();
-//                }
-//                totalmoneyLabel.setText(NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(sumTotal));
-//            }
-//        });
-//    }
 
     public void editOrderDetails() {
         orderDetailsTables.setRowFactory(tv -> {
@@ -507,7 +457,6 @@ public class ShopController implements Initializable {
                     grid.setMinWidth(Region.USE_COMPUTED_SIZE);
                     grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
                     grid.setMaxWidth(Region.USE_PREF_SIZE);
-
                     grid.setMinHeight(Region.USE_COMPUTED_SIZE);
                     grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
                     grid.setMaxHeight(Region.USE_PREF_SIZE);
