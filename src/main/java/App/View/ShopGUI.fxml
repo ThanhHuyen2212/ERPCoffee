@@ -260,7 +260,7 @@
                         <Font name="System Bold" size="21.0" />
                      </font>
                   </Label>
-                  <TableView fx:id="orderDetailsTables" layoutX="7.0" layoutY="66.0" prefHeight="539.0" prefWidth="482.0">
+                  <TableView fx:id="orderDetailsTables" layoutX="7.0" layoutY="66.0" prefHeight="454.0" prefWidth="482.0">
                      <columns>
                         <TableColumn fx:id="NoColumn" prefWidth="61.0" text="No," />
                         <TableColumn fx:id="ProductColumn" prefWidth="183.0" text="Product" />
@@ -269,27 +269,27 @@
                         <TableColumn fx:id="DeleteColum" prefWidth="58.0" />
                      </columns>
                   </TableView>
-                  <Label layoutX="22.0" layoutY="635.0" prefHeight="53.0" prefWidth="178.0" text="Total money:">
+                  <Label layoutX="11.0" layoutY="559.0" prefHeight="53.0" prefWidth="178.0" text="Total money:">
                      <font>
                         <Font size="22.0" />
                      </font>
                   </Label>
-                  <Label fx:id="totalmoneyLabel" layoutX="240.0" layoutY="632.0" prefHeight="59.0" prefWidth="227.0" text="0đ">
+                  <Label fx:id="totalmoneyLabel" layoutX="210.0" layoutY="553.0" prefHeight="59.0" prefWidth="227.0" text="0đ">
                      <font>
                         <Font size="24.0" />
                      </font>
                   </Label>
-                  <Label layoutX="22.0" layoutY="701.0" prefHeight="53.0" prefWidth="178.0" text=" the customer pays:">
+                  <Label layoutX="11.0" layoutY="612.0" prefHeight="53.0" prefWidth="178.0" text=" the customer pays:">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <Label fx:id="returnMoneyLabel" layoutX="237.0" layoutY="768.0" prefHeight="53.0" prefWidth="212.0" text="0đ">
+                  <Label fx:id="returnMoneyLabel" layoutX="200.0" layoutY="703.0" prefHeight="53.0" prefWidth="212.0" text="0đ">
                      <font>
                         <Font size="22.0" />
                      </font>
                   </Label>
-                  <Label layoutX="22.0" layoutY="768.0" prefHeight="53.0" prefWidth="178.0" text="Return money:">
+                  <Label layoutX="11.0" layoutY="696.0" prefHeight="53.0" prefWidth="178.0" text="Return money:">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -306,22 +306,33 @@
                         <String fx:value="colorRed" />
                      </styleClass>
                   </Button>
-                  <Button fx:id="customerBtn" layoutX="14.0" layoutY="853.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="171.0" text="Customer">
+                  <Button fx:id="customerBtn" layoutX="15.0" layoutY="778.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="171.0" text="Customer">
                      <styleClass>
                         <String fx:value="btnAdd" />
                         <String fx:value="blue" />
                      </styleClass>
                   </Button>
-                  <Label fx:id="labelCustomer" layoutX="237.0" layoutY="850.0" prefHeight="53.0" prefWidth="219.0">
-                     <font>
-                        <Font size="21.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="txtCustomerpay" layoutX="237.0" layoutY="705.0" prefHeight="44.0" prefWidth="219.0" text="0đ">
+                  <HBox fx:id="hbCustomer" layoutX="210.0" layoutY="768.0" prefHeight="61.0" prefWidth="271.0">
+                     <children>
+                        <Label fx:id="labelCustomer" prefHeight="61.0" prefWidth="218.0" />
+                        <Pane prefHeight="61.0" prefWidth="19.0" />
+                     </children></HBox>
+                  <TextField fx:id="txtCustomerpay" layoutX="162.0" layoutY="616.0" prefHeight="46.0" prefWidth="184.0" text="0đ">
                      <font>
                         <Font name="System Bold" size="22.0" />
                      </font>
                   </TextField>
+                  <AnchorPane layoutX="-2.0" layoutY="841.0" prefHeight="63.0" prefWidth="496.0">
+                     <children>
+                        <HBox fx:id="Hbdiscount" layoutY="-8.0" prefHeight="73.0" prefWidth="496.0" />
+                     </children>
+                  </AnchorPane>
+                  <Button fx:id="btnApply" layoutX="378.0" layoutY="616.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="91.0" text="Apply">
+                     <styleClass>
+                        <String fx:value="btnAdd" />
+                        <String fx:value="colorGreen" />
+                     </styleClass>
+                  </Button>
                </children></AnchorPane>
             <Pane prefHeight="1050.0" prefWidth="100.0" />
          </children>

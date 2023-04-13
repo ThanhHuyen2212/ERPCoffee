@@ -54,8 +54,8 @@ public class customerController implements Initializable {
     }
 
 
-    private void initTable(ArrayList<Member> memberList){
-        MemberObservableList = FXCollections.observableArrayList(memberList);
+    private void initTable(){
+        MemberObservableList = FXCollections.observableArrayList(memberManagement.getMembers());
         customerID.setCellValueFactory(new PropertyValueFactory<Member, Integer>(""));
         customerName.setCellValueFactory(new PropertyValueFactory<Member, String>("fullName"));
         customerPhone.setCellValueFactory(new PropertyValueFactory<Member, String>("phoneNumber"));
@@ -147,6 +147,6 @@ public class customerController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println(memberList.size());
-        initTable(memberList);
+        initTable();
     }
 }

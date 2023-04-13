@@ -90,9 +90,9 @@ public class OrderController implements Initializable{
         return orderReceipts;
     }
 
-    public void RenderOrder(Order order){
+    public void RenderOrder(Order order, String payCustomer, String returnMoney){
         initTable(order.getDetails());
-        if(order.getCustomer()==null || order.getCustomer().getFullName()==null){
+        if(order.getCustomer()==null){
             CustomerLabel.setText("Alias");
             PhoneLabel.setText("Alias");
         }else{
@@ -102,8 +102,26 @@ public class OrderController implements Initializable{
         TotalPriceLabel.setText(NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(order.getTotalPrice()));
         dateLabel.setText(String.valueOf(order.getOrderDate()));
         orderIdLabel.setText("#"+String.valueOf(order.getOrderId()));
+        ReceiveLabel.setText(payCustomer);
+        changeLabel.setText(returnMoney);
     }
 
+    public void RenderOrder(Order order){
+        initTable(order.getDetails());
+        System.out.println("SizeOrderDetails:"+order.getDetails().size());
+        if(order.getCustomer()==null){
+            CustomerLabel.setText("Alias");
+            PhoneLabel.setText("Alias");
+        }else{
+            CustomerLabel.setText(order.getCustomer().getFullName());
+            PhoneLabel.setText(order.getCustomer().getPhoneNumber());
+        }
+        TotalPriceLabel.setText(NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(order.getTotalPrice()));
+        dateLabel.setText(String.valueOf(order.getOrderDate()));
+        orderIdLabel.setText("#"+String.valueOf(order.getOrderId()));
+        ReceiveLabel.setText("payCustomer");
+        changeLabel.setText("returnMoney");
+    }
         @Override
         public void initialize(URL url, ResourceBundle resourceBundle) {
 

@@ -69,4 +69,14 @@ public class MemberAccess extends DataAccess {
         }
     return  newMember;
     }
+    public void UpdateSubPoint(Member member,Integer point){
+        try {
+            PreparedStatement prSt = getConn().prepareStatement("call update_sub_point_member(?, ?)");
+            prSt.setString(1, member.getPhoneNumber());
+            prSt.setInt(2,point);
+            prSt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
