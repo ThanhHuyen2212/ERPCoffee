@@ -22,4 +22,7 @@ public class SizeManagement {
     public void editSize(String oldSize, Size s){
         sizeAccess.editSize(oldSize,s);
     }
+    public Size findByName(String name){
+        return sizeAccess.findByName(name);
+    }
 }
