@@ -5,18 +5,28 @@ import App.Depot.View.MessageDialog;
 import App.ModuleManager.AppControl;
 import Entity.PurchaseDetail;
 import Entity.PurchaseOrder;
+import Util.FileTool;
+import com.itextpdf.text.DocumentException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
+import javax.swing.border.Border;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -70,8 +80,6 @@ public class DetailPOController implements Initializable {
         unitCol.setCellValueFactory(data -> new SimpleStringProperty(
                 IngredientManagementController.setupUnit(data.getValue().getIngredient())
         ));
-
-        printBtn.setVisible(false);
 
     }
 
@@ -175,8 +183,33 @@ public class DetailPOController implements Initializable {
             }
         };
 
+        EventHandler<ActionEvent> buttonPrintHandler = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    String path = "src/main/java/App/Depot/View/POTemplate.fxml";
+                    FXMLLoader fxmlLoader = new FXMLLoader(new File(path).toURI().toURL());
+                    Parent root = fxmlLoader.load();
+                    POTemplateController controller = fxmlLoader.getController();
+                    controller.init(model, model.getCurrent());
+                    Stage childStage = new Stage();
+                    childStage.setScene(new Scene(root));
+                    childStage.show();
+                    new FileTool().createPdf(
+                            "src/main/resources/poTest1.pdf",
+                            root
+                    );
+                    AppControl.showAlert("success", "Export thành công!!!");
+                } catch (IOException | DocumentException e) {
+                    AppControl.showAlert("error", "Lỗi export!!!");
+                    throw new RuntimeException(e);
+                }
+            }
+        };
+
         revAllBtn.setOnAction(buttonRevAllHandler);
         confirmBtn.setOnAction(buttonConfirmHandler);
         cancelBtn.setOnAction(buttonCancelHandler);
+        printBtn.setOnAction(buttonPrintHandler);
     }
 }
