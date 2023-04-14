@@ -2,6 +2,9 @@ package DAL;
 
 import Entity.*;
 import Logic.MemberManagement;
+import Logic.OrderManagement;
+import Logic.ProductManagement;
+import Logic.SizeManagement;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -71,8 +74,10 @@ public class OrderAccess extends DataAccess {
 
         return false;
     }
-    public int insertOrderWithPhone(Order order){
-
+    public Order insertOrderWithPhone(Order order){
+        OrderManagement orderManagement = new OrderManagement();
+        MemberManagement memberManagement = new MemberManagement();
+        Order newOrder = new Order();
         PreparedStatement prSt = null;
         try {
             prSt = getConn().prepareStatement("call insert_orders(?, ?)");
@@ -84,18 +89,21 @@ public class OrderAccess extends DataAccess {
             prSt.setString(2,order.getCustomer().getPhoneNumber());
             ResultSet rs = prSt.executeQuery();
             while(rs!=null && rs.next()){
-                return rs.getInt(1);
+                newOrder.setOrderId(rs.getInt(1));
+                newOrder.setCustomer(memberManagement.findByPhone(rs.getString(4)));
+                newOrder.setOrderDate(rs.getDate(3));
+                newOrder.setTotalPrice(rs.getInt(2));
+                newOrder.setDetails(orderManagement.selectOrderDetailsWithOrderID(newOrder.getOrderId()));
             };
         } catch (SQLException e) {
             System.out.println("OrderAccess");
             System.out.println(e.getMessage());
         }
-
-        return  0;
-
+        return  newOrder;
     }
-    public int insertOrderNoPhone(Order order){
-
+    public Order insertOrderNoPhone(Order order){
+        Order newOrder = new Order();
+        OrderManagement orderManagement = new OrderManagement();
         PreparedStatement prSt = null;
         try {
             prSt = getConn().prepareStatement("call insert_orders_without_phone(?)");
@@ -106,18 +114,35 @@ public class OrderAccess extends DataAccess {
             prSt.setInt(1,order.getTotalPrice());
             ResultSet rs = prSt.executeQuery();
             while(rs!=null && rs.next()){
-                return rs.getInt(1);
+                newOrder.setOrderId(rs.getInt(1));
+                newOrder.setOrderDate(rs.getDate(3));
+                newOrder.setTotalPrice(rs.getInt(2));
+                newOrder.setDetails(orderManagement.selectOrderDetailsWithOrderID(newOrder.getOrderId()));
             };
         } catch (SQLException e) {
             System.out.println("OrderAccess(No phone)");
             System.out.println(e.getMessage());
         }
-        return  0;
+        return  newOrder;
     }
+    public ArrayList<OrderDetail> selectOrderDetailsWithOrderID(Integer OrderID){
+        ProductManagement productManagement = new ProductManagement();
+        SizeManagement sizeManagement = new SizeManagement();
+        ArrayList<OrderDetail> orderDetails = new ArrayList<>();
+        try {
+            PreparedStatement prSt = getConn().prepareStatement("call select_orderdetail_with_orderid(?)");
+            prSt.setInt(1,OrderID);
+            ResultSet rs = prSt.executeQuery();
+            while (rs.next()){
+                orderDetails.add(
+                        new OrderDetail(productManagement.findByName(rs.getString(1)),
+                       sizeManagement.findByName(rs.getString(3)) ,rs.getInt(2)));
+            }
 
-    public static void main(String[] args) {
-        OrderAccess orderAccess = new OrderAccess();
-        orderAccess.retrieve();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return orderDetails;
     }
 
 }

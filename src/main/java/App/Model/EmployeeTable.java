@@ -24,6 +24,12 @@ public class EmployeeTable extends DataAccess {
         this.address = address;
         this.position = position;
     }
+    public EmployeeTable(String name,String phone,String address,String position) {
+        this.name = name;
+        this.phone = phone;
+        this.address = address;
+        this.position = position;
+    }
     public EmployeeTable(){
 
     }
@@ -78,7 +84,10 @@ public class EmployeeTable extends DataAccess {
     }
     public void empAdd(){
         EmployeeAccess employeeAccess = new EmployeeAccess();
-        EmployeeTable employeeTable = new EmployeeTable(id,name,phone,address,position);
-        employeeAccess.add(employeeTable);
+        employeeAccess.add(this);
+    }
+    public void empUpdate(){
+        EmployeeAccess employeeAccess = new EmployeeAccess();
+        employeeAccess.edit(this);
     }
 }

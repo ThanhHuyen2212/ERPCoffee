@@ -20,18 +20,17 @@ public class OrderManagement {
     public ArrayList<OrderDetail> findDetailsByOrderId(){
         return null;
     }
-    public Order insertOrder(ArrayList<OrderDetail> orderDetails, Member member){
+    public Order insertOrder(ArrayList<OrderDetail> orderDetails, Member member, Integer price){
         Order order = new Order();
         order.setDetails(orderDetails);
-        int sum=0;
-        for(OrderDetail p: orderDetails){
-            sum+=(p.getProduct().getPrice(p.getSize().getSign())*p.getQty());
-        }
+        order.setTotalPrice(price);
         order.setCustomer(member);
-        order.setTotalPrice(sum);
-        order.setOrderId(orderAccess.insertOrderWithPhone(order));
+        Order newOrder=orderAccess.insertOrderWithPhone(order);
+        order.setOrderId(newOrder.getOrderId());
+        order.setOrderDate(newOrder.getOrderDate());
         for(OrderDetail o : orderDetails){
             if(orderAccess.insertOrderDetails(o,order)){
+                System.out.println(order.getCustomer().getFullName());
                 System.out.println("Them san pham thanh cong: "+o.getProduct().getProductName());
             }else{
                 System.out.println("Them san pham that bai");
@@ -47,7 +46,9 @@ public class OrderManagement {
             sum+=(p.getProduct().getPrice(p.getSize().getSign())*p.getQty());
         }
         order.setTotalPrice(sum);
-        order.setOrderId(orderAccess.insertOrderNoPhone(order));
+        Order newOrder=orderAccess.insertOrderNoPhone(order);
+        order.setOrderId(newOrder.getOrderId());
+        order.setOrderDate(newOrder.getOrderDate());
         for(OrderDetail o : orderDetails){
             if(orderAccess.insertOrderDetails(o,order)){
                 System.out.println("Them san pham thanh cong: "+o.getProduct().getProductName());
@@ -56,5 +57,8 @@ public class OrderManagement {
             }
         }
         return order;
+    }
+    public ArrayList<OrderDetail> selectOrderDetailsWithOrderID(Integer orderId){
+        return orderAccess.selectOrderDetailsWithOrderID(orderId);
     }
 }

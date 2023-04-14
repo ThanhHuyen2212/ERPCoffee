@@ -1,7 +1,7 @@
 package App.Controller;
 
+import App.Model.OrderGUI;
 import App.Model.OrderTable;
-import App.ModuleManager.AppControl;
 import Entity.*;
 import Logic.*;
 import Logic.Depot.ProductPreparationManagement;
@@ -40,7 +40,11 @@ public class ShopController implements Initializable {
     @FXML
     private Button BtnSearch;
     @FXML
+    private Button btnApply;
+    @FXML
     private ImageView imgProduct;
+    @FXML
+    private HBox hbCustomer;
 
     @FXML
     private TableColumn<OrderTable, String> NoColumn;
@@ -49,7 +53,10 @@ public class ShopController implements Initializable {
     private TableColumn<OrderTable, String> ProductColumn;
     @FXML
     private TableColumn<OrderTable, Void> DeleteColum;
-
+    @FXML
+    private TextField txtCustomerpay;
+    @FXML
+    private Label  returnMoneyLabel;
     @FXML
     private TextField Quality;
 
@@ -71,6 +78,8 @@ public class ShopController implements Initializable {
     private HBox hboxCartegory;
     @FXML
     private HBox shopHBox;
+    @FXML
+    private HBox Hbdiscount;
 
     @FXML
     private TableView<OrderTable> orderDetailsTables;
@@ -97,6 +106,11 @@ public class ShopController implements Initializable {
     private Label txtProductNamedetails;
     @FXML
     private Label totalmoneyLabel;
+
+    ComboBox<String> cbPoint = new ComboBox<>();
+    Label labelInfo = new Label();
+    Label price = new Label();
+    Button btnClose = new Button("x");
 
     private MyListener myListener;
     private CategoryManagement categoryManagement = new CategoryManagement();
@@ -141,6 +155,7 @@ public class ShopController implements Initializable {
                     private final Button btn = new Button("Delete");
 
                     {
+
                         btn.setOnAction((ActionEvent event) -> {
                             OrderTable data = getTableView().getItems().get(getIndex());
                             orderList.remove(data.getOrderDetail());
@@ -152,8 +167,13 @@ public class ShopController implements Initializable {
                                 sumTotal += o.getProduct().getPrice(o.getSize().getSign()) * o.getQty();
                             }
                             preListTemp.put(data.getOrderDetail().getProduct().getProductId(), 0);
+                            MemberManagement memberManagement = new MemberManagement();
 
-                            totalmoneyLabel.setText(NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(sumTotal));
+                            if(memberManagement.findByName(labelCustomer.getText()).getPoint()>10){
+                                totalmoneyLabel.setText(String.valueOf(sumTotal-Integer.parseInt(price.getText())));
+                            }else {
+                                totalmoneyLabel.setText(String.valueOf(sumTotal));
+                            }
                         });
                     }
 
@@ -239,11 +259,11 @@ public class ShopController implements Initializable {
 
 
         return (ProductPreparationManagement.preparedList.containsKey(currentTarget)
-                    && !preListTemp.containsKey(currentTarget))
+                && !preListTemp.containsKey(currentTarget))
                 || (ProductPreparationManagement.preparedList.containsKey(currentTarget)
-                        && ProductPreparationManagement.preparedList.get(currentTarget)
-                        >= orderDetail.getProduct().getVle(orderDetail.getSize()) * Integer.parseInt(Quality.getText())
-                            + preListTemp.get(currentTarget))   ;
+                && ProductPreparationManagement.preparedList.get(currentTarget)
+                >= orderDetail.getProduct().getVle(orderDetail.getSize()) * Integer.parseInt(Quality.getText())
+                + preListTemp.get(currentTarget))   ;
     }
 
     public boolean checkPreList(Product product, String size, Integer quantity) {
@@ -328,7 +348,7 @@ public class ShopController implements Initializable {
     public OrderDetail orderDetailsChoose(Product product, String sizeChoose) {
         OrderDetail orderDetail = new OrderDetail();
         orderDetail.setProduct(product);
-       int quantity = Integer.parseInt(Quality.getText());
+        int quantity = Integer.parseInt(Quality.getText());
         Size size = null;
 
         for (Size s : sizeList) {
@@ -339,9 +359,6 @@ public class ShopController implements Initializable {
         orderDetail.setQty(quantity);
         orderDetail.setSize(size);
         return orderDetail;
-    }
-
-    public void checkPreListFirst(OrderDetail product) {
     }
 
     public void AddOrderDetails(OrderDetail product) {
@@ -357,7 +374,15 @@ public class ShopController implements Initializable {
                 for (OrderDetail o : orderList) {
                     sumTotal += o.getProduct().getPrice(o.getSize().getSign()) * o.getQty();
                 }
-                totalmoneyLabel.setText(NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(sumTotal));
+                totalmoneyLabel.setText(String.valueOf(sumTotal));
+                MemberManagement memberManagement = new MemberManagement();
+
+                if(memberManagement.findByName(labelCustomer.getText()).getPoint()>10){
+                    totalmoneyLabel.setText(String.valueOf(sumTotal-Integer.parseInt(price.getText())));
+                }else {
+                    totalmoneyLabel.setText(String.valueOf(sumTotal));
+                }
+
             }
         });
     }
@@ -397,7 +422,7 @@ public class ShopController implements Initializable {
         });
     }
 
-    public void printOrder(Order newOrder) {
+    public void printOrder(Order newOrder, String payCustomer, String returnMoney) {
         FXMLLoader loader = new FXMLLoader();
         String orderFIle = "src/main/java/App/View/Order.fxml";
         try {
@@ -414,7 +439,7 @@ public class ShopController implements Initializable {
         Dialog<ButtonType> dialog = new Dialog<>();
         OrderController orderController = loader.getController();
         dialog.setDialogPane((DialogPane) order);
-        orderController.RenderOrder(newOrder);
+        orderController.RenderOrder(newOrder,  payCustomer,  returnMoney);
         Optional<ButtonType> clickedButton = dialog.showAndWait();
         if (clickedButton.get() == ButtonType.NO) {
             dialog.close();
@@ -427,6 +452,7 @@ public class ShopController implements Initializable {
     public void Event(Product product) {
         setDetails(product);
         changeSizePrice(product);
+        btnClose();
 
     }
 
@@ -445,7 +471,11 @@ public class ShopController implements Initializable {
         orderList.clear();
         orderTableObservableList.clear();
         orderDetailsTables.refresh();
-        totalmoneyLabel.setText("");
+        totalmoneyLabel.setText("0");
+        txtCustomerpay.setText("0");
+        returnMoneyLabel.setText("0");
+        labelCustomer.setText("");
+        Hbdiscount.getChildren().removeAll();
     }
 
     public void addOrderChangeSize(Product product) {
@@ -645,11 +675,16 @@ public class ShopController implements Initializable {
                                     if (checkPreList(o.getProduct(), size.getSign(),  quantity)) {
                                         o.setQty(o.getQty() + quantity);
                                         orderList.remove(orderDetail);
+                                    }else {
+                                        showDialogAlert(orderDetail.getProduct());
                                     }
                                 } else {
                                     if (checkPreList(orderDetail.getProduct(), size.getSign(), quantity)) {
                                         orderDetail.setSize(size);
                                         orderDetail.setQty(quantity);
+                                    }
+                                    else {
+                                        showDialogAlert(orderDetail.getProduct());
                                     }
                                 }
                                 break;
@@ -661,6 +696,8 @@ public class ShopController implements Initializable {
                                 if (orderDetail.getQty() != quantity) {
                                     if (checkPreList(orderDetail.getProduct(), orderDetail.getSize().getSign(), quantity)) {
                                         orderDetail.setQty(quantity);
+                                    }else {
+                                        showDialogAlert(orderDetail.getProduct());
                                     }
                                 }
                             }
@@ -672,14 +709,94 @@ public class ShopController implements Initializable {
                     for (OrderDetail o : orderList) {
                         sumTotal += o.getProduct().getPrice(o.getSize().getSign()) * o.getQty();
                     }
+                    MemberManagement memberManagement = new MemberManagement();
 
-                    totalmoneyLabel.setText(NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(sumTotal));
+                    if(memberManagement.findByName(labelCustomer.getText()).getPoint()>10){
+                        totalmoneyLabel.setText(String.valueOf(sumTotal-Integer.parseInt(price.getText())));
+                    }else {
+                        totalmoneyLabel.setText(String.valueOf(sumTotal));
+                    }
+
                 }
 
             }
             //}
         });
     }
+    private void pointOfMember(ArrayList<OrderDetail> orderList){
+        cbPoint.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                if(t1!=null) {
+                    price.setText(String.valueOf(Integer.parseInt(t1)*5000));
+                    Integer sumTotal = 0;
+                    for (OrderDetail o : orderList) {
+                        sumTotal += o.getProduct().getPrice(o.getSize().getSign()) * o.getQty();
+                    }
+                    if(sumTotal-Integer.parseInt(t1)*5000>0){
+                        totalmoneyLabel.setText(String.valueOf(sumTotal-Integer.parseInt(t1)*5000));
+                    }else {
+                        totalmoneyLabel.setText("0");
+                    }
+
+
+                }
+            }
+        });
+    }
+    private void setDiscount(Member member){
+        MemberManagement memberManagement = new MemberManagement();
+        if(memberManagement.PointOfMember(member).size()<1){
+            labelInfo.setText("Bạn chưa đủ điều kiện");
+            Hbdiscount.getChildren().add(labelInfo);
+        }else {
+            ObservableList<String> observableArrayList = FXCollections.observableArrayList(memberManagement.PointOfMember(member));
+            cbPoint.setItems(observableArrayList);
+            cbPoint.getSelectionModel().selectFirst();
+            Hbdiscount.getChildren().add(cbPoint);
+            price.setText(String.valueOf(Integer.parseInt(cbPoint.getValue())*5000));
+            Integer sumTotal = 0;
+            for (OrderDetail o : orderList) {
+                sumTotal += o.getProduct().getPrice(o.getSize().getSign()) * o.getQty();
+            }
+            if(sumTotal-Integer.parseInt(cbPoint.getValue())*5000>0){
+                totalmoneyLabel.setText(String.valueOf(sumTotal-Integer.parseInt(cbPoint.getValue())*5000));
+            }else {
+                totalmoneyLabel.setText("0");
+            }
+            Hbdiscount.getChildren().add(price);
+            Pane newPane = new Pane();
+            newPane.setMaxWidth(15);
+            Hbdiscount.getChildren().add(newPane);
+            Hbdiscount.getChildren().add(btnClose);
+
+        }
+    }
+private void btnClose(){
+        btnClose.setOnAction(e->{
+            price.setText("");
+            Hbdiscount.getChildren().remove(price);
+            Hbdiscount.getChildren().remove(cbPoint);
+            Hbdiscount.getChildren().remove(btnClose);
+            Integer sumTotal = 0;
+            for (OrderDetail o : orderList) {
+                sumTotal += o.getProduct().getPrice(o.getSize().getSign()) * o.getQty();
+            }
+            totalmoneyLabel.setText(String.valueOf(sumTotal));
+        });
+}
+private void setBtnApply(){
+        btnApply.setOnAction(e->{
+            Integer payCustomer = null;
+            if(txtCustomerpay!=null || !txtCustomerpay.getText().equalsIgnoreCase(null)){
+                payCustomer= Integer.parseInt(txtCustomerpay.getText());
+            }
+            if(payCustomer>=Integer.parseInt(totalmoneyLabel.getText()))
+            returnMoneyLabel.setText(String.valueOf(payCustomer-Integer.parseInt(totalmoneyLabel.getText())));
+
+        });
+}
+Button btnDeleteCustomer = new Button("x");
 
     private void disLayCustomer() {
         customerBtn.setOnAction(actionEvent -> {
@@ -700,25 +817,48 @@ public class ShopController implements Initializable {
             customerController customerController = loader.getController();
             dialog.setDialogPane((DialogPane) customerPane);
             dialog.initStyle(StageStyle.TRANSPARENT);
-
+            MemberManagement memberManagement = new MemberManagement();
             shopHBox.setStyle("-fx-opacity:" + "0.5; \n");
             Optional<ButtonType> btn = dialog.showAndWait();
             if (btn.get() == ButtonType.YES) {
+                hbCustomer.getChildren().remove(btnDeleteCustomer);
                 shopHBox.setStyle("-fx-opacity:" + "1; \n");
                 Member member = customerController.getMember();
+
                 if (member == null) {
                     labelCustomer.setText("Alias");
                 } else {
-                    labelCustomer.setText(member.getFullName());
+
+                        Hbdiscount.getChildren().remove(cbPoint);
+                        Hbdiscount.getChildren().remove(price);
+                        Hbdiscount.getChildren().remove(labelInfo);
+                        Hbdiscount.getChildren().remove(btnClose);
+                        labelCustomer.setText(member.getFullName());
+                        hbCustomer.getChildren().add(btnDeleteCustomer);
+                        btnDeleteCustomer.setOnAction(e->{
+                        labelCustomer.setText("");
+                        hbCustomer.getChildren().remove(btnDeleteCustomer);
+                        Hbdiscount.getChildren().remove(labelInfo);
+                        Hbdiscount.getChildren().remove(cbPoint);
+                        Hbdiscount.getChildren().remove(price);
+                        Hbdiscount.getChildren().remove(btnClose);
+                    });
+                    Integer sum=0;
+                    for(OrderDetail o : orderList){
+                        sum+=o.getProduct().getPrice(o.getSize().getSign())*o.getQty();
+                    }
+                    totalmoneyLabel.setText(String.valueOf(sum));
+                    setDiscount(member);
+                    pointOfMember(orderList);
+                    btnClose();
                 }
             } else if (btn.get() == ButtonType.NO) {
                 shopHBox.setStyle("-fx-opacity:" + "1; \n");
                 dialog.close();
             }
-
-
         });
     }
+
 
     public void searchProduct() {
         BtnSearch.setOnAction(e -> {
@@ -779,16 +919,17 @@ public class ShopController implements Initializable {
         });
     }
 
+    private Order order(ArrayList<OrderDetail> orderList, Member member, Integer value) {
+        Order newOder;
+
+            newOder = orderManagement.insertOrder(orderList, member,value);
+        return newOder;
+    }
     private Order order(ArrayList<OrderDetail> orderList) {
-        Order newOder = new Order();
+        Order newOder;
+
         customerController customerController = new customerController();
-        String memberName = labelCustomer.getText();
-        if (memberName.equalsIgnoreCase(" ")) {
-            Member member = customerController.findByName(memberName);
-            newOder = orderManagement.insertOrder(orderList, member);
-        } else {
-            newOder = orderManagement.insertOrder(orderList);
-        }
+        newOder = orderManagement.insertOrder(orderList);
         return newOder;
     }
 
@@ -815,22 +956,39 @@ public class ShopController implements Initializable {
         }
         Optional<ButtonType> clickedButton = dialog.showAndWait();
         if (clickedButton.get() == ButtonType.OK) {
-            OrderGUIController orderGUIController = new OrderGUIController();
-            Order order = order(orderList);
-            orderGUIController.reload(order);
-            printOrder(order);
+            OrderGUIController orderGUIController =new OrderGUIController();
+            Order order = null;
+            if(labelCustomer.getText().isEmpty() || labelCustomer.getText().equalsIgnoreCase("") || labelCustomer==null){
+                order = order(orderList);
+            }else {
+                MemberManagement memberManagement = new MemberManagement();
+                order = order(orderList,
+                        memberManagement.findByName(labelCustomer.getText()),
+                        Integer.parseInt(totalmoneyLabel.getText()));
+                if(memberManagement.findByName(labelCustomer.getText()).getPoint()>10){
+                    memberManagement.updateSubPoint(memberManagement.findByName(labelCustomer.getText()),Integer.parseInt(cbPoint.getValue()));
+                }
+            }
+
+            setBtnApply();
+            OrderGUIController.orderGUIList.add(new OrderGUI(order));
+            printOrder(order,txtCustomerpay.getText(),returnMoneyLabel.getText());
             preListTemp.forEach((k,v)->{
                 ProductPreparationManagement.preparedList.replace(k,ProductPreparationManagement.preparedList.get(k)-v);
             });
+            preListTemp.clear();
             orderList.clear();
             orderTableObservableList.clear();
             orderDetailsTables.refresh();
-            totalmoneyLabel.setText("");
+            totalmoneyLabel.setText("0");
+            txtCustomerpay.setText("0");
+            returnMoneyLabel.setText("0");
+            labelCustomer.setText("");
+            Hbdiscount.getChildren().removeAll();
         } else if (clickedButton.get() == ButtonType.CANCEL) {
             dialog.close();
         }
     }
-
     private void orderEvent() {
         btnOrder.setOnAction(e -> {
             if (orderList.size() > 0) {
@@ -872,6 +1030,7 @@ public class ShopController implements Initializable {
             searchProduct();
             renderCategories();
             disLayCustomer();
+            setBtnApply();
             orderEvent();
         } catch (IOException e) {
             throw new RuntimeException(e);

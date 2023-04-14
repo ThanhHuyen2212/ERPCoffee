@@ -33,8 +33,8 @@ public class AppControl {
 
     HashMap<String,String> modulePath = new HashMap<>(){{
         put("sale","src/main/java/App/View/ShopGUI.fxml");
-        put("product","");
-        put("size","");
+        put("product","src/main/java/App/View/ProductGUI.fxml");
+        put("size","src/main/java/App/Size/View/Size.fxml");
         put("account","src/main/java/App/View/AccountCRUD.fxml");
         put("system","src/main/java/App/Permission/View/Permission.fxml");
         put("category","src/main/java/App/View/CategoryCRUD.fxml");
