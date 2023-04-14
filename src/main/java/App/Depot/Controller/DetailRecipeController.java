@@ -1,6 +1,5 @@
 package App.Depot.Controller;
 
-import App.Controller.Alert2Controller;
 import App.Depot.Model.DetailRecipeModel;
 import App.Depot.View.MessageDialog;
 import App.ModuleManager.AppControl;

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="1.7976931348623157E308" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.Depot.Controller.POTemplateController">
+   <children>
+        <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="621.0" prefWidth="611.0" spacing="10.0">
+            <children>
+                <VBox>
+                    <children>
+                        <Label text="ERP Coffee Store" />
+                        <Label text="Hung Vuong district 5 Ho Chi Minh City, Viet Nam" />
+                        <Label text="(+84) 99912345" />
+                    </children>
+                </VBox>
+                <VBox alignment="TOP_RIGHT">
+                    <children>
+                        <Label fx:id="vendorLbl" text="Abyss Vendor" />
+                        <Label text="VietNam" />
+                    </children>
+                </VBox>
+                <Label alignment="CENTER" prefHeight="37.0" prefWidth="607.0" text="Purchase Order" textAlignment="CENTER" VBox.vgrow="ALWAYS">
+                    <font>
+                        <Font size="30.0" />
+                    </font>
+                </Label>
+                <HBox prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label text="ID Purrchase: ">
+                                    <font>
+                                        <Font name="System Bold" size="16.0" />
+                                    </font>
+                                </Label>
+                                <Label fx:id="idLbl" />
+                                <Label text="Order Date: ">
+                                    <font>
+                                        <Font name="System Bold" size="16.0" />
+                                    </font>
+                                </Label>
+                                <Label fx:id="dateLbl" />
+                            </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label text="Purchase person:">
+                                    <font>
+                                        <Font name="System Bold" size="16.0" />
+                                    </font>
+                                </Label>
+                                <Label fx:id="createStaffLbl" />
+                                <Label text="Confirm person: ">
+                                    <font>
+                                        <Font name="System Bold" size="16.0" />
+                                    </font>
+                                </Label>
+                                <Label fx:id="confirmStaffLbl" />
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+                <TableView fx:id="detailTable" maxHeight="1.7976931348623157E308" prefHeight="360.0" prefWidth="587.0">
+                    <columns>
+                        <TableColumn fx:id="idCol" prefWidth="33.5" text="ID" />
+                        <TableColumn fx:id="ingredientNameCol" prefWidth="172.5" text="Ingredient" />
+                        <TableColumn fx:id="qtyCol" minWidth="0.0" prefWidth="94.32528686523438" text="Order Quantity" />
+                        <TableColumn fx:id="receiveCol" prefWidth="89.67471313476562" text="Received" />
+                        <TableColumn fx:id="unitCol" prefWidth="65.01199340820312" text="Unit" />
+                        <TableColumn fx:id="priceCol" prefWidth="120.0" text="Unit Price" />
+                    </columns>
+                </TableView>
+                <VBox alignment="CENTER_RIGHT" spacing="8.0">
+                    <children>
+                        <HBox alignment="CENTER_RIGHT" prefHeight="34.0" prefWidth="254.0">
+                            <children>
+                                <Label minWidth="20.0" prefHeight="17.0" prefWidth="120.0" text="Total Order">
+                                    <padding>
+                                        <Insets right="20.0" />
+                                    </padding>
+                                </Label>
+                                <Label fx:id="totalOrderLbl" minWidth="150.0" prefHeight="17.0" prefWidth="179.0" textAlignment="RIGHT" HBox.hgrow="ALWAYS" />
+                                <Label text="đ" />
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER_RIGHT" prefHeight="34.0" prefWidth="254.0" VBox.vgrow="ALWAYS">
+                            <children>
+                                <Label minWidth="20.0" prefHeight="17.0" prefWidth="120.0" text="Total Receive">
+                                    <padding>
+                                        <Insets right="20.0" />
+                                    </padding>
+                                </Label>
+                                <Label fx:id="totalRevLbl" minWidth="150.0" prefHeight="17.0" prefWidth="179.0" textAlignment="RIGHT" HBox.hgrow="ALWAYS" />
+                                <Label text="đ" />
+                            </children>
+                            <VBox.margin>
+                                <Insets />
+                            </VBox.margin>
+                        </HBox>
+                    </children>
+                </VBox>
+            </children>
+            <padding>
+                <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
+            </padding>
+        </VBox>
+   </children>
+</Pane>

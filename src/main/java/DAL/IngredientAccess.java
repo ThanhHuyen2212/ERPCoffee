@@ -13,7 +13,7 @@ public class IngredientAccess extends DataAccess {
         IngredientAccess ingredientAccess = new IngredientAccess();
         ArrayList<Ingredient> ingredients = new ArrayList<>();
         try {
-//            ingredientAccess.createConnection();
+            ingredientAccess.createConnection();
             PreparedStatement prSt = ingredientAccess.getConn().prepareStatement("call select_ingredient();");
             ResultSet rs = prSt.executeQuery();
             while(rs.next()){
