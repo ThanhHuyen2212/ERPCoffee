@@ -1161,3 +1161,20 @@ begin
 	end if;
 end; //
 delimiter ;
+
+
+
+-- create temporary table test 
+-- ( 
+-- 	ID int, 
+-- 	Name varchar(100) 
+-- ); 
+-- select mod(-20,10); 
+-- select * from Members m 
+-- where 
+-- select timestampdiff(year, '2020-03-28', current_date()); 
+-- select concat('0',SUBSTRING('+84908617538',4,12)); 
+-- delete from Employee where EmployeeId = 6; 
+-- alter table Employee AUTO_INCREMENT = 1; 
+-- SPLIT_STR(string, delimiter, position) 
+-- FIND_IN_SET(string, string_list)
