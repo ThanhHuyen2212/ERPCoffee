@@ -24,14 +24,14 @@ public abstract class DataAccess {
                 rs[idx++] = myReader.nextLine();
             }
             myReader.close();
-            this.host = rs[0];
-            this.username = rs[1];
-            this.pass = rs[2];
-            this.port = rs[3];
-//            this.host="localhost";
-//            this.port="3307";
-//            this.username="root";
-//            this.pass="123456";
+//            this.host = rs[0];
+//            this.username = rs[1];
+//            this.pass = rs[2];
+//            this.port = rs[3];
+            this.host="localhost";
+            this.port="3307";
+            this.username="root";
+            this.pass="123456";
 
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
