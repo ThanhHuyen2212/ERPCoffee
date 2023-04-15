@@ -58,7 +58,7 @@ public class OrderManagement {
         }
         return order;
     }
-    public ArrayList<OrderDetail> selectOrderDetailsWithOrderID(Integer orderId){
-        return orderAccess.selectOrderDetailsWithOrderID(orderId);
+    public ArrayList<OrderDetail> orderDetails(Integer id){
+        return orderAccess.orderDetailsWithID(id);
     }
 }

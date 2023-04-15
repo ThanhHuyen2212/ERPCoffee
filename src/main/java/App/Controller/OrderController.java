@@ -90,8 +90,14 @@ public class OrderController implements Initializable{
         return orderReceipts;
     }
 
-    public void RenderOrder(Order order, String payCustomer, String returnMoney){
-        initTable(order.getDetails());
+    public void RenderOrder(Order order, String payCustomer, String returnMoney, String casier){
+        if(order.getDetails()==null || order.getDetails().size()==0){
+            OrderManagement orderManagement = new OrderManagement();
+            System.out.println("OrderDetails ArrayList:"+orderManagement.orderDetails(order.getOrderId()).size());
+            initTable(orderManagement.orderDetails(order.getOrderId()));
+        }else{
+            initTable(order.getDetails());
+        }
         if(order.getCustomer()==null){
             CustomerLabel.setText("Alias");
             PhoneLabel.setText("Alias");
@@ -104,11 +110,17 @@ public class OrderController implements Initializable{
         orderIdLabel.setText("#"+String.valueOf(order.getOrderId()));
         ReceiveLabel.setText(payCustomer);
         changeLabel.setText(returnMoney);
+        cashierLabel.setText(casier);
     }
 
     public void RenderOrder(Order order){
-        initTable(order.getDetails());
-        System.out.println("SizeOrderDetails:"+order.getDetails().size());
+        if(order.getDetails()==null || order.getDetails().size()==0){
+            OrderManagement orderManagement = new OrderManagement();
+            System.out.println("OrderDetails ArrayList:"+orderManagement.orderDetails(order.getOrderId()).size());
+            initTable(orderManagement.orderDetails(order.getOrderId()));
+        }else{
+            initTable(order.getDetails());
+        }
         if(order.getCustomer()==null){
             CustomerLabel.setText("Alias");
             PhoneLabel.setText("Alias");

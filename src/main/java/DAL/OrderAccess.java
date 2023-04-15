@@ -9,6 +9,7 @@ import Logic.SizeManagement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -93,7 +94,6 @@ public class OrderAccess extends DataAccess {
                 newOrder.setCustomer(memberManagement.findByPhone(rs.getString(4)));
                 newOrder.setOrderDate(rs.getDate(3));
                 newOrder.setTotalPrice(rs.getInt(2));
-                newOrder.setDetails(orderManagement.selectOrderDetailsWithOrderID(newOrder.getOrderId()));
             };
         } catch (SQLException e) {
             System.out.println("OrderAccess");
@@ -117,7 +117,6 @@ public class OrderAccess extends DataAccess {
                 newOrder.setOrderId(rs.getInt(1));
                 newOrder.setOrderDate(rs.getDate(3));
                 newOrder.setTotalPrice(rs.getInt(2));
-                newOrder.setDetails(orderManagement.selectOrderDetailsWithOrderID(newOrder.getOrderId()));
             };
         } catch (SQLException e) {
             System.out.println("OrderAccess(No phone)");
@@ -125,24 +124,28 @@ public class OrderAccess extends DataAccess {
         }
         return  newOrder;
     }
-    public ArrayList<OrderDetail> selectOrderDetailsWithOrderID(Integer OrderID){
-        ProductManagement productManagement = new ProductManagement();
+    public ArrayList<OrderDetail> orderDetailsWithID(Integer orderID){
+        ProductAccess productAccess = new ProductAccess();
         SizeManagement sizeManagement = new SizeManagement();
         ArrayList<OrderDetail> orderDetails = new ArrayList<>();
         try {
             PreparedStatement prSt = getConn().prepareStatement("call select_orderdetail_with_orderid(?)");
-            prSt.setInt(1,OrderID);
+            prSt.setInt(1,orderID);
             ResultSet rs = prSt.executeQuery();
+            System.out.println(rs.getRow());
             while (rs.next()){
-                orderDetails.add(
-                        new OrderDetail(productManagement.findByName(rs.getString(1)),
-                       sizeManagement.findByName(rs.getString(3)) ,rs.getInt(2)));
-            }
 
+                orderDetails.add(new OrderDetail(
+                        productAccess.findByName(rs.getString(2)),sizeManagement.findByName(rs.getString(4)),
+                        rs.getInt(3)
+                ));
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
         return orderDetails;
     }
+
 
 }
