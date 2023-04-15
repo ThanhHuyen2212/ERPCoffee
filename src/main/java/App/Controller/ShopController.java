@@ -1,10 +1,12 @@
 package App.Controller;
 
+import App.Model.OrderGUI;
 import App.Model.OrderTable;
 import App.ModuleManager.AppControl;
 import Entity.*;
 import Logic.*;
 import Logic.Depot.ProductPreparationManagement;
+import Main.MainApp;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -40,7 +42,11 @@ public class ShopController implements Initializable {
     @FXML
     private Button BtnSearch;
     @FXML
+    private Button btnApply;
+    @FXML
     private ImageView imgProduct;
+    @FXML
+    private HBox hbCustomer;
 
     @FXML
     private TableColumn<OrderTable, String> NoColumn;
@@ -52,7 +58,7 @@ public class ShopController implements Initializable {
     @FXML
     private TextField txtCustomerpay;
     @FXML
-    private Label  returnMoneyLabel;
+    private Label returnMoneyLabel;
     @FXML
     private TextField Quality;
 
@@ -74,6 +80,8 @@ public class ShopController implements Initializable {
     private HBox hboxCartegory;
     @FXML
     private HBox shopHBox;
+    @FXML
+    private HBox Hbdiscount;
 
     @FXML
     private TableView<OrderTable> orderDetailsTables;
@@ -100,6 +108,11 @@ public class ShopController implements Initializable {
     private Label txtProductNamedetails;
     @FXML
     private Label totalmoneyLabel;
+
+    ComboBox<String> cbPoint = new ComboBox<>();
+    Label labelInfo = new Label();
+    Label price = new Label();
+    Button btnClose = new Button("x");
 
     private MyListener myListener;
     private CategoryManagement categoryManagement = new CategoryManagement();
@@ -144,6 +157,7 @@ public class ShopController implements Initializable {
                     private final Button btn = new Button("Delete");
 
                     {
+
                         btn.setOnAction((ActionEvent event) -> {
                             OrderTable data = getTableView().getItems().get(getIndex());
                             orderList.remove(data.getOrderDetail());
@@ -155,8 +169,20 @@ public class ShopController implements Initializable {
                                 sumTotal += o.getProduct().getPrice(o.getSize().getSign()) * o.getQty();
                             }
                             preListTemp.put(data.getOrderDetail().getProduct().getProductId(), 0);
+                            MemberManagement memberManagement = new MemberManagement();
 
-                            totalmoneyLabel.setText(NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(sumTotal));
+                            if(memberManagement.findByName(labelCustomer.getText()).getPoint()>10){
+                                if(!price.getText().equalsIgnoreCase("")){
+                                    if(sumTotal-Integer.parseInt(price.getText())>0){
+                                        totalmoneyLabel.setText(String.valueOf(sumTotal-Integer.parseInt(price.getText())));
+                                    }else{
+                                        totalmoneyLabel.setText("0");
+                                    }
+                                }
+                            }else {
+                                totalmoneyLabel.setText(String.valueOf(sumTotal));
+                            }
+
                         });
                     }
 
@@ -240,22 +266,21 @@ public class ShopController implements Initializable {
 //        }
 
 
-
         return (ProductPreparationManagement.preparedList.containsKey(currentTarget)
-                    && !preListTemp.containsKey(currentTarget))
+                && !preListTemp.containsKey(currentTarget))
                 || (ProductPreparationManagement.preparedList.containsKey(currentTarget)
-                        && ProductPreparationManagement.preparedList.get(currentTarget)
-                        >= orderDetail.getProduct().getVle(orderDetail.getSize()) * Integer.parseInt(Quality.getText())
-                            + preListTemp.get(currentTarget))   ;
+                && ProductPreparationManagement.preparedList.get(currentTarget)
+                >= orderDetail.getProduct().getVle(orderDetail.getSize()) * Integer.parseInt(Quality.getText())
+                + preListTemp.get(currentTarget));
     }
 
     public boolean checkPreList(Product product, String size, Integer quantity) {
-        Integer newVle = product.getVle(size)*quantity;
+        Integer newVle = product.getVle(size) * quantity;
         OrderDetail oldSelected = orderDetailsTables.getSelectionModel().getSelectedItem().getOrderDetail();
-        Integer oldVle = oldSelected.getProduct().getVle(oldSelected.getSize())*oldSelected.getQty();
-        if(ProductPreparationManagement.preparedList.get(oldSelected.getProduct().getProductId())
-                >= preListTemp.get(oldSelected.getProduct().getProductId()) - oldVle + newVle){
-            preListTemp.replace(oldSelected.getProduct().getProductId(),preListTemp.get(oldSelected.getProduct().getProductId()) - oldVle + newVle);
+        Integer oldVle = oldSelected.getProduct().getVle(oldSelected.getSize()) * oldSelected.getQty();
+        if (ProductPreparationManagement.preparedList.get(oldSelected.getProduct().getProductId())
+                >= preListTemp.get(oldSelected.getProduct().getProductId()) - oldVle + newVle) {
+            preListTemp.replace(oldSelected.getProduct().getProductId(), preListTemp.get(oldSelected.getProduct().getProductId()) - oldVle + newVle);
             System.out.println("true");
             System.out.println("prepare");
             System.out.println(ProductPreparationManagement.preparedList.get(oldSelected.getProduct().getProductId()));
@@ -294,8 +319,8 @@ public class ShopController implements Initializable {
         Integer newVl = 0;
         if (checkPreList(orderDetail)) {
             for (OrderDetail o : orderList) {
-                if (orderDetail.getProduct() == o.getProduct()){
-                    if(o.getSize().getSign().equalsIgnoreCase(cbSizePrice.getValue())){
+                if (orderDetail.getProduct() == o.getProduct()) {
+                    if (o.getSize().getSign().equalsIgnoreCase(cbSizePrice.getValue())) {
                         System.out.println(o);
                         System.out.println(orderDetail);
                         o.setQty(o.getQty() + Integer.parseInt(Quality.getText()));
@@ -314,7 +339,7 @@ public class ShopController implements Initializable {
                 }
 
             }
-            if(preListTemp.containsKey(orderDetail.getProduct().getProductId())) {
+            if (preListTemp.containsKey(orderDetail.getProduct().getProductId())) {
                 preListTemp.replace(orderDetail.getProduct().getProductId(),
                         preListTemp.get(orderDetail.getProduct().getProductId())
                                 + Integer.parseInt(Quality.getText()) * orderDetail.getProduct().getVle(orderDetail.getSize()));
@@ -322,7 +347,7 @@ public class ShopController implements Initializable {
                 preListTemp.put(orderDetail.getProduct().getProductId(), orderDetail.getQty() * orderDetail.getProduct().getVle(orderDetail.getSize()));
 
             }
-        }else{
+        } else {
             showDialogAlert(orderDetail.getProduct());
         }
         return existed;
@@ -331,7 +356,7 @@ public class ShopController implements Initializable {
     public OrderDetail orderDetailsChoose(Product product, String sizeChoose) {
         OrderDetail orderDetail = new OrderDetail();
         orderDetail.setProduct(product);
-       int quantity = Integer.parseInt(Quality.getText());
+        int quantity = Integer.parseInt(Quality.getText());
         Size size = null;
 
         for (Size s : sizeList) {
@@ -357,7 +382,20 @@ public class ShopController implements Initializable {
                 for (OrderDetail o : orderList) {
                     sumTotal += o.getProduct().getPrice(o.getSize().getSign()) * o.getQty();
                 }
-                totalmoneyLabel.setText(NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(sumTotal));
+                totalmoneyLabel.setText(String.valueOf(sumTotal));
+                MemberManagement memberManagement = new MemberManagement();
+                if(labelCustomer!=null && memberManagement.findByName(labelCustomer.getText()).getPoint()>10){
+                    if(!price.getText().equalsIgnoreCase("")){
+                        if(sumTotal-Integer.parseInt(price.getText())>0){
+                            totalmoneyLabel.setText(String.valueOf(sumTotal-Integer.parseInt(price.getText())));
+                        }else{
+                            totalmoneyLabel.setText("0");
+                        }
+                    }
+                }else {
+                    totalmoneyLabel.setText(String.valueOf(sumTotal));
+                }
+
             }
         });
     }
@@ -397,7 +435,7 @@ public class ShopController implements Initializable {
         });
     }
 
-    public void printOrder(Order newOrder) {
+    public void printOrder(Order newOrder, String payCustomer, String returnMoney, String casier) {
         FXMLLoader loader = new FXMLLoader();
         String orderFIle = "src/main/java/App/View/Order.fxml";
         try {
@@ -414,7 +452,7 @@ public class ShopController implements Initializable {
         Dialog<ButtonType> dialog = new Dialog<>();
         OrderController orderController = loader.getController();
         dialog.setDialogPane((DialogPane) order);
-        orderController.RenderOrder(newOrder);
+        orderController.RenderOrder(newOrder, payCustomer, returnMoney,casier);
         Optional<ButtonType> clickedButton = dialog.showAndWait();
         if (clickedButton.get() == ButtonType.NO) {
             dialog.close();
@@ -427,6 +465,7 @@ public class ShopController implements Initializable {
     public void Event(Product product) {
         setDetails(product);
         changeSizePrice(product);
+        btnClose();
 
     }
 
@@ -445,7 +484,11 @@ public class ShopController implements Initializable {
         orderList.clear();
         orderTableObservableList.clear();
         orderDetailsTables.refresh();
-        totalmoneyLabel.setText("");
+        totalmoneyLabel.setText("0");
+        txtCustomerpay.setText("0");
+        returnMoneyLabel.setText("0");
+        labelCustomer.setText("");
+        Hbdiscount.getChildren().removeAll();
     }
 
     public void addOrderChangeSize(Product product) {
@@ -642,14 +685,18 @@ public class ShopController implements Initializable {
                         for (OrderDetail o : orderList) {
                             if (o.getProduct() == orderDetail.getProduct()) {
                                 if (o.getSize() == size) {
-                                    if (checkPreList(o.getProduct(), size.getSign(),  quantity)) {
+                                    if (checkPreList(o.getProduct(), size.getSign(), quantity)) {
                                         o.setQty(o.getQty() + quantity);
                                         orderList.remove(orderDetail);
+                                    } else {
+                                        showDialogAlert(orderDetail.getProduct());
                                     }
                                 } else {
                                     if (checkPreList(orderDetail.getProduct(), size.getSign(), quantity)) {
                                         orderDetail.setSize(size);
                                         orderDetail.setQty(quantity);
+                                    } else {
+                                        showDialogAlert(orderDetail.getProduct());
                                     }
                                 }
                                 break;
@@ -661,6 +708,8 @@ public class ShopController implements Initializable {
                                 if (orderDetail.getQty() != quantity) {
                                     if (checkPreList(orderDetail.getProduct(), orderDetail.getSize().getSign(), quantity)) {
                                         orderDetail.setQty(quantity);
+                                    } else {
+                                        showDialogAlert(orderDetail.getProduct());
                                     }
                                 }
                             }
@@ -672,14 +721,172 @@ public class ShopController implements Initializable {
                     for (OrderDetail o : orderList) {
                         sumTotal += o.getProduct().getPrice(o.getSize().getSign()) * o.getQty();
                     }
+                    MemberManagement memberManagement = new MemberManagement();
+                    if(memberManagement.findByName(labelCustomer.getText()).getPoint()>10){
+                        if(!price.getText().equalsIgnoreCase("")){
+                            if(sumTotal-Integer.parseInt(price.getText())>0){
+                                totalmoneyLabel.setText(String.valueOf(sumTotal-Integer.parseInt(price.getText())));
+                            }else{
+                                totalmoneyLabel.setText("0");
+                            }
+                        }
+                    }else {
+                        totalmoneyLabel.setText(String.valueOf(sumTotal));
+                    }
 
-                    totalmoneyLabel.setText(NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(sumTotal));
+
                 }
 
             }
             //}
         });
     }
+
+    private void pointOfMember(ArrayList<OrderDetail> orderList) {
+        cbPoint.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                if (t1 != null) {
+                    price.setText(String.valueOf(Integer.parseInt(t1) * 5000));
+                    Integer sumTotal = 0;
+                    for (OrderDetail o : orderList) {
+                        sumTotal += o.getProduct().getPrice(o.getSize().getSign()) * o.getQty();
+                    }
+                    if (sumTotal - Integer.parseInt(t1) * 5000 > 0) {
+                        totalmoneyLabel.setText(String.valueOf(sumTotal - Integer.parseInt(t1) * 5000));
+                    } else {
+                        totalmoneyLabel.setText("0");
+                    }
+
+
+                }
+            }
+        });
+    }
+
+    Pane newPane1 = new Pane();
+    Pane newPane = new Pane();
+    Pane newPane2 = new Pane();
+
+    private void setDiscount(Member member) {
+        MemberManagement memberManagement = new MemberManagement();
+        if (memberManagement.PointOfMember(member).size() < 1) {
+            labelInfo.setText("Bạn chưa đủ điều kiện");
+            /**
+             * -fx-text-fill: #fff;
+             *     -fx-font-size: 16;
+             *     -fx-font-weight: 700;
+             */
+            labelInfo.setStyle("-fx-text-fill:" + "#eb2f06; \n" +
+                    "-fx-font-size:" + "18; \n" +
+                    "-fx-font-weight:" + "700; \n");
+            Hbdiscount.getChildren().add(labelInfo);
+        } else {
+            ObservableList<String> observableArrayList = FXCollections.observableArrayList(memberManagement.PointOfMember(member));
+            cbPoint.setItems(observableArrayList);
+            Hbdiscount.setStyle("-fx-pref-width:"+"450px;\n"+
+                    "fx-pref-height:"+"150px;\n"+
+                    "-fx-alignment:" + "center; \n"+
+                    "-fx-border-radius:" + "50px; \n" +
+                    "-fx-background-radius:" + "50px; \n" +
+                    "-fx-background-color:" + "#dff9fb; \n" +
+                    "-fx-border-color:" + "#dff9fb; \n"
+            );
+            newPane1.setStyle("-fx-pref-width:" + "20px; \n");
+            Hbdiscount.getChildren().add(newPane1);
+            cbPoint.getSelectionModel().selectFirst();
+            cbPoint.setStyle("-fx-pref-width:" + "100px; \n" +
+                    "-fx-pref-height:" + "50px; \n"+
+                    "-fx-alignment:" + "center; \n"+
+                    "-fx-border-radius:" + "10px; \n" +
+                    "-fx-background-radius:" + "10px; \n" +
+                    "-fx-background-color:" + "#f9ca24; \n"+
+                    "-fx-text-fill:" + "#fff; \n"
+                 );
+            Hbdiscount.getChildren().add(cbPoint);
+            price.setStyle("-fx-text-fill:" + "#c0392b; \n" +
+                    "-fx-pref-width:" + "100px; \n" +
+                    "-fx-font-size:" + "20; \n" +
+                    "-fx-font-weight:" + "700; \n");
+            price.setText(String.valueOf(Integer.parseInt(cbPoint.getValue()) * 5000));
+            Integer sumTotal = 0;
+            for (OrderDetail o : orderList) {
+                sumTotal += o.getProduct().getPrice(o.getSize().getSign()) * o.getQty();
+            }
+            if (sumTotal - Integer.parseInt(cbPoint.getValue()) * 5000 > 0) {
+                totalmoneyLabel.setText(String.valueOf(sumTotal - Integer.parseInt(cbPoint.getValue()) * 5000));
+            } else {
+                totalmoneyLabel.setText("0");
+            }
+            newPane2.setStyle("-fx-pref-width:" + "80px; \n");
+            Hbdiscount.getChildren().add(newPane2);
+            Hbdiscount.getChildren().add(price);
+            newPane.setStyle("-fx-pref-width:" + "100px; \n");
+            Hbdiscount.getChildren().add(newPane);
+            btnClose.setStyle("-fx-border-insets:" + "5px; \n" +
+                    "-fx-background-insets:" + "5px; \n" +
+                    "-fx-border-radius:" + "50%; \n" +
+                    "-fx-background-radius:" + "50%; \n" +
+                    "-fx-background-color:" + "#eb2f06; \n" +
+                    "-fx-border-color:" + "#eb2f06; \n" +
+                    "-fx-alignment:" + "center; \n" +
+                    "fx-pref-height:" + "20px; \n" +
+                    "-fx-pref-width:" + "20px; \n" +
+                    "-fx-font-size:" + "15; \n" +
+                    "-fx-text-fill:" + "#fff; \n"+
+                    "-fx-font-weight:" + "700;\n");
+            Hbdiscount.getChildren().add(btnClose);
+
+        }
+    }
+
+    public void clearHbDiscount() {
+        price.setText("");
+        Hbdiscount.getChildren().remove(labelInfo);
+        Hbdiscount.getChildren().remove(cbPoint);
+        Hbdiscount.getChildren().remove(price);
+        Hbdiscount.getChildren().remove(newPane);
+        Hbdiscount.getChildren().remove(newPane1);
+        Hbdiscount.getChildren().remove(newPane2);
+        Hbdiscount.getChildren().remove(btnClose);
+        Hbdiscount.setStyle("");
+    }
+
+    private void btnClose() {
+        MemberManagement memberManagement = new MemberManagement();
+        btnClose.setOnAction(e -> {
+            Integer sumTotal = 0;
+            for (OrderDetail o : orderList) {
+                sumTotal += o.getProduct().getPrice(o.getSize().getSign()) * o.getQty();
+            }
+            if(labelCustomer!=null && memberManagement.findByName(labelCustomer.getText()).getPoint()>10){
+                if(!price.getText().equalsIgnoreCase("")){
+                    if(sumTotal-Integer.parseInt(price.getText())>0){
+                        totalmoneyLabel.setText(String.valueOf(sumTotal-Integer.parseInt(price.getText())));
+                    }else{
+                        totalmoneyLabel.setText("0");
+                    }
+                }
+            }else {
+                totalmoneyLabel.setText(String.valueOf(sumTotal));
+            }
+            clearHbDiscount();
+        });
+    }
+
+    private void setBtnApply() {
+        btnApply.setOnAction(e -> {
+            Integer payCustomer = null;
+            if (txtCustomerpay != null || !txtCustomerpay.getText().equalsIgnoreCase(null)) {
+                payCustomer = Integer.parseInt(txtCustomerpay.getText());
+            }
+            if (payCustomer >= Integer.parseInt(totalmoneyLabel.getText()))
+                returnMoneyLabel.setText(String.valueOf(payCustomer - Integer.parseInt(totalmoneyLabel.getText())));
+
+        });
+    }
+
+    Button btnDeleteCustomer = new Button("x");
 
     private void disLayCustomer() {
         customerBtn.setOnAction(actionEvent -> {
@@ -700,26 +907,74 @@ public class ShopController implements Initializable {
             customerController customerController = loader.getController();
             dialog.setDialogPane((DialogPane) customerPane);
             dialog.initStyle(StageStyle.TRANSPARENT);
-
+            MemberManagement memberManagement = new MemberManagement();
             shopHBox.setStyle("-fx-opacity:" + "0.5; \n");
             Optional<ButtonType> btn = dialog.showAndWait();
             if (btn.get() == ButtonType.YES) {
+                hbCustomer.getChildren().remove(btnDeleteCustomer);
                 shopHBox.setStyle("-fx-opacity:" + "1; \n");
                 Member member = customerController.getMember();
+
                 if (member == null) {
                     labelCustomer.setText("Alias");
                 } else {
+                    if(orderList.size()>0){
+                        Integer sumTotal = 0;
+                        for (OrderDetail o : orderList) {
+                            sumTotal += o.getProduct().getPrice(o.getSize().getSign()) * o.getQty();
+                        }
+                        if (memberManagement.findByName(labelCustomer.getText()).getPoint() > 10) {
+                            if (sumTotal - Integer.parseInt(price.getText()) > 0) {
+                                totalmoneyLabel.setText(String.valueOf(sumTotal - Integer.parseInt(price.getText()) * 5000));
+                            } else {
+                                totalmoneyLabel.setText("0");
+                            }
+                        } else {
+                            totalmoneyLabel.setText(String.valueOf(sumTotal));
+                        }
+                    }
+
+                    clearHbDiscount();
                     labelCustomer.setText(member.getFullName());
+                    btnDeleteCustomer.setStyle("-fx-border-insets:" + "5px; \n" +
+                            "-fx-background-insets:" + "5px; \n" +
+                            "-fx-border-radius:" + "50%; \n" +
+                            "-fx-background-radius:" + "50%; \n" +
+                            "-fx-background-color:" + "#eb2f06; \n" +
+                            "-fx-border-color:" + "#eb2f06; \n" +
+                            "-fx-alignment:" + "center; \n" +
+                            "fx-pref-height:" + "20px; \n" +
+                            "-fx-pref-width:" + "20px; \n" +
+                            "-fx-font-size:" + "15; \n" +
+                            "-fx-text-fill:" + "#fff; \n"+
+                            "-fx-font-weight:" + "700;\n");
+                    hbCustomer.getChildren().add(btnDeleteCustomer);
+                    btnDeleteCustomer.setOnAction(e -> {
+                        Integer sumTotal = 0;
+                        for (OrderDetail o : orderList) {
+                            sumTotal += o.getProduct().getPrice(o.getSize().getSign()) * o.getQty();
+                        }
+                        totalmoneyLabel.setText(String.valueOf(sumTotal));
+                        price.setText("");
+                        labelCustomer.setText("");
+                        hbCustomer.getChildren().remove(btnDeleteCustomer);
+                        clearHbDiscount();
+                    });
+                    Integer sum = 0;
+                    for (OrderDetail o : orderList) {
+                        sum += o.getProduct().getPrice(o.getSize().getSign()) * o.getQty();
+                    }
+                    totalmoneyLabel.setText(String.valueOf(sum));
+                    setDiscount(member);
+                    pointOfMember(orderList);
+                    btnClose();
                 }
             } else if (btn.get() == ButtonType.NO) {
                 shopHBox.setStyle("-fx-opacity:" + "1; \n");
                 dialog.close();
             }
-
-
         });
     }
-
     public void searchProduct() {
         BtnSearch.setOnAction(e -> {
             FXMLLoader loader = new FXMLLoader();
@@ -779,16 +1034,18 @@ public class ShopController implements Initializable {
         });
     }
 
+    private Order order(ArrayList<OrderDetail> orderList, Member member, Integer value) {
+        Order newOder;
+
+        newOder = orderManagement.insertOrder(orderList, member, value);
+        return newOder;
+    }
+
     private Order order(ArrayList<OrderDetail> orderList) {
-        Order newOder = new Order();
+        Order newOder;
+
         customerController customerController = new customerController();
-        String memberName = labelCustomer.getText();
-        if (memberName.equalsIgnoreCase(" ")) {
-            Member member = customerController.findByName(memberName);
-            newOder = orderManagement.insertOrder(orderList, member);
-        } else {
-            newOder = orderManagement.insertOrder(orderList);
-        }
+        newOder = orderManagement.insertOrder(orderList);
         return newOder;
     }
 
@@ -816,20 +1073,40 @@ public class ShopController implements Initializable {
         Optional<ButtonType> clickedButton = dialog.showAndWait();
         if (clickedButton.get() == ButtonType.OK) {
             OrderGUIController orderGUIController = new OrderGUIController();
-            Order order = order(orderList);
-            orderGUIController.reload(order);
-            printOrder(order);
-            preListTemp.forEach((k,v)->{
-                ProductPreparationManagement.preparedList.replace(k,ProductPreparationManagement.preparedList.get(k)-v);
+            Order order = null;
+            if (labelCustomer.getText().isEmpty() || labelCustomer.getText().equalsIgnoreCase("") || labelCustomer == null) {
+                order = order(orderList);
+            } else {
+                MemberManagement memberManagement = new MemberManagement();
+                order = order(orderList,
+                        memberManagement.findByName(labelCustomer.getText()),
+                        Integer.parseInt(totalmoneyLabel.getText()));
+                if (memberManagement.findByName(labelCustomer.getText()).getPoint() > 10) {
+                    memberManagement.updateSubPoint(memberManagement.findByName(labelCustomer.getText()), Integer.parseInt(cbPoint.getValue()));
+                }
+            }
+
+            setBtnApply();
+            OrderGUIController.orderGUIList.add(new OrderGUI(order));
+            printOrder(order, txtCustomerpay.getText(), returnMoneyLabel.getText(), AppControl.currentUser.getName());
+            preListTemp.forEach((k, v) -> {
+                ProductPreparationManagement.preparedList.replace(k, ProductPreparationManagement.preparedList.get(k) - v);
             });
+            preListTemp.clear();
             orderList.clear();
             orderTableObservableList.clear();
             orderDetailsTables.refresh();
-            totalmoneyLabel.setText("");
+            totalmoneyLabel.setText("0");
+            txtCustomerpay.setText("0");
+            returnMoneyLabel.setText("0");
+            labelCustomer.setText("");
+            Hbdiscount.getChildren().removeAll();
+            hbCustomer.getChildren().remove(btnDeleteCustomer);
         } else if (clickedButton.get() == ButtonType.CANCEL) {
             dialog.close();
         }
     }
+
     private void orderEvent() {
         btnOrder.setOnAction(e -> {
             if (orderList.size() > 0) {
@@ -871,6 +1148,7 @@ public class ShopController implements Initializable {
             searchProduct();
             renderCategories();
             disLayCustomer();
+            setBtnApply();
             orderEvent();
         } catch (IOException e) {
             throw new RuntimeException(e);

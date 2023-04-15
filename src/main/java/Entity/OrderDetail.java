@@ -8,6 +8,7 @@ public class OrderDetail {
     public OrderDetail() {
     }
 
+
     public OrderDetail(Product product, Size size, int qty) {
         this.product = product;
         this.size = size;
@@ -25,6 +26,7 @@ public class OrderDetail {
     public Size getSize() {
         return size;
     }
+
 
     public void setSize(Size size) {
         this.size = size;

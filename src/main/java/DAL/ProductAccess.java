@@ -137,7 +137,6 @@ public class ProductAccess extends DataAccess {
 
     public static void main(String[] args) {
         ProductAccess productAccess = new ProductAccess();
-        Product product= productAccess.findByName("Cà phê sữa");
-        System.out.println(product.getProductId());
+        System.out.println(productAccess.findByName("Cà phê đen").getProductName());
     }
 }

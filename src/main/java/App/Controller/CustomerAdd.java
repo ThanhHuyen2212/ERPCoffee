@@ -30,7 +30,7 @@ public class CustomerAdd {
         if(txtPoint!=null){
             point= Integer.parseInt(txtPoint.getText());
         }
-        return new Member(name,phone,point);
+        return new Member(phone,name,point);
     }
     public void createMember(){
         Member newMember = member();

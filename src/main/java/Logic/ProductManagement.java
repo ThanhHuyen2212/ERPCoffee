@@ -28,4 +28,7 @@ public class ProductManagement {
     public void insertProdSize(String name,String size,int vle,int price){
         productAccess.InsertProductSize(name,size,vle,price);
     }
+    public Product findByName(String name){
+        return productAccess.findByName(name);
+    }
 }
