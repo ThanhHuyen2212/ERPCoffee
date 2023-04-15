@@ -58,6 +58,8 @@ public class RecipeManagementController implements Initializable {
 
         addBtn.setVisible(false);
         deleteBtn.setVisible(false);
+        searchTxf.setVisible(false);
+        searchBtn.setVisible(false);
 
         init();
     }
