@@ -722,13 +722,15 @@ public class ShopController implements Initializable {
                         sumTotal += o.getProduct().getPrice(o.getSize().getSign()) * o.getQty();
                     }
                     MemberManagement memberManagement = new MemberManagement();
-                    if(memberManagement.findByName(labelCustomer.getText()).getPoint()>10){
-                        if(!price.getText().equalsIgnoreCase("")){
-                            if(sumTotal-Integer.parseInt(price.getText())>0){
-                                totalmoneyLabel.setText(String.valueOf(sumTotal-Integer.parseInt(price.getText())));
-                            }else{
+                    if(labelCustomer!=null && memberManagement.findByName(labelCustomer.getText()).getPoint()>10) {
+                        if (!price.getText().equalsIgnoreCase("")) {
+                            if (sumTotal - Integer.parseInt(price.getText()) > 0) {
+                                totalmoneyLabel.setText(String.valueOf(sumTotal - Integer.parseInt(price.getText())));
+                            } else {
                                 totalmoneyLabel.setText("0");
                             }
+                        } else {
+                            totalmoneyLabel.setText(String.valueOf(sumTotal));
                         }
                     }else {
                         totalmoneyLabel.setText(String.valueOf(sumTotal));
@@ -859,17 +861,8 @@ public class ShopController implements Initializable {
             for (OrderDetail o : orderList) {
                 sumTotal += o.getProduct().getPrice(o.getSize().getSign()) * o.getQty();
             }
-            if(labelCustomer!=null && memberManagement.findByName(labelCustomer.getText()).getPoint()>10){
-                if(!price.getText().equalsIgnoreCase("")){
-                    if(sumTotal-Integer.parseInt(price.getText())>0){
-                        totalmoneyLabel.setText(String.valueOf(sumTotal-Integer.parseInt(price.getText())));
-                    }else{
-                        totalmoneyLabel.setText("0");
-                    }
-                }
-            }else {
-                totalmoneyLabel.setText(String.valueOf(sumTotal));
-            }
+            totalmoneyLabel.setText(String.valueOf(sumTotal));
+            price.setText("");
             clearHbDiscount();
         });
     }
@@ -923,13 +916,17 @@ public class ShopController implements Initializable {
                         for (OrderDetail o : orderList) {
                             sumTotal += o.getProduct().getPrice(o.getSize().getSign()) * o.getQty();
                         }
-                        if (memberManagement.findByName(labelCustomer.getText()).getPoint() > 10) {
-                            if (sumTotal - Integer.parseInt(price.getText()) > 0) {
-                                totalmoneyLabel.setText(String.valueOf(sumTotal - Integer.parseInt(price.getText()) * 5000));
+                        if(labelCustomer!=null && memberManagement.findByName(labelCustomer.getText()).getPoint()>10) {
+                            if (!price.getText().equalsIgnoreCase("")) {
+                                if (sumTotal - Integer.parseInt(price.getText()) > 0) {
+                                    totalmoneyLabel.setText(String.valueOf(sumTotal - Integer.parseInt(price.getText())));
+                                } else {
+                                    totalmoneyLabel.setText("0");
+                                }
                             } else {
-                                totalmoneyLabel.setText("0");
+                                totalmoneyLabel.setText(String.valueOf(sumTotal));
                             }
-                        } else {
+                        }else {
                             totalmoneyLabel.setText(String.valueOf(sumTotal));
                         }
                     }
@@ -1081,7 +1078,7 @@ public class ShopController implements Initializable {
                 order = order(orderList,
                         memberManagement.findByName(labelCustomer.getText()),
                         Integer.parseInt(totalmoneyLabel.getText()));
-                if (memberManagement.findByName(labelCustomer.getText()).getPoint() > 10) {
+                if (memberManagement.findByName(labelCustomer.getText()).getPoint() > 10&&!price.getText().equalsIgnoreCase("")) {
                     memberManagement.updateSubPoint(memberManagement.findByName(labelCustomer.getText()), Integer.parseInt(cbPoint.getValue()));
                 }
             }
@@ -1100,7 +1097,7 @@ public class ShopController implements Initializable {
             txtCustomerpay.setText("0");
             returnMoneyLabel.setText("0");
             labelCustomer.setText("");
-            Hbdiscount.getChildren().removeAll();
+            clearHbDiscount();
             hbCustomer.getChildren().remove(btnDeleteCustomer);
         } else if (clickedButton.get() == ButtonType.CANCEL) {
             dialog.close();

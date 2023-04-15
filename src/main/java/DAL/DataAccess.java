@@ -28,6 +28,11 @@ public abstract class DataAccess {
             this.username = rs[1];
             this.pass = rs[2];
             this.port = rs[3];
+//            this.host="localhost";
+//            this.port="3307";
+//            this.username="root";
+//            this.pass="123456";
+
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
@@ -50,6 +55,7 @@ public abstract class DataAccess {
 
 
     }
+
 
     protected void closeConnection(){
         if(conn != null ) {
