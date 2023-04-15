@@ -174,8 +174,10 @@ public class DetailPOController implements Initializable {
                 int rs = 1;
                 if (!model.isConfirm()) {
                     rs = MessageDialog.showAlert(
-                            "Warning", "Bạn muốn thoát trạng thái hiện tại?" +
-                                    "\n\nCác thay đổi sẽ mất nếu bạn không lưu.");
+                            "Warning", """
+                                    Bạn muốn thoát trạng thái hiện tại?
+
+                                    Các thay đổi sẽ mất nếu bạn không lưu.""");
                 }
                 if (rs == 1) {
                     ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
