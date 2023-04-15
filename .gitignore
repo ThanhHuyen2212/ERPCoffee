@@ -54,6 +54,7 @@ ERPCoffee.iml
 /.idea/libraries
 /src/main/resources/
 /target/
+.env
 
 
 
