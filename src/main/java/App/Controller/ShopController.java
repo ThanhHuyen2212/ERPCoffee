@@ -12,12 +12,14 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
@@ -26,10 +28,17 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.*;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
+import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -37,6 +46,8 @@ import java.net.URL;
 import java.text.NumberFormat;
 import java.util.*;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ShopController implements Initializable {
     @FXML
@@ -457,11 +468,71 @@ public class ShopController implements Initializable {
         if (clickedButton.get() == ButtonType.NO) {
             dialog.close();
         } else if (clickedButton.get() == ButtonType.YES) {
-            //code
+            if(printPDF(newOrder,order)){
+                System.out.println("In hóa đơn thành công");
+                AlertController controller = new AlertController();
+                showDialogAlert("Hóa đơn số "+newOrder.getOrderId()+" đã in thành công");
+            }
         }
 
     }
-
+    public void showDialogAlert(String info){
+        FXMLLoader loader = new FXMLLoader();
+        try {
+            loader.setLocation(new File("src/main/java/App/View/Alert.fxml").toURI().toURL());
+        } catch (MalformedURLException ex) {
+            throw new RuntimeException(ex);
+        }
+        Pane alert = null;
+        try {
+            alert = loader.load();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+        Dialog<ButtonType> dialog = new Dialog<>();
+        AlertController alertController = loader.getController();
+        dialog.setDialogPane((DialogPane) alert);
+        try {
+            alertController.RenderAlert("Success",  info);
+        } catch (MalformedURLException ex) {
+            throw new RuntimeException(ex);
+        }
+        Optional<ButtonType> clickedButton = dialog.showAndWait();
+        if (clickedButton.get() == ButtonType.OK) {
+            dialog.close();
+        }
+    }
+    public boolean printPDF(Order newOrder, Pane order){
+        WritableImage image = order.snapshot(new SnapshotParameters(), null);
+        File file = new File("src/Receipt"+newOrder.getOrderId()+".png");
+        try {
+            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        PDDocument doc    = new PDDocument();
+        PDPage page = new PDPage();
+        PDImageXObject pdimage;
+        PDPageContentStream content;
+        try {
+            int actualPDFWidth = 0;
+            int actualPDFHeight = 0;
+            actualPDFWidth = (int) PDRectangle.A4.getWidth();
+            actualPDFHeight = (int) PDRectangle.A4.getHeight();
+            pdimage = PDImageXObject.createFromFile("src/Receipt"+newOrder.getOrderId()+".png",doc);
+            content = new PDPageContentStream(doc, page);
+            content.drawImage(pdimage, 10,-40,actualPDFWidth,actualPDFHeight);
+            content.close();
+            doc.addPage(page);
+            doc.save("src/Receipt"+newOrder.getOrderId()+String.valueOf(newOrder.getOrderDate())+".pdf");
+            doc.close();
+            file.delete();
+            return true;
+        } catch (IOException ex) {
+            Logger.getLogger(OrderGUIController.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
     public void Event(Product product) {
         setDetails(product);
         changeSizePrice(product);
@@ -804,7 +875,7 @@ public class ShopController implements Initializable {
                     "-fx-background-radius:" + "10px; \n" +
                     "-fx-background-color:" + "#f9ca24; \n"+
                     "-fx-text-fill:" + "#fff; \n"
-                 );
+            );
             Hbdiscount.getChildren().add(cbPoint);
             price.setStyle("-fx-text-fill:" + "#c0392b; \n" +
                     "-fx-pref-width:" + "100px; \n" +
@@ -1078,16 +1149,20 @@ public class ShopController implements Initializable {
                 order = order(orderList,
                         memberManagement.findByName(labelCustomer.getText()),
                         Integer.parseInt(totalmoneyLabel.getText()));
-                if (memberManagement.findByName(labelCustomer.getText()).getPoint() > 10&&!price.getText().equalsIgnoreCase("")) {
+                if (memberManagement.findByName(labelCustomer.getText()).getPoint() > 10 && !price.getText().equalsIgnoreCase("")) {
+                    System.out.println("Do khong do m");
+                    System.out.println(cbPoint.getValue());
+                    System.out.println(memberManagement.findByName(labelCustomer.getText()).getPhoneNumber());
                     memberManagement.updateSubPoint(memberManagement.findByName(labelCustomer.getText()), Integer.parseInt(cbPoint.getValue()));
                 }
             }
-
             setBtnApply();
             OrderGUIController.orderGUIList.add(new OrderGUI(order));
             printOrder(order, txtCustomerpay.getText(), returnMoneyLabel.getText(), AppControl.currentUser.getName());
             preListTemp.forEach((k, v) -> {
-                ProductPreparationManagement.preparedList.replace(k, ProductPreparationManagement.preparedList.get(k) - v);
+                if(ProductPreparationManagement.preparedList.get(k)>0){
+                    ProductPreparationManagement.preparedList.replace(k, ProductPreparationManagement.preparedList.get(k) - v);
+                }
             });
             preListTemp.clear();
             orderList.clear();
