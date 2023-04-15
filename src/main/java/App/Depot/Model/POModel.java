@@ -76,7 +76,7 @@ public class POModel {
     }
 
     public void handleAddDetail(String value, int qty) {
-        logic.handleAddDetail(current, new IngredientManagement().findByName(value), qty);
+        logic.handleAddDetail(current, Management.ingredientManagement.findByName(value), qty);
         currentDetails = FXCollections.observableArrayList(current.getDetails());
     }
 
