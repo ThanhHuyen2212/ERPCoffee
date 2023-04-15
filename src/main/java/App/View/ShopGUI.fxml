@@ -314,7 +314,10 @@
                   </Button>
                   <HBox fx:id="hbCustomer" layoutX="210.0" layoutY="768.0" prefHeight="61.0" prefWidth="271.0">
                      <children>
-                        <Label fx:id="labelCustomer" prefHeight="61.0" prefWidth="218.0" />
+                        <Label fx:id="labelCustomer" prefHeight="61.0" prefWidth="218.0">
+                           <font>
+                              <Font size="18.0" />
+                           </font></Label>
                         <Pane prefHeight="61.0" prefWidth="19.0" />
                      </children></HBox>
                   <TextField fx:id="txtCustomerpay" layoutX="162.0" layoutY="616.0" prefHeight="46.0" prefWidth="184.0" text="0đ">
