@@ -1121,10 +1121,12 @@ delimiter //
 create trigger trigger_update_points_members
 after insert on Orders for each row
 begin
-	set @total_price = (select sum(o.TotalPrice) from Orders o where o.PhoneNumber is not null and new.PhoneNumber = o.PhoneNumber group by o.PhoneNumber);
-	update Members
-	set Points = Points + floor(((@total_price) - Points*100000)/100000)
-	where new.PhoneNumber is not null and new.PhoneNumber = PhoneNumber;
+	set @total_price = (select o.TotalPrice from Orders o where o.PhoneNumber is not null and new.PhoneNumber = o.PhoneNumber and o.OrderId = new.OrderId limit 1);
+	if @total_price >= 100000 then
+		update Members
+		set Points = Points + floor((@total_price)/100000)
+		where new.PhoneNumber is not null and new.PhoneNumber = PhoneNumber;
+	end if;
 end; //
 delimiter ;
 
